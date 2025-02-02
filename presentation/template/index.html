@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="/presentation/static/style.css">
     <title>Registration</title>
 
 </head>
 
 <body>
-    <div class="register-container">
+    <div id="register-container">
         <div class="info-side">
-            <h2>Créer un compte</h2>
+            <h2>Create an account</h2>
             <p>Join us and enjoy all the benefits of our platform</p>
             <ul class="feature-list">
                 <li>Customer Service 24/7</li>
@@ -27,42 +27,45 @@
                 <div class="name-row">
                     <div class="form-group">
                         <label for="f-n">First Name</label>
-                        <input type="text" id="f-n" required placeholder="John">
+                        <input type="text" id="f" placeholder="John">
                     </div>
                     <div class="form-group">
                         <label for="l-n">Last Name</label>
-                        <input type="text" id="l-n" required placeholder="Doe">
+                        <input type="text" id="l" placeholder="Doe">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="age">Age</label>
-                    <input type="number" id="age" required placeholder="25">
+                    <input type="number" id="age" placeholder="25">
                 </div>
                 <div class="form-group">
                     <label for="gender">Gender</label>
-                    <select id="gender" required>
+                    <select id="gender">
                         <option value="" disabled selected>Select gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required placeholder="johndoe">
+                    <label for="username">Nickname</label>
+                    <input type="text" id="username" placeholder="johndoe">
                 </div>
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" required placeholder="john@example.com">
+                    <input type="email" id="email" placeholder="john@example.com">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="••••••••">
+                    <input type="password" id="password" placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn">Create Account</button>
+                <div class="fill">
+                    <span> Fill in all fields </span>
+                </div>
+                <button type="submit" id="creat-btn">Create Account</button>
             </form>
         </div>
     </div>
-    <div class="login-container">
+    <div id="login-container">
         <div class="info-side">
             <h2>Welcome back!</h2>
             <p>Log in to access your account</p>
@@ -72,20 +75,21 @@
             <h1>Login</h1>
             <form id="login-form">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required placeholder="example@email.com">
+                    <label>Nickname / Email</label>
+                    <input type="email" id="nickname" required placeholder="example@email.com">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
+                    <input type="password" id="paswd" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" id="login-btn">Login</button>
                 <div class="register-link">
-                    Pas encore de compte? <a href="#">Register</a>
+                    Pas encore de compte? <button id="c-a">Create an account</button>
                 </div>
             </form>
         </div>
     </div>
+    <script src="/presentation/javascript/login-register.js"></script>
 </body>
 
 </html>
