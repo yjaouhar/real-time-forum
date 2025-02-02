@@ -1,5 +1,4 @@
 
-
 let regester = document.getElementById("register-container")
 let login = document.getElementById("login-container")
 regester.style.display = "none"
@@ -14,11 +13,9 @@ function loginHandel(event) {
 }
 
 function CreatAccounte(event) {
-    
     login.style.display = "none"
     regester.style.display = "flex"
     let regester_bottone = document.getElementById("creat-btn")
-
     let f = document.getElementById("f")
     let l = document.getElementById("l")
     let a = document.getElementById("age")
@@ -28,31 +25,25 @@ function CreatAccounte(event) {
     let p = document.getElementById("password")
 
     regester_bottone.addEventListener("click", debounce(function (event) {
-       
+        let err = document.querySelector(".fill")
         event.preventDefault();
         if (f.value !== "" && l.value !== "" && a.value !== "" && g.value !== "" && n.value !== "" && e.value !== "" && p.value !== "") {
-            console.log("///////");
-
+            login.style.display = "flex"
+            regester.style.display = "none"
+            err.style.display = "none"
         } else {
-            
-            let err = document.querySelector(".fill")
             err.style.display = "flex"
         }
 
-    }, 5000))
+    }, 300))
 }
 
 
 
 function debounce(func, delay) {
     let timeoutId;
-    
-
     return function (...args) {
-        // Clear any existing timeout
         clearTimeout(timeoutId);
-
-        // Set a new timeout
         timeoutId = setTimeout(() => {
             func.apply(this, args);
         }, delay);

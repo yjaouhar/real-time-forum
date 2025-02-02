@@ -111,14 +111,15 @@ select {
     color: white;
     font-size: 1em;
     font-weight: 600;
-    cursor: pointer;
+  
     transition: all 0.3s;
 }
 
-/* #creat-btn:hover {
+#creat-btn:hover {
+    cursor: pointer;
     background: #0984e3;
     transform: translateY(-2px);
-} */
+}
 
 .feature-list {
     list-style: none;
