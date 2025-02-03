@@ -1,24 +1,29 @@
-let regester = document.getElementById("register-container")
+import { Regester } from "./pages.js"
+import {Checkemail , validateAge, validateGender, validateName, validateNickname, validatePassword } from "./check.js"
+
+
+// let regester = document.getElementById("register-container")
 let login = document.getElementById("login-container")
-regester.style.display = "none"
+// regester.style.display = "none"
 
 let creat_account = document.getElementById("c-a")
 let login_bottone = document.getElementById("login-btn")
-let regester_form = document.getElementById("register-form") // Hna l-form 
+// let regester_form = document.getElementById("register-form") // Hna l-form 
 
 // Events
 login_bottone.addEventListener("click", loginHandel)
 creat_account.addEventListener("click", CreatAccounte)
-regester_form.addEventListener("submit", handleRegister) // 7iydna event mn button o dirna f form
+// regester_form.addEventListener("submit", handleRegister) // 7iydna event mn button o dirna f form
 
 function loginHandel(event) {
-    event.preventDefault(); 
+    // event.preventDefault(); 
 }
 
 function CreatAccounte(event) {
-    event.preventDefault();  
-    login.style.display = "none"
-    regester.style.display = "flex"
+    Regester()
+    let regester_form = document.getElementById("register-form")
+    regester_form.addEventListener("submit", handleRegister)
+
 }
 
 function handleRegister(ev) {
@@ -26,24 +31,27 @@ function handleRegister(ev) {
     
     console.log("Register button clicked!");
 
-    let f = document.getElementById("f").value;
-    let l = document.getElementById("l").value;
-    let a = document.getElementById("age").value;
-    let g = document.getElementById("gender").value;
-    let n = document.getElementById("username").value;
-    let e = document.getElementById("email").value;
-    let p = document.getElementById("password").value;
-    console.log(f, l, a, g, n, e, p);
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let age = document.getElementById("age").value;
+    let gender = document.getElementById("gender").value;
+    let nickname = document.getElementById("nickname").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    console.log(firstName, lastName, age, gender, nickname, email, password);
+    
     
 
-    if (f === "" || l === "" || a === "" || g === "" || n === "" || e === "" || p === "") {
+    if (!validateName(firstName) || !validateName(lastName) || !validateAge(age) || !validateGender(gender) || !validateNickname(nickname) || !Checkemail(email) || !validatePassword(password)) {
         let err = document.getElementById("error-message")
+         err.textContent = "you have empty fields"
         err.style.display = "block"
-        // err.style.color = "red"
-        err.textContent = "you have empty fields"
+         err.style.color = "red"
+       
     } else {
-        let err = document.querySelector(".fill")
-        err.style.display = "flex"
+       console.log("Form submitted successfully!");
+       
     }
 }
 

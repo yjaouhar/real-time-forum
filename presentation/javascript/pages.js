@@ -1,50 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css"> <!-- Correct path for CSS -->
-    <title>Registration</title>
-
-</head>
-
-<body>
- 
-    <div id="login-container">
-        <div class="info-side">
-            <h2>Welcome back!</h2>
-            <p>Log in to access your account</p>
-            <p>Take advantage of all our exclusive services and features.</p>
-        </div>
-        <div class="login-form">
-            <h1>Login</h1>
-            <form id="login-form">
-                <div class="form-group">
-                    <label>Nickname / Email</label>
-                    <input type="email" id="nickname" required placeholder="example@email.com">
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="paswd" placeholder="••••••••" required>
-                </div>
-                <button type="submit" id="login-btn">Login</button>
-                <div class="register-link">
-                    Pas encore de compte? <button id="c-a">Create an account</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</body>
-<script type="module" src="../javascript/login-register.js" ></script> <!-- Correct path for JS -->
-
-</html>
-
-
-
-
-
-   <!-- <div id="register-container">
+export const Regester = () => {
+    document.body.innerHTML=document.body.innerHTML = `
+    <div id="register-container">
         <div class="info-side">
             <h2>Create an account</h2>
             <p>Join us and enjoy all the benefits of our platform</p>
@@ -61,11 +17,11 @@
                 <div class="name-row">
                     <div class="form-group">
                         <label for="f-n">First Name</label>
-                        <input type="text" id="f" placeholder="John">
+                        <input type="text" id="firstName" placeholder="John">
                     </div>
                     <div class="form-group">
                         <label for="l-n">Last Name</label>
-                        <input type="text" id="l" placeholder="Doe">
+                        <input type="text" id="lastName" placeholder="Doe">
                     </div>
                 </div>
                 <div class="form-group">
@@ -82,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="username">Nickname</label>
-                    <input type="text" id="username" placeholder="johndoe">
+                    <input type="text" id="nickname" placeholder="johndoe">
                 </div>
                 <div class="form-group">
                     <label for="email">Email Address</label>
@@ -93,10 +49,25 @@
                     <input type="password" id="password" placeholder="••••••••">
                 </div>
                 <div class="fill">
-                    <span> Fill in all fields </span>
+                    <span>Fill in all fields</span>
                 </div>
                 <p id="error-message"></p>
                 <button type="submit" id="creat-btn">Create Account</button>
             </form>
         </div>
-    </div> -->
+    </div>
+ `;
+ 
+//  // Wla ymkn lik dir creation dyal kol element wa7do:
+ 
+//  const container = document.createElement('div');
+//  container.id = 'register-container';
+ 
+//  const infoSide = document.createElement('div');
+//  infoSide.className = 'info-side';
+//  // ... etc l kol element
+ 
+//  // Exemple dyal kif tzid child elements:
+//  container.appendChild(infoSide);
+//  document.body.appendChild(container);
+}
