@@ -12,7 +12,6 @@ func Db() (*sql.DB, error) {
 	var err error
 	DB, err = sql.Open("sqlite3", "../Database/cration/tet.db")
 	if err != nil {
-
 		return nil, err
 	}
 	err = CreateTable()
@@ -21,5 +20,4 @@ func Db() (*sql.DB, error) {
 	}
 
 	return DB, nil
-
 }
