@@ -1,40 +1,57 @@
+import { showError } from "./errore.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+    if (!re.test(email)) {
+        showError("Invalid email address")
+        return false
+    } else {
+        return true
+    }
 }
 
 function validatePassword(password) {
     const hasTwoNumbers = (/\d{2,}/).test(password);
 
     const hasTwoLetters = (/[a-zA-Z]{3,}/).test(password);
-    if (password.length > 20) {
-        return false
+    if (password.length > 20 || !hasTwoLetters || !hasTwoNumbers ) {
+        showError("Password must be less than 20 characters and contain at least 2 numbers and 3 letters")
+        return false;
     }
-    return hasTwoNumbers && hasTwoLetters;
+    return true;
+
 }
 
 
 function validateName(username) {
     const hasTwoLetters = (/[a-zA-Z]{4,}/).test(username);
 
-    return hasTwoLetters;
+    if (!hasTwoLetters) {
+        showError("Name must be at least 4 characters")
+        return false
+    }
+    return true;
 }
 
 function validateAge(age) {
-    const hasTwoNumbers = (/\d{1,3}/).test(age);
-    if (age < 5 || age > 150) {
-        return false
+    const hasTwoNumbers = (/\d{2,}/).test(age);
+    if (age < 5 || age > 150 || !hasTwoNumbers) {
+        showError("Age must be between 5 and 150")
+        return false;
     }
-    return hasTwoNumbers;
+    return true;
 }
 
 function validateGender(gender) {
-    return gender === "male" || gender === "female";
+    if (gender !== "male" && gender !== "female") {
+        showError("Gender must be 'male' or 'female'")
+        return false
+    }
+    return true;
 }
 
 function validateNickname(name) {
-    const hasTwoLetters = (/[a-zA-Z0-9]{4,15}/).test(name);
+    const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
     return hasTwoLetters;
 }
 
-export { Checkemail, validatePassword, validateName, validateAge, validateGender, validateNickname }
+export { Checkemail, validatePassword, validateName, validateAge, validateGender }

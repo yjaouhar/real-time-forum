@@ -1,5 +1,6 @@
 import { Regester } from "./pages.js"
-import { Checkemail, validateAge, validateGender, validateName, validateNickname, validatePassword } from "./check.js"
+import { showError } from "./errore.js"
+import { Checkemail, validateAge, validateGender, validateName, validatePassword } from "./check.js"
 
 
 let login = document.getElementById("login-container")
@@ -35,16 +36,16 @@ async function handleRegister(ev) {
 
     console.log(firstName, lastName, age, gender, nickname, email, password);
 
+    console.log("=====>", validateName(firstName));
+    console.log("=====>", validateName(lastName));
+    console.log("=====>", validateAge(age));
+    console.log("=====>", validateGender(gender));
+    console.log("=====>", Checkemail(email));
+    console.log("=====>", validatePassword(password));
 
+    if (validateName(firstName) && validateName(lastName) && validateAge(age) && validateGender(gender) && Checkemail(email) && validatePassword(password)) {
 
-    if (!validateName(firstName) || !validateName(lastName) || !validateAge(age) || !validateGender(gender) || !validateNickname(nickname) || !Checkemail(email) || !validatePassword(password)) {
-        let err = document.getElementById("error-message")
-        err.textContent = "you have empty fields"
-        err.style.display = "block"
-        err.style.color = "red"
-
-    } else {
-        console.log("Form submitted successfully!");
+        console.log("Form submitted successfully!==========");
         try {
             await fetch('http://localhost:8080/resgester', {
                 method: 'POST',
@@ -57,7 +58,6 @@ async function handleRegister(ev) {
             console.log('Error:', error);
             response.textContent = 'An error occurred while sending the request.';
         }
-
     }
 }
 
