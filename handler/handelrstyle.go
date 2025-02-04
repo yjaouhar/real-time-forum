@@ -6,21 +6,15 @@ import (
 	"os"
 )
 
-func Style(w http.ResponseWriter, r *http.Request) {
-	// file := r.PathValue("file")
-	fmt.Println(55)
+func Sta(w http.ResponseWriter, r *http.Request) {
+	file := r.URL.Path
 
-	style := http.StripPrefix("/static/css/", http.FileServer(http.Dir("../presentation/static/css")))
-
-	//	fmt.Println(style)
-	// Check if the requested file exists by trying to read it
-	_, err := os.ReadFile("../presentation/static/css/style.css")
+	fmt.Println(file)
+	_, err := os.ReadFile("../presentation" + file)
 	if err != nil {
-		// fmt.Println(file)
-		// Error(w, http.StatusNotFound)
+		
 		return
 	}
 
-	style.ServeHTTP(w, r)
-
+	http.ServeFile(w, r, "../presentation"+file)
 }

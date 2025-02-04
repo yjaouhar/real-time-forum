@@ -1,9 +1,6 @@
 package db
 
-import "fmt"
-
 func CreateTable() error {
-
 	// Code to create a table
 	tables := `
 		CREATE TABLE IF NOT EXISTS users (
@@ -18,9 +15,9 @@ func CreateTable() error {
 		)`
 	_, err := DB.Exec(tables)
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return err
 	}
-	fmt.Println("Table created successfully")
+	// fmt.Println("Table created successfully")
 	return nil
 }
