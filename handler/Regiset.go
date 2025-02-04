@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	db "real-time-forum/Database/cration"
+	"real-time-forum/utils"
 )
 
 type User struct {
@@ -36,12 +37,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		if !validatNikname {
 			message = "Nickname already exists"
 		}
+		if !validatEmail && !validatNikname {
+			message = "Email and nickname already exist"
+		}
 		if message != "" {
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(map[string]interface{}{"success": true, "message": message})
 			return
 		}
-
+		info.Password, _ = utils.HashPassword(info.Password)
 		err := db.Insertuser(info.FirstName, info.LastName, info.Email, info.Gender, info.Age, info.Nickname, info.Password)
 		if err != nil {
 			fmt.Println(err)

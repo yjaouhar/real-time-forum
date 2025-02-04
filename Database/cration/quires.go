@@ -20,7 +20,7 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func CheckInfo(info string, input string) bool {
+func CheckInfo(info string,input string) bool{////hna kanoxofo wax email ola wax nikname kayn 3la hsab input xno fiha wax email ola wax nikname 
 	var inter int
 	quire := "SELECT COUNT(*) FROM users WHERE " + input + " = ?"
 	err := DB.QueryRow(quire, info).Scan(&inter)
@@ -28,4 +28,14 @@ func CheckInfo(info string, input string) bool {
 		return false
 	}
 	return inter == 0
+}
+
+func Getpasswor(input string) (string, error) {
+	var password string
+	quire := "SELECT password FROM users WHERE"+input+" = ?"
+	err := DB.QueryRow(quire, input).Scan(&password)
+	if err != nil {
+		return "", err
+	}
+	return password, nil
 }

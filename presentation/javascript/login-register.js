@@ -14,11 +14,24 @@ creat_account.addEventListener("click", CreatAccounte)
 function loginHandel(event) {
     event.preventDefault()
     const formData = new FormData(login_form);
+
     fetch('http://localhost:8080/login', {
         method: 'POST',
         body: formData
-
+        
     })
+    .then(response => response.json())
+    .then(data => {
+       if (data.status) {
+        console.log("kolchi dayz")
+       }else{
+        showError(data.error)
+       }
+    })
+    .catch(error => {
+        console.log('Error:', error);
+        
+    });
 }
 
 function CreatAccounte(event) {
