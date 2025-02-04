@@ -14,6 +14,7 @@ func Router() *http.ServeMux {
 
 	router.HandleFunc("/", handler.First)
 	router.HandleFunc("/resgester", handler.Register)
+	router.HandleFunc("/login", handler.Login)
 
 	router.Handle("/static/", http.HandlerFunc(handler.Sta))
 	router.Handle("/javascript/", http.HandlerFunc(handler.Sta))

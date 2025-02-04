@@ -6,12 +6,20 @@ import { Checkemail, validateAge, validateGender, validateName, validatePassword
 let login = document.getElementById("login-container")
 
 let creat_account = document.getElementById("c-a")
-let login_bottone = document.getElementById("login-btn")
+let login_form = document.getElementById("login-form")
 
-login_bottone.addEventListener("click", loginHandel)
+login_form.addEventListener("submit", loginHandel)
 creat_account.addEventListener("click", CreatAccounte)
 
 function loginHandel(event) {
+    event.preventDefault()
+    const formData = new FormData(login_form);
+ //   console.log("=====>", formData);
+    fetch('http://localhost:8080/login', {
+        method: 'POST',
+        body: formData
+        
+    })
 }
 
 function CreatAccounte(event) {
