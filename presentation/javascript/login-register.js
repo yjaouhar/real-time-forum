@@ -14,11 +14,10 @@ creat_account.addEventListener("click", CreatAccounte)
 function loginHandel(event) {
     event.preventDefault()
     const formData = new FormData(login_form);
- //   console.log("=====>", formData);
     fetch('http://localhost:8080/login', {
         method: 'POST',
         body: formData
-        
+
     })
 }
 
@@ -29,11 +28,9 @@ function CreatAccounte(event) {
 
 }
 
-async function handleRegister(ev) {
+function handleRegister(ev) {
     ev.preventDefault();
-
     console.log("Register button clicked!");
-
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let age = document.getElementById("age").value;
@@ -41,38 +38,33 @@ async function handleRegister(ev) {
     let nickname = document.getElementById("nickname").value;
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
-
-    console.log(firstName, lastName, age, gender, nickname, email, password);
-
-    console.log("=====>", validateName(firstName));
-    console.log("=====>", validateName(lastName));
-    console.log("=====>", validateAge(age));
-    console.log("=====>", validateGender(gender));
-    console.log("=====>", Checkemail(email));
-    console.log("=====>", validatePassword(password));
-
     if (validateName(firstName) && validateName(lastName) && validateAge(age) && validateGender(gender) && Checkemail(email) && validatePassword(password)) {
-
         console.log("Form submitted successfully!==========");
-        try {
-            await fetch('http://localhost:8080/resgester', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ FirstName: firstName, LastName: lastName, Email: email, Password: password, Age: age, Gender: gender, Nickname: nickname })
+
+        fetch('/resgester', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ FirstName: firstName, LastName: lastName, Email: email, Password: password, Age: age, Gender: gender, Nickname: nickname })
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.success) {
+                    showError(result.message)
+
+                }else{
+                    window.location.href="/"
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
             });
-        } catch (error) {
-            console.log('Error:', error);
-            response.textContent = 'An error occurred while sending the request.';
-        }
     }
 }
 
 function debounce(func, delay) {
     let timeoutId;
-
-
     return function (...args) {
         clearTimeout(timeoutId);
 

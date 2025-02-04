@@ -1,6 +1,8 @@
 package db
 
-import "strconv"
+import (
+	"strconv"
+)
 
 func Insertuser(first_name string, last_name string, email string, gender string, age string, nikname string, password string) error {
 	infiuser, err := DB.Prepare("INSERT INTO users (first_name, last_name, email, gender, age, nikname, password) VALUES (?, ?, ?, ?, ?, ?, ?)")
@@ -18,9 +20,9 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func CheckInfo(info string) bool{
+func CheckInfo(info string, input string) bool {
 	var inter int
-	quire := "SELECT * FROM users WHERE "+info+" = ?"
+	quire := "SELECT COUNT(*) FROM users WHERE " + input + " = ?"
 	err := DB.QueryRow(quire, info).Scan(&inter)
 	if err != nil {
 		return false

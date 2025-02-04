@@ -53,6 +53,8 @@ export const Regester = () => {
                 </div>
                 <p id="error-message"></p>
                 <button type="submit" id="creat-btn">Create Account</button>
+                <span class="have">Already have an account?</span>
+                <button  id="log"><a href="/">Login</a></button>
             </form>
         </div>
     </div>

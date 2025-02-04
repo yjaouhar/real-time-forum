@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
 	db "real-time-forum/Database/cration"
 )
 
@@ -19,20 +20,25 @@ type User struct {
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		message := ""
 		var info User
 		errore := json.NewDecoder(r.Body).Decode(&info)
 		if errore != nil {
 			fmt.Println(errore)
 			return
 		}
-		validateur := db.CheckInfo(info.Email)
-		if !validateur {
-			fmt.Println("Email already exists")
-			return
+		w.Header().Set("Content-Type", "application/json")
+		validatEmail := db.CheckInfo(info.Email, "email")
+		if !validatEmail {
+			message = "Email already exists"
 		}
-		validateur = db.CheckInfo(info.Nickname)
-		if !validateur {
-			fmt.Println("Nickname already exists")
+		validatNikname := db.CheckInfo(info.Nickname, "nikname")
+		if !validatNikname {
+			message = "Nickname already exists"
+		}
+		if message != "" {
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": true, "message": message})
 			return
 		}
 
@@ -41,5 +47,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": ""})
 	}
 }

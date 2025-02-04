@@ -6,7 +6,6 @@ body {
     width: 100%;
     max-width: 1000px;
     margin: auto;
-    margin-top: 200px;
     padding: 20px;
     display: flex;
     gap: 30px;
@@ -113,12 +112,13 @@ select {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    margin-bottom: 15px;
 }
 
-/* #creat-btn:hover {
+#creat-btn:hover {
     background: #0984e3;
     transform: translateY(-2px);
-} */
+}
 
 .feature-list {
     list-style: none;
@@ -140,7 +140,32 @@ select {
     color: #0984e3;
     font-weight: bold;
 }
-
+a{
+    text-decoration: none;
+    color: white;
+}
+#log{
+    width: 50%;
+    background: rgb(66, 183, 42);
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 20%;
+    margin-top: 20px;
+}
+#log:hover{
+    background-color: rgb(30, 206, 68);
+    transform: translateY(-2px);
+}
+.have{
+    margin-left: 25%;
+    margin-top: 5px;
+    margin-bottom: 15PX;
+}
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -162,7 +187,6 @@ select {
     /* display: none; */
     width: 100%;
     margin: auto;
-    margin-top: 400px;
     max-width: 1000px;
     padding: 20px;
     display: flex;
