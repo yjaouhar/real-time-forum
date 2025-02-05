@@ -27,11 +27,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			typ = "nikname"
 		}
 	
-		if boo {
+		if !boo {
 			hashedPassword, err = db.Getpasswor(typ, email)
 		}
 		
-		if !boo || err != nil || !utils.ComparePassAndHashedPass(hashedPassword, password) {
+		if boo || err != nil || !utils.ComparePassAndHashedPass(hashedPassword, password) {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte(`{"error": "Invalid email or password", "status":false}`))
 			return

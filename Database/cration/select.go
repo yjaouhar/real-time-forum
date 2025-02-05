@@ -1,34 +1,17 @@
 package db
 
-import (
-	"strconv"
-)
-
-func Insertuser(first_name string, last_name string, email string, gender string, age string, nikname string, password string) error {
-	infiuser, err := DB.Prepare("INSERT INTO users (first_name, last_name, email, gender, age, nikname, password) VALUES (?, ?, ?, ?, ?, ?, ?)")
-	if err != nil {
-		return err
-	}
-	age_int, err := strconv.Atoi(age)
-	if err != nil {
-		return err
-	}
-	_, err = infiuser.Exec(first_name, last_name, email, gender, age_int, nikname, password)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+import "fmt"
 
 func CheckInfo(info string, input string) bool { ////hna kanoxofo wax email ola wax nikname kayn 3la hsab input xno fiha wax email ola wax nikname
 	var inter int
 	quire := "SELECT COUNT(*) FROM users WHERE " + input + " = ?"
 	err := DB.QueryRow(quire, info).Scan(&inter)
 	if err != nil {
+		fmt.Println(err)
 		return false
 	}
 
-	return inter == 1
+	return inter == 0
 }
 
 func Getpasswor(input string, typ string) (string, error) {
@@ -50,12 +33,22 @@ func Updatesession(typ string, tocken string, input string) error {
 	return nil
 }
 
-func HaveToken(input string) bool {
+func HaveToken(input string, tocken string) bool {
 	var token int
-	quire := "SELECT sessionToken FROM users WHERE" + input + " = ?"
-	err := DB.QueryRow(quire, input).Scan(&token)
+	quire := "SELECT sessionToken FROM users WHERE " + input + " = ?"
+	err := DB.QueryRow(quire, tocken).Scan(&token)
 	if err != nil {
 		return false
 	}
 	return token == 1
+}
+
+func GetId(input string, tocken string) int {
+	var id int
+	quire := "SELECT id FROM users WHERE " + input + " = ?"
+	err := DB.QueryRow(quire, tocken).Scan(&id)
+	if err != nil {
+		return 0
+	}
+	return id
 }

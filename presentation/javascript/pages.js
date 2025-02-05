@@ -1,5 +1,105 @@
+export const Homepage = () => {
+    document.body.innerHTML = `
+    <header class="header">
+        <div class="logo">FORUM</div>
+        <button>logout</button>
+    </header>
+    `
+    let container = document.createElement("div");
+    container.setAttribute("class", "container")
+    let sidebar = document.createElement("aside")
+    sidebar.setAttribute("class", "sidebar")
+    let info = document.createElement("div")
+    info.setAttribute("class", "contact")
+    let profile = document.createElement("span")
+    profile.setAttribute("class", "material-icons")
+    profile.textContent="account_circle"
+    let user = document.createElement("span")
+    user.textContent = "yassine"
+    let online = document.createElement("span")
+    online.setAttribute("class", "online-indicator")
+    info.append(profile)
+    info.append(user)
+    info.append(online)
+    sidebar.append(info)
+    sidebar.innerHTML += `
+                <h3>Category</h3>
+            <div class="category-list">
+                <button>Tech Support</button>
+                <button>General Discussion</button>
+                <button>Tutorials</button>
+                <button>Gaming</button>
+                <button>Hobbies & Interests</button>
+                <button>Job Listings</button>
+                <button>Announcements</button>
+            </div>
+    `
+    container.append(sidebar)
+    let main = document.createElement("main")
+    main.setAttribute("class", "main-content")
+    let creatPost = document.createElement("div")
+    creatPost.setAttribute("class", "create-post")
+    creatPost.innerHTML = "<button>+ creat a post</button>"
+    main.append(creatPost)
+    container.append(main)
+    let post = document.createElement("div")
+    post.setAttribute("class", "post")
+    let post_header = document.createElement("div")
+    let poster_profile = document.createElement("span")
+    poster_profile.setAttribute("class", "material-icons")
+    poster_profile.textContent="account_circle"
+    post_header.append(poster_profile)
+    post_header.setAttribute("class", "post-header")
+    let poster = document.createElement("span")
+    poster.textContent = "yassine"
+    let time = document.createElement("span")
+    time.textContent = "1h"
+    time.style.color="#6c757d"
+    post_header.append(poster)
+    post_header.append(time)
+    let title = document.createElement("h3")
+    title.textContent = "titel"
+    let p = document.createElement("p")
+    p.textContent = "Post"
+    post.append(post_header)
+    post.append(title)
+    post.append(p)
+   
+    let reaction = document.createElement("div")
+    reaction.setAttribute("class", "post-actions")
+    let likes = document.createElement("div")
+    likes.innerHTML = `
+    <button>👍</button>
+    <button>👎</button>`
+    let comment = document.createElement("div")
+    comment.textContent = "0 💬"
+    reaction.append(likes)
+    reaction.append(comment)
+    post.append(reaction)
+    main.append(post)
+    container.append(main)
+    let contacts = document.createElement("aside")
+    contacts.setAttribute("class", "contacts")
+    contacts.innerHTML = `
+     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <h3>contact</h3>
+            </div>
+    `
+    let contact = document.createElement("div")
+    contact.setAttribute("class", "contact")
+    let sp = document.createElement("span")
+    sp.textContent = "yjaouhar"
+    contact.append(profile)
+    contact.append(sp)
+    contacts.append(contact)
+    container.append(contacts)
+    document.body.append(container)
+}
+
+
+
 export const Regester = () => {
-    document.body.innerHTML=`
+    document.body.innerHTML = `
     <div id="register-container">
         <div class="info-side">
             <h2>Create an account</h2>
@@ -59,11 +159,11 @@ export const Regester = () => {
         </div>
     </div>
  `;
- 
+
 }
 
-export function Login() {
-    document.body.innerHTML=`<div id="login-container">
+export const Login = () => {
+    document.body.innerHTML = `<div id="login-container">
         <div class="info-side">
             <h2>Welcome back!</h2>
             <p>Log in to access your account</p>

@@ -18,7 +18,7 @@ func Stuts(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"error": "Login Unsuccessful", "status":false}`))
 			return
 		}
-		isHave := db.HaveToken(sesiontoken.Value)
+		isHave := db.HaveToken("sessionToken",sesiontoken.Value)
 		if !isHave {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "Login Unsuccessful", "status":false}`))

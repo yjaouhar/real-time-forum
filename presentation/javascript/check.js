@@ -1,5 +1,5 @@
 import { showError } from "./errore.js"
-import {Login} from "./pages.js"
+import {Login,Regester,Homepage} from "./pages.js"
 import {handle} from "./login-register.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,7 +57,9 @@ function validateGender(gender) {
 // }
 
 async function Checkstuts(event){
+ 
     event.preventDefault()
+   
     fetch('/stuts', {
        method: 'GET',
        headers: {
@@ -68,11 +70,16 @@ async function Checkstuts(event){
        .then((result) => {
         
            if (!result.status) {
-              Login()
+            handle()
+          
+            console.log("fih cokes");
+            
+           
            } else {
-               console.log("yyyyyy");
+            console.log("mafihch");
+            Homepage()
            }
-           handle()
+        
        })
        .catch((error) => {
            console.error("Error:", error);

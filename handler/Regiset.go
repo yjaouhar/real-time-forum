@@ -33,6 +33,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		if !validatEmail {
 			message = "Email already exists"
 		}
+		
 		validatNikname := db.CheckInfo(info.Nickname, "nikname")
 		if !validatNikname {
 			message = "Nickname already exists"
