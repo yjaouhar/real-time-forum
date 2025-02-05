@@ -54,4 +54,27 @@ function validateNickname(name) {
     return hasTwoLetters;
 }
 
+function Checkstuts(event){
+     event.preventDefault()
+        const formData = new FormData(login_form);
+    
+        fetch('http://localhost:8080/stuts', {
+            method: 'POST',
+            body: formData
+            
+        })
+        .then(response => response.json())
+        .then(data => {
+           if (data.status) {
+            console.log("kolchi dayz")
+           }else{
+            showError(data.error)
+           }
+        })
+        .catch(error => {
+            console.log('Error:', error);
+            
+        });
+}
+
 export { Checkemail, validatePassword, validateName, validateAge, validateGender }

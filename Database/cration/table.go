@@ -11,8 +11,9 @@ func CreateTable() error {
 			gender TEXT NOT NULL,
 			age INTEGER NOT NULL,
 			nikname TEXT NOT NULL,
-			password TEXT NOT NULL
-		)`
+			password TEXT NOT NULL,
+			sessionToken TEXT,
+ 		)`
 	_, err := DB.Exec(tables)
 	if err != nil {
 		// fmt.Println(err)

@@ -40,17 +40,11 @@ func Getpasswor(input string) (string, error) {
 	return password, nil
 }
 
-func Getpasswor(input string) (string, error) {
-	query := `UPDATE users SET email = $1 WHERE id = $2`
-	_, err := db.Exec(query, newEmail, userID)
+func Updatesession(typ string,tocken string ,input string ) (error) {
+	query := "UPDATE users SET sessionToken = $1 WHERE "+typ+" = $2"
+	_, err := DB.Exec(query,tocken,input)
 	if err != nil {
 		return err
 	}
-	var password string
-	quire := "SELECT password FROM users WHERE" + input + " = ?"
-	err := DB.QueryRow(quire, input).Scan(&password)
-	if err != nil {
-		return "", err
-	}
-	return password, nil
+	return nil
 }

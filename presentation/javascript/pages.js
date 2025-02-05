@@ -1,5 +1,5 @@
 export const Regester = () => {
-    document.body.innerHTML=document.body.innerHTML = `
+    document.body.innerHTML=`
     <div id="register-container">
         <div class="info-side">
             <h2>Create an account</h2>
@@ -60,16 +60,34 @@ export const Regester = () => {
     </div>
  `;
  
-//  // Wla ymkn lik dir creation dyal kol element wa7do:
- 
-//  const container = document.createElement('div');
-//  container.id = 'register-container';
- 
-//  const infoSide = document.createElement('div');
-//  infoSide.className = 'info-side';
-//  // ... etc l kol element
- 
-//  // Exemple dyal kif tzid child elements:
-//  container.appendChild(infoSide);
-//  document.body.appendChild(container);
+}
+
+export function Login() {
+    document.body.innerHTML=`<div id="login-container">
+        <div class="info-side">
+            <h2>Welcome back!</h2>
+            <p>Log in to access your account</p>
+            <p>Take advantage of all our exclusive services and features.</p>
+        </div>
+        <div class="login-form">
+            <h1>Login</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Nickname / Email</label>
+                    <input type="email" id="nickname" name="email" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="paswd" name="password" placeholder="••••••••" required>
+                </div>
+                <p id="error-message"></p>
+                <button type="submit" id="login-btn">Login</button>
+                <div class="register-link">
+                    Pas encore de compte? <button id="c-a">Create an account</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    `
 }

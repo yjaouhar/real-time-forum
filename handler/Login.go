@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -30,7 +31,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"error": "Invalid email or password", "status":false}`))
 			return
 		}
-
+		SessionToken,erre := utils.GenerateSessionToken()
+		if erre != nil{
+			fmt.Println("err f sition")
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"error": "Login successful", "status":true}`))
 		// fmt.Println("Email:", email, "Password:", password)

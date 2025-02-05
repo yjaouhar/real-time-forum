@@ -1,8 +1,8 @@
-import { Regester } from "./pages.js"
+import { Regester,Login } from "./pages.js"
 import { showError } from "./errore.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword } from "./check.js"
 
-
+document.addEventListener("DOMContentLoaded",Checkstuts)
 let login = document.getElementById("login-container")
 
 let creat_account = document.getElementById("c-a")
