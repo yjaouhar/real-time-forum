@@ -1,3 +1,59 @@
+export const CreatPostTemp=()=>{
+    let publ = document.querySelector(".main-content")
+    publ.innerHTML=`
+      <div class="form-container">
+        <form>
+            <div class="form-group">
+           
+                <label>Post Title</label>
+                <input type="text" name="title" class="form-control" placeholder="Enter post title" required>
+            </div>
+
+            <div class="form-group">
+                <label>Post Content</label>
+                <textarea class="form-control" name="content"  rows="5" placeholder="Write your post content" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Select Categories</label>
+                <div class="category-grid">
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Tech Support
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        General Discussion
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Tutorials
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Gaming
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Hobbies & Interests
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Job Listings
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories">
+                        Announcements
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Post</button>
+        </form>
+    </div>
+    `
+}
+
 export const Homepage = () => {
     document.body.innerHTML = `
     <header class="header">

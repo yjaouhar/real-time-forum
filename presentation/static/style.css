@@ -213,6 +213,95 @@ h3 {
     line-height: 1.7;
 }
 
+/*-----------------------------------------------------------------*/
+.form-container {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.3s;
+    resize: none;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.category-checkbox {
+    display: flex;
+    align-items: center;
+    background: #f7fafc;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.category-checkbox:hover {
+    background: #f3f4f6;
+}
+
+.category-checkbox input {
+    margin-right: 0.75rem;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e0;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.category-checkbox input:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #059669;
+}
+/*-----------------------------------------------------------------*/
 #register-container {
     width: 100%;
     max-width: 1000px;

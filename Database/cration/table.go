@@ -15,13 +15,21 @@ func CreateTable() error {
 		sessionToken TEXT
 	);
 	
-	CREATE TABLE IF NOT EXISTS posts (
+	CREATE TABLE IF NOT EXISTS postes (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_id INTEGER NOT NULL,
 		title TEXT NOT NULL,
 		content TEXT NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		categories TEXT NOT NULL,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	);
+
+	CREATE TABLE IF NOT EXISTS categories (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		post_id INTEGER NOT NULL,
+		categories TEXT NOT NULL,
+		FOREIGN KEY (post_id) REFERENCES postes(id) ON DELETE CASCADE
 	);
 `
 
