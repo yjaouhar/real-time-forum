@@ -3,6 +3,7 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: #f4f6f8;
@@ -34,6 +35,7 @@ body {
     padding: 0.5rem 1.25rem;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
+    cursor: pointer;
     background: white;
     color: #4b5563;
     font-weight: 500;
@@ -55,7 +57,8 @@ body {
     padding: 1.5rem;
 }
 
-.sidebar, .contacts {
+.sidebar,
+.contacts {
     width: 280px;
     background: white;
     border-radius: 16px;
@@ -119,6 +122,7 @@ body {
 
 .create-post {
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 .create-post button {
@@ -187,14 +191,18 @@ body {
 .contact:hover {
     background: #f9fafb;
 }
-#cancel{
+
+#cancel {
     cursor: pointer;
-    height:25px;
+    /* height: 25px; */
+    margin-left: 96%;
 }
-#cancel:hover{
+
+#cancel:hover {
     border-radius: 100%;
     background-color: #e7e7e7;
 }
+
 h3 {
     color: #111827;
     font-weight: 600;
@@ -220,8 +228,9 @@ h3 {
     max-width: 600px;
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -245,7 +254,7 @@ h3 {
 .form-control:focus {
     outline: none;
     border-color: #10b981;
-    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .category-grid {
@@ -301,6 +310,7 @@ h3 {
 .submit-btn:hover {
     background-color: #059669;
 }
+
 /*-----------------------------------------------------------------*/
 #register-container {
     width: 100%;
@@ -440,11 +450,13 @@ select {
     color: #0984e3;
     font-weight: bold;
 }
-a{
+
+a {
     text-decoration: none;
     color: white;
 }
-#log{
+
+#log {
     width: 50%;
     background: rgb(66, 183, 42);
     padding: 14px;
@@ -457,15 +469,18 @@ a{
     margin-left: 20%;
     margin-top: 20px;
 }
-#log:hover{
+
+#log:hover {
     background-color: rgb(30, 206, 68);
     transform: translateY(-2px);
 }
-.have{
+
+.have {
     margin-left: 25%;
     margin-top: 5px;
     margin-bottom: 15PX;
 }
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;

@@ -1,12 +1,16 @@
-export const CreatPostTemp=()=>{
+export const CreatPostTemp = () => {
     let publ = document.querySelector(".main-content")
-    publ.innerHTML=`
+    publ.innerHTML = `
       <div class="form-container">
         <form>
             <div class="form-group">
-           
+            <div>
+            <span class="material-icons" id="cancel">
+                        close
+                </span>
                 <label>Post Title</label>
                 <input type="text" name="title" class="form-control" placeholder="Enter post title" required>
+                </div>
             </div>
 
             <div class="form-group">
@@ -52,6 +56,7 @@ export const CreatPostTemp=()=>{
         </form>
     </div>
     `
+    publ.style.flex = "none"
 }
 
 export const Homepage = () => {
@@ -69,7 +74,7 @@ export const Homepage = () => {
     info.setAttribute("class", "contact")
     let profile = document.createElement("span")
     profile.setAttribute("class", "material-icons")
-    profile.textContent="account_circle"
+    profile.textContent = "account_circle"
     let user = document.createElement("span")
     user.textContent = "yassine"
     let online = document.createElement("span")
@@ -103,14 +108,14 @@ export const Homepage = () => {
     let post_header = document.createElement("div")
     let poster_profile = document.createElement("span")
     poster_profile.setAttribute("class", "material-icons")
-    poster_profile.textContent="account_circle"
+    poster_profile.textContent = "account_circle"
     post_header.append(poster_profile)
     post_header.setAttribute("class", "post-header")
     let poster = document.createElement("span")
     poster.textContent = "yassine"
     let time = document.createElement("span")
     time.textContent = "1h"
-    time.style.color="#6c757d"
+    time.style.color = "#6c757d"
     post_header.append(poster)
     post_header.append(time)
     let title = document.createElement("h3")
@@ -120,7 +125,7 @@ export const Homepage = () => {
     post.append(post_header)
     post.append(title)
     post.append(p)
-   
+
     let reaction = document.createElement("div")
     reaction.setAttribute("class", "post-actions")
     let likes = document.createElement("div")
@@ -137,8 +142,12 @@ export const Homepage = () => {
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
     contacts.innerHTML = `
-     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+     <div style=" margin-bottom: 1rem;">
+     <span class="material-icons" id="cancel">
+                        close
+                </span>
                 <h3>contact</h3>
+                 
             </div>
     `
     let contact = document.createElement("div")
