@@ -20,7 +20,7 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func CheckInfo(info string,input string) bool{////hna kanoxofo wax email ola wax nikname kayn 3la hsab input xno fiha wax email ola wax nikname 
+func CheckInfo(info string, input string) bool { ////hna kanoxofo wax email ola wax nikname kayn 3la hsab input xno fiha wax email ola wax nikname
 	var inter int
 	quire := "SELECT COUNT(*) FROM users WHERE " + input + " = ?"
 	err := DB.QueryRow(quire, info).Scan(&inter)
@@ -32,7 +32,22 @@ func CheckInfo(info string,input string) bool{////hna kanoxofo wax email ola wax
 
 func Getpasswor(input string) (string, error) {
 	var password string
-	quire := "SELECT password FROM users WHERE"+input+" = ?"
+	quire := "SELECT password FROM users WHERE" + input + " = ?"
+	err := DB.QueryRow(quire, input).Scan(&password)
+	if err != nil {
+		return "", err
+	}
+	return password, nil
+}
+
+func Getpasswor(input string) (string, error) {
+	query := `UPDATE users SET email = $1 WHERE id = $2`
+	_, err := db.Exec(query, newEmail, userID)
+	if err != nil {
+		return err
+	}
+	var password string
+	quire := "SELECT password FROM users WHERE" + input + " = ?"
 	err := DB.QueryRow(quire, input).Scan(&password)
 	if err != nil {
 		return "", err
