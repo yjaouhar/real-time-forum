@@ -1,15 +1,17 @@
 import { Regester,Login } from "./pages.js"
 import { showError } from "./errore.js"
-import { Checkemail, validateAge, validateGender, validateName, validatePassword } from "./check.js"
+
+import { Checkemail, validateAge, validateGender, validateName, validatePassword,Checkstuts } from "./check.js"
 
 document.addEventListener("DOMContentLoaded",Checkstuts)
-let login = document.getElementById("login-container")
+
+// let login = document.getElementById("login-container")
 
 let creat_account = document.getElementById("c-a")
 let login_form = document.getElementById("login-form")
 
-login_form.addEventListener("submit", loginHandel)
-creat_account.addEventListener("click", CreatAccounte)
+// login_form.addEventListener("submit", loginHandel)
+// creat_account.addEventListener("click", CreatAccounte)
 
 function loginHandel(event) {
     event.preventDefault()
@@ -76,13 +78,3 @@ function handleRegister(ev) {
     }
 }
 
-function debounce(func, delay) {
-    let timeoutId;
-    return function (...args) {
-        clearTimeout(timeoutId);
-
-        timeoutId = setTimeout(() => {
-            func.apply(this, args);
-        }, delay);
-    };
-}

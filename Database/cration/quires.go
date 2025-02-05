@@ -40,11 +40,21 @@ func Getpasswor(input string) (string, error) {
 	return password, nil
 }
 
-func Updatesession(typ string,tocken string ,input string ) (error) {
-	query := "UPDATE users SET sessionToken = $1 WHERE "+typ+" = $2"
-	_, err := DB.Exec(query,tocken,input)
+func Updatesession(typ string, tocken string, input string) error {
+	query := "UPDATE users SET sessionToken = $1 WHERE " + typ + " = $2"
+	_, err := DB.Exec(query, tocken, input)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func HaveToken(input string) bool {
+	var token int
+	quire := "SELECT sessionToken FROM users WHERE" + input + " = ?"
+	err := DB.QueryRow(quire, input).Scan(&token)
+	if err != nil {
+		return false
+	}
+	return token == 1
 }

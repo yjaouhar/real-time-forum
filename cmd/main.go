@@ -9,7 +9,7 @@ import (
 func main() {
 	Db, err := data.Db()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("====Z",err)
 		return
 	}
 	defer Db.Close()

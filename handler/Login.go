@@ -17,11 +17,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		var boo bool
 		var err error
+		typ := ""
 		var hashedPassword string
 		if strings.Contains(email, "@") {
 			boo = db.CheckInfo(email, "email")
+			typ = "email"
 		} else {
 			boo = db.CheckInfo(email, "nikname")
+			typ = "nikname"
 		}
 		if boo {
 			hashedPassword, err = db.Getpasswor(email)
@@ -31,9 +34,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"error": "Invalid email or password", "status":false}`))
 			return
 		}
-		SessionToken,erre := utils.GenerateSessionToken()
-		if erre != nil{
+		SessionToken, erre := utils.GenerateSessionToken()
+		if erre != nil {
 			fmt.Println("err f sition")
+			return
+		}
+		err = db.Updatesession(typ, SessionToken, email)
+		if err != nil {
+			fmt.Println("ERRORE", err)
 			return
 		}
 		w.WriteHeader(http.StatusOK)

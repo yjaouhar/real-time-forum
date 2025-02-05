@@ -13,7 +13,7 @@ export const Regester = () => {
         </div>
         <div class="register">
             <h1>Create Your Account</h1>
-            <form id="register-form">
+            <form id="register-form" method="post">
                 <div class="name-row">
                     <div class="form-group">
                         <label for="f-n">First Name</label>
@@ -71,7 +71,7 @@ export function Login() {
         </div>
         <div class="login-form">
             <h1>Login</h1>
-            <form id="login-form">
+            <form id="login-form" method="post">
                 <div class="form-group">
                     <label>Nickname / Email</label>
                     <input type="email" id="nickname" name="email" placeholder="example@email.com">

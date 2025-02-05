@@ -12,7 +12,7 @@ func CreateTable() error {
 			age INTEGER NOT NULL,
 			nikname TEXT NOT NULL,
 			password TEXT NOT NULL,
-			sessionToken TEXT,
+			sessionToken TEXT
  		)`
 	_, err := DB.Exec(tables)
 	if err != nil {

@@ -1,4 +1,5 @@
 import { showError } from "./errore.js"
+import {Login} from "./pages.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -49,32 +50,30 @@ function validateGender(gender) {
     return true;
 }
 
-function validateNickname(name) {
-    const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
-    return hasTwoLetters;
-}
+// function validateNickname(name) {
+//     const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
+//     return hasTwoLetters;
+// }
 
-function Checkstuts(event){
+async function Checkstuts(event){
      event.preventDefault()
-        const formData = new FormData(login_form);
-    
-        fetch('http://localhost:8080/stuts', {
-            method: 'POST',
-            body: formData
-            
+     fetch('/stuts', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            if (!result.status) {
+               Login()
+            }else{
+                console.log("yyyyyy");
+            }
         })
-        .then(response => response.json())
-        .then(data => {
-           if (data.status) {
-            console.log("kolchi dayz")
-           }else{
-            showError(data.error)
-           }
-        })
-        .catch(error => {
-            console.log('Error:', error);
-            
+        .catch((error) => {
+            console.error("Error:", error);
         });
 }
 
-export { Checkemail, validatePassword, validateName, validateAge, validateGender }
+export { Checkemail, validatePassword, validateName, validateAge, validateGender,Checkstuts }
