@@ -20,15 +20,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		typ := ""
 		var hashedPassword string
 		if strings.Contains(email, "@") {
-			boo = db.CheckInfo(email, "email")
+			boo = db.CheckInfo(email, "email")	
 			typ = "email"
 		} else {
 			boo = db.CheckInfo(email, "nikname")
 			typ = "nikname"
 		}
+	
 		if boo {
-			hashedPassword, err = db.Getpasswor(email)
+			hashedPassword, err = db.Getpasswor(typ, email)
 		}
+		
 		if !boo || err != nil || !utils.ComparePassAndHashedPass(hashedPassword, password) {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte(`{"error": "Invalid email or password", "status":false}`))
@@ -44,6 +46,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("ERRORE", err)
 			return
 		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:  "SessionToken",
+			Value: SessionToken,
+			Path:  "/",
+		})
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"error": "Login successful", "status":true}`))
 		// fmt.Println("Email:", email, "Password:", password)

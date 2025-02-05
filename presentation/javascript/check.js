@@ -1,5 +1,6 @@
 import { showError } from "./errore.js"
 import {Login} from "./pages.js"
+import {handle} from "./login-register.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -56,24 +57,32 @@ function validateGender(gender) {
 // }
 
 async function Checkstuts(event){
-     event.preventDefault()
-     fetch('/stuts', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => response.json())
-        .then((result) => {
-            if (!result.status) {
-               Login()
-            }else{
-                console.log("yyyyyy");
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+    event.preventDefault()
+    fetch('/stuts', {
+       method: 'GET',
+       headers: {
+           'Content-Type': 'application/json',
+       },
+   })
+       .then((response) => response.json())
+       .then((result) => {
+        
+           if (!result.status) {
+              Login()
+           } else {
+               console.log("yyyyyy");
+           }
+           handle()
+       })
+       .catch((error) => {
+           console.error("Error:", error);
+       });
+
+    // Delay l'appel handle jusqu'à ce que l'élément soit disponible dans DOM
+
+       
+       
 }
+
 
 export { Checkemail, validatePassword, validateName, validateAge, validateGender,Checkstuts }

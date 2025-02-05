@@ -27,13 +27,14 @@ func CheckInfo(info string, input string) bool { ////hna kanoxofo wax email ola 
 	if err != nil {
 		return false
 	}
-	return inter == 0
+
+	return inter == 1
 }
 
-func Getpasswor(input string) (string, error) {
+func Getpasswor(input string, typ string) (string, error) {
 	var password string
-	quire := "SELECT password FROM users WHERE" + input + " = ?"
-	err := DB.QueryRow(quire, input).Scan(&password)
+	quire := "SELECT password FROM users WHERE " + input + " = ?"
+	err := DB.QueryRow(quire, typ).Scan(&password)
 	if err != nil {
 		return "", err
 	}

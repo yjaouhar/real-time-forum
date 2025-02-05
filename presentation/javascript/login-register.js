@@ -5,13 +5,17 @@ import { Checkemail, validateAge, validateGender, validateName, validatePassword
 
 document.addEventListener("DOMContentLoaded",Checkstuts)
 
-// let login = document.getElementById("login-container")
+
+
+
+
+export function handle(){
 
 let creat_account = document.getElementById("c-a")
 let login_form = document.getElementById("login-form")
 
-// login_form.addEventListener("submit", loginHandel)
-// creat_account.addEventListener("click", CreatAccounte)
+login_form.addEventListener("submit", loginHandel)
+creat_account.addEventListener("click", CreatAccounte)
 
 function loginHandel(event) {
     event.preventDefault()
@@ -76,5 +80,6 @@ function handleRegister(ev) {
                 console.error("Error:", error);
             });
     }
+}
 }
 
