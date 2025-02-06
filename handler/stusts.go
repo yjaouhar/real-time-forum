@@ -9,16 +9,17 @@ import (
 
 func Stuts(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		fmt.Println("--------")
+
 		w.Header().Set("Content-Type", "application/json")
 
 		sesiontoken, err := r.Cookie("SessionToken")
+		fmt.Println(sesiontoken.Value)
 		if err != nil || sesiontoken.Value == "" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "Login Unsuccessful", "status":false}`))
 			return
 		}
-		isHave := db.HaveToken("sessionToken",sesiontoken.Value)
+		isHave := db.HaveToken( sesiontoken.Value)
 		if !isHave {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "Login Unsuccessful", "status":false}`))

@@ -70,13 +70,13 @@ async function Checkstuts(event){
        .then((result) => {
         
            if (!result.status) {
+            console.log(result.status);
             handle()
           
-            console.log("fih cokes");
             
            
            } else {
-            console.log("mafihch");
+            console.log(result.status,'fih cokes');
             Homepage()
            }
         

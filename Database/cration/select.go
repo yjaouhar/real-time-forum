@@ -33,9 +33,9 @@ func Updatesession(typ string, tocken string, input string) error {
 	return nil
 }
 
-func HaveToken(input string, tocken string) bool {
+func HaveToken( tocken string) bool {
 	var token int
-	quire := "SELECT sessionToken FROM users WHERE " + input + " = ?"
+	quire := "SELECT COUNT(*) FROM users WHERE sessionToken = ?"
 	err := DB.QueryRow(quire, tocken).Scan(&token)
 	if err != nil {
 		return false

@@ -16,7 +16,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"error": "Unauthorized ", "status":false}`))
 			return
 		}
-		isHave := db.HaveToken("sessionToken", tocken.Value)
+		isHave := db.HaveToken(tocken.Value)
 
 		if !isHave {
 			w.WriteHeader(http.StatusUnauthorized)
