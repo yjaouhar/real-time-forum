@@ -6,6 +6,7 @@ import (
 
 	db "real-time-forum/Database/cration"
 	"real-time-forum/servisse"
+	"real-time-forum/utils"
 )
 
 func Post(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +37,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`{"error": "Internal ServerError", "status":false}`))
 			return
 		}
+		utils.LastId, _ = db.Getlastid()
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"error": "Login successful", "status":true}`))
 

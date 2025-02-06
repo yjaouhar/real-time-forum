@@ -67,10 +67,11 @@ func GetUser(id int) string {
 	return name
 }
 
-func GetPostes() ([]utils.Postes, error) {
-	var postes []utils.Postes
-	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes ORDER BY created_at DESC "
-	rows, err := DB.Query(quire)
+func GetPostes(str int, end int) ([]utils.Postes, error) {
+
+	fmt.Println("///", str, "///", end)
+	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id > ? AND id <= ? ORDER BY created_at DESC "
+	rows, err := DB.Query(quire, end, str)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +86,18 @@ func GetPostes() ([]utils.Postes, error) {
 		if post.Username == "" {
 			return nil, err
 		}
-		postes = append(postes, post)
+		utils.Poste = append(utils.Poste, post)
 	}
-	return postes, nil
+
+	return utils.Poste, nil
+}
+
+func Getlastid() (int, error) {
+	id := 0
+	query := "SELECT id FROM postes ORDER BY id DESC LIMIT 1"
+	err := DB.QueryRow(query).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
 }

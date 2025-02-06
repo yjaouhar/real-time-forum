@@ -1,23 +1,28 @@
 import { Homepage, CreatPostTemp } from "./pages.js"
 import { showError } from "./errore.js"
+let nb = 20
 function HomeHandeler() {
-    fetch('http://localhost:8080/getpost')
-    .then(response => response.json())
-    .then(data => {
-        Homepage(data)
-        let creatpost = document.querySelector(".create-post")
-        creatpost.addEventListener("click", handelpost)
-        let cancel = document.querySelector("#cancel")
-        cancel.addEventListener("click", handelcontact)
-        
-    })
-    .catch(error => {
-        console.log('Error:', error);
-    });
-    
-    
-   
+    const formData = new FormData();
+    formData.append('namber', nb)
+    fetch('/getpost', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            console.log("====> data jat");
+            CreatHomePage(data)
+            nb += 10
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
 
+}
+
+const CreatHomePage = (data) => {
+    Homepage(data)
+    let creatpost = document.querySelector(".create-post")
+    creatpost.addEventListener("click", handelpost)
+    let cancel = document.querySelector("#cancel")
+    cancel.addEventListener("click", handelcontact)
 }
 
 const handelpost = () => {

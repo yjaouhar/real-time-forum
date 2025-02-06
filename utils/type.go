@@ -9,3 +9,6 @@ type Postes struct {
 	Categories string
 	CreatedAt  string
 }
+
+var LastId = 0
+var Poste []Postes
