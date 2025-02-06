@@ -1,4 +1,6 @@
 export const CreatPostTemp = () => {
+   
+    
     let publ = document.querySelector(".main-content")
     publ.innerHTML = `
       <div class="form-container">
@@ -159,6 +161,7 @@ export const Homepage = () => {
     contacts.append(contact)
     container.append(contacts)
     document.body.append(container)
+    
 }
 
 

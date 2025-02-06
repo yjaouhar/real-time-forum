@@ -1,6 +1,7 @@
 import { showError } from "./errore.js"
 import {Login,Regester,Homepage} from "./pages.js"
 import {handle} from "./login-register.js"
+import {HomeHandeler} from "./Homehandler.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -77,7 +78,7 @@ async function Checkstuts(event){
            
            } else {
             console.log(result.status,'fih cokes');
-            Homepage()
+            HomeHandeler()
            }
         
        })
