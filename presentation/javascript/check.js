@@ -73,9 +73,6 @@ async function Checkstuts(event){
            if (!result.status) {
             console.log(result.status);
             handle()
-          
-            
-           
            } else {
             console.log(result.status,'fih cokes');
             HomeHandeler()

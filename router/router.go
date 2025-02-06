@@ -11,16 +11,13 @@ import (
 func Router() *http.ServeMux {
 	router := http.NewServeMux()
 
-
 	router.HandleFunc("/", handler.First)
 	router.HandleFunc("/resgester", handler.Register)
 	router.HandleFunc("/login", handler.Login)
 	router.HandleFunc("/stuts", handler.Stuts)
-	router.HandleFunc("/category", handler.Post)
-
+	router.HandleFunc("/pubpost", handler.Post)
 	router.Handle("/static/", http.HandlerFunc(handler.Sta))
 	router.Handle("/javascript/", http.HandlerFunc(handler.Sta))
-
 
 	return router
 }

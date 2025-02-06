@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", Checkstuts)
 
 
 export function handle() {
-    
-    
     Login()
     let creat_account = document.getElementById("c-a")
     let login_form = document.getElementById("login-form")

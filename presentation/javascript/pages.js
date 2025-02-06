@@ -1,17 +1,15 @@
 export const CreatPostTemp = () => {
-   
-    
     let publ = document.querySelector(".main-content")
     publ.innerHTML = `
       <div class="form-container">
-        <form>
+        <form name="creatpost">
             <div class="form-group">
             <div>
             <span class="material-icons" id="cancel">
                         close
                 </span>
                 <label>Post Title</label>
-                <input type="text" name="title" class="form-control" placeholder="Enter post title" required>
+                <input type="text" name="title" class="form-control" placeholder="Enter post title" required >
                 </div>
             </div>
 
@@ -23,37 +21,37 @@ export const CreatPostTemp = () => {
             <div class="form-group">
                 <label>Select Categories</label>
                 <div class="category-grid">
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                    <label class="category-checkbox"> 
+                        <input type="checkbox" name="categories" value="Tech Support">
                         Tech Support
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories" value="General Discussion" >
                         General Discussion
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories"  value="Tutorials"  >
                         Tutorials
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories" value="Gaming">
                         Gaming
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories" value="Hobbies & Interests">
                         Hobbies & Interests
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories" value="Job Listings">
                         Job Listings
                     </label>
                     <label class="category-checkbox">
-                        <input type="checkbox" name="categories">
+                        <input type="checkbox" name="categories" value="Announcements">
                         Announcements
                     </label>
                 </div>
             </div>
-
+                <p id="error-message"></p>
             <button type="submit" class="submit-btn">Submit Post</button>
         </form>
     </div>
@@ -145,15 +143,15 @@ export const Homepage = () => {
     contacts.setAttribute("class", "contacts")
     contacts.innerHTML = `
      <div style=" margin-bottom: 1rem;">
-     <span class="material-icons" id="cancel">
-                        close
-                </span>
+  <span class="material-icons" id="cancel">visibility_off</span>
                 <h3>contact</h3>
                  
             </div>
     `
     let contact = document.createElement("div")
     contact.setAttribute("class", "contact")
+    contact.setAttribute("id", "contact")
+
     let sp = document.createElement("span")
     sp.textContent = "yjaouhar"
     contact.append(profile)

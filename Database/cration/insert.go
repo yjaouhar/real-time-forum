@@ -1,6 +1,9 @@
 package db
 
-import "strconv"
+import (
+	"strconv"
+	"time"
+)
 
 func Insertuser(first_name string, last_name string, email string, gender string, age string, nikname string, password string) error {
 	infiuser, err := DB.Prepare("INSERT INTO users (first_name, last_name, email, gender, age, nikname, password) VALUES (?, ?, ?, ?, ?, ?, ?)")
@@ -18,8 +21,9 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func InsertCategory(user_id int, title string, content string, created_at string, catygory string) error {
-	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,created_at,categories) VALUES (?,?,?,?,?)")
+func InsertCategory(user_id int, title string, content string, catygory string) error {
+	created_at := time.Now().Format("2006-01-02 15:04:05")
+	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,createdat,categories) VALUES (?,?,?,?,?)")
 	if err != nil {
 		return err
 	}
