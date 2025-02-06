@@ -18,6 +18,7 @@ func Router() *http.ServeMux {
 	router.HandleFunc("/pubpost", handler.Post)
 	router.Handle("/static/", http.HandlerFunc(handler.Sta))
 	router.Handle("/javascript/", http.HandlerFunc(handler.Sta))
+	router.HandleFunc("/getpost", handler.Getpost)
 
 	return router
 }

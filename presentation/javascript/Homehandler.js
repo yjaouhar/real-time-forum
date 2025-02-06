@@ -1,11 +1,22 @@
 import { Homepage, CreatPostTemp } from "./pages.js"
 import { showError } from "./errore.js"
 function HomeHandeler() {
-    Homepage()
-    let creatpost = document.querySelector(".create-post")
-    creatpost.addEventListener("click", handelpost)
-    let cancel = document.querySelector("#cancel")
-    cancel.addEventListener("click", handelcontact)
+    fetch('http://localhost:8080/getpost')
+    .then(response => response.json())
+    .then(data => {
+        Homepage(data)
+        let creatpost = document.querySelector(".create-post")
+        creatpost.addEventListener("click", handelpost)
+        let cancel = document.querySelector("#cancel")
+        cancel.addEventListener("click", handelcontact)
+        
+    })
+    .catch(error => {
+        console.log('Error:', error);
+    });
+    
+    
+   
 
 }
 

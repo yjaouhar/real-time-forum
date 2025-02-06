@@ -89,5 +89,20 @@ async function Checkstuts(event){
        
 }
 
+const Dateformat = (timestamp) => {
+    let pastDate = new Date(timestamp);
+    let now = new Date();
+    let seconds = Math.floor((pastDate - now) / 1000); // Correction: now - pastDate
 
-export { Checkemail, validatePassword, validateName, validateAge, validateGender,Checkstuts }
+    if (seconds < 60) {
+        return `${seconds} seconds`;
+    } else if (seconds < 3600) {
+        return `${Math.floor(seconds / 60)} minutes`;
+    } else if (seconds < 86400) {
+        return `${Math.floor(seconds / 3600)} heures`;
+    } else {
+        return `${Math.floor(seconds / 86400)} jours`;
+    }
+}
+
+export { Checkemail, validatePassword, validateName, validateAge, validateGender,Checkstuts ,Dateformat} 

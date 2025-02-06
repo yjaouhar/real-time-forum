@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -23,7 +24,8 @@ func Insertuser(first_name string, last_name string, email string, gender string
 
 func InsertCategory(user_id int, title string, content string, catygory string) error {
 	created_at := time.Now().Format("2006-01-02 15:04:05")
-	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,createdat,categories) VALUES (?,?,?,?,?)")
+	fmt.Println(created_at)
+	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,created_at,categories) VALUES (?,?,?,?,?)")
 	if err != nil {
 		return err
 	}

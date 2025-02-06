@@ -1,3 +1,4 @@
+import { Dateformat } from "./check.js"
 export const CreatPostTemp = () => {
     let publ = document.querySelector(".main-content")
     publ.innerHTML = `
@@ -59,13 +60,16 @@ export const CreatPostTemp = () => {
     publ.style.flex = "none"
 }
 
-export const Homepage = () => {
+export const Homepage = (data) => {
+    // console.log("=>",data[0])
     document.body.innerHTML = `
     <header class="header">
         <div class="logo">FORUM</div>
         <button>logout</button>
     </header>
     `
+   
+
     let container = document.createElement("div");
     container.setAttribute("class", "container")
     let sidebar = document.createElement("aside")
@@ -98,11 +102,15 @@ export const Homepage = () => {
     container.append(sidebar)
     let main = document.createElement("main")
     main.setAttribute("class", "main-content")
+    //================================
+    
     let creatPost = document.createElement("div")
     creatPost.setAttribute("class", "create-post")
     creatPost.innerHTML = "<button>+ creat a post</button>"
     main.append(creatPost)
     container.append(main)
+    if (data) {
+    data.forEach(element => {
     let post = document.createElement("div")
     post.setAttribute("class", "post")
     let post_header = document.createElement("div")
@@ -112,20 +120,19 @@ export const Homepage = () => {
     post_header.append(poster_profile)
     post_header.setAttribute("class", "post-header")
     let poster = document.createElement("span")
-    poster.textContent = "yassine"
+    poster.textContent = element.Username
     let time = document.createElement("span")
-    time.textContent = "1h"
+    time.textContent = Dateformat(element.CreatedAt)
     time.style.color = "#6c757d"
     post_header.append(poster)
     post_header.append(time)
     let title = document.createElement("h3")
-    title.textContent = "titel"
+    title.textContent = element.Title
     let p = document.createElement("p")
-    p.textContent = "Post"
+    p.textContent = element.Content
     post.append(post_header)
     post.append(title)
     post.append(p)
-
     let reaction = document.createElement("div")
     reaction.setAttribute("class", "post-actions")
     let likes = document.createElement("div")
@@ -139,6 +146,17 @@ export const Homepage = () => {
     post.append(reaction)
     main.append(post)
     container.append(main)
+    })
+    }else{
+        let post = document.createElement("div")
+        post.setAttribute("class", "post")
+        let p = document.createElement("p")
+        p.textContent = "no post found"
+        post.append(p)
+        main.append(post)
+        container.append(main)
+    }
+     //================================
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
     contacts.innerHTML = `
