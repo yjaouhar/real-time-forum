@@ -10,7 +10,7 @@ import (
 
 func Post(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		ishave := servisse.IsHaveToken(r)
+		_, ishave := servisse.IsHaveToken(r)
 		if ishave != nil {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false}`))

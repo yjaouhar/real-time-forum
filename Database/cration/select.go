@@ -69,7 +69,7 @@ func GetUser(id int) string {
 
 func GetPostes() ([]utils.Postes, error) {
 	var postes []utils.Postes
-	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes"
+	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes ORDER BY created_at DESC "
 	rows, err := DB.Query(quire)
 	if err != nil {
 		return nil, err

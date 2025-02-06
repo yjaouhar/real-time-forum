@@ -26,7 +26,7 @@ export function handle() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    HomeHandeler()
+                   Checkstuts(event)
                 } else {
                     showError(data.error)
                 }

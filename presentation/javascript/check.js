@@ -74,7 +74,8 @@ async function Checkstuts(event){
             console.log(result.status);
             handle()
            } else {
-            console.log(result.status,'fih cokes');
+            let head = document.querySelector(".g")
+            head.setAttribute("class",result.name)
             HomeHandeler()
            }
         
@@ -90,14 +91,18 @@ async function Checkstuts(event){
 }
 
 const Dateformat = (timestamp) => {
+  
+    
     let pastDate = new Date(timestamp);
+    pastDate.setHours(pastDate.getHours()-1)
+    console.log("Date : ",pastDate); // 2025-02-06 17:41:25
     let now = new Date();
-    let seconds = Math.floor((pastDate - now) / 1000); // Correction: now - pastDate
-
+    let seconds = Math.floor((now-pastDate) / 1000); // Correction: now - pastDate
+    
     if (seconds < 60) {
         return `${seconds} seconds`;
     } else if (seconds < 3600) {
-        return `${Math.floor(seconds / 60)} minutes`;
+        return `${Math.floor((seconds / 60))} minutes`;
     } else if (seconds < 86400) {
         return `${Math.floor(seconds / 3600)} heures`;
     } else {

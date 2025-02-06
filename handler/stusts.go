@@ -9,14 +9,15 @@ import (
 func Stuts(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		w.Header().Set("Content-Type", "application/json")
-		ishave := servisse.IsHaveToken(r)
+		name, ishave := servisse.IsHaveToken(r)
 		if ishave != nil {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false}`))
 			return
 		}
+
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "Login successful", "status":true}`))
+		w.Write([]byte(`{"error": "Login successful","name": "` + name + `","status":true}`))
 
 	}
 }

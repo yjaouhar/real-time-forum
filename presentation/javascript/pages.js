@@ -61,14 +61,18 @@ export const CreatPostTemp = () => {
 }
 
 export const Homepage = (data) => {
-    // console.log("=>",data[0])
+    let title = document.querySelector("title")
+    console.log(title);
+    
+    let name = title.getAttribute("class")
+    console.log("=>", data[0])
     document.body.innerHTML = `
     <header class="header">
         <div class="logo">FORUM</div>
         <button>logout</button>
     </header>
     `
-   
+
 
     let container = document.createElement("div");
     container.setAttribute("class", "container")
@@ -80,7 +84,7 @@ export const Homepage = (data) => {
     profile.setAttribute("class", "material-icons")
     profile.textContent = "account_circle"
     let user = document.createElement("span")
-    user.textContent = "yassine"
+    user.textContent = name
     let online = document.createElement("span")
     online.setAttribute("class", "online-indicator")
     info.append(profile)
@@ -103,51 +107,55 @@ export const Homepage = (data) => {
     let main = document.createElement("main")
     main.setAttribute("class", "main-content")
     //================================
-    
+
     let creatPost = document.createElement("div")
     creatPost.setAttribute("class", "create-post")
     creatPost.innerHTML = "<button>+ creat a post</button>"
     main.append(creatPost)
     container.append(main)
     if (data) {
-    data.forEach(element => {
-    let post = document.createElement("div")
-    post.setAttribute("class", "post")
-    let post_header = document.createElement("div")
-    let poster_profile = document.createElement("span")
-    poster_profile.setAttribute("class", "material-icons")
-    poster_profile.textContent = "account_circle"
-    post_header.append(poster_profile)
-    post_header.setAttribute("class", "post-header")
-    let poster = document.createElement("span")
-    poster.textContent = element.Username
-    let time = document.createElement("span")
-    time.textContent = Dateformat(element.CreatedAt)
-    time.style.color = "#6c757d"
-    post_header.append(poster)
-    post_header.append(time)
-    let title = document.createElement("h3")
-    title.textContent = element.Title
-    let p = document.createElement("p")
-    p.textContent = element.Content
-    post.append(post_header)
-    post.append(title)
-    post.append(p)
-    let reaction = document.createElement("div")
-    reaction.setAttribute("class", "post-actions")
-    let likes = document.createElement("div")
-    likes.innerHTML = `
+        data.forEach(element => {
+            let post = document.createElement("div")
+            post.setAttribute("class", "post")
+            let post_header = document.createElement("div")
+            let poster_profile = document.createElement("span")
+            poster_profile.setAttribute("class", "material-icons")
+            poster_profile.textContent = "account_circle"
+            post_header.append(poster_profile)
+            post_header.setAttribute("class", "post-header")
+            let poster = document.createElement("span")
+            poster.textContent = element.Username
+            let time = document.createElement("span")
+            time.textContent = Dateformat(element.CreatedAt)
+            time.style.color = "#6c757d"
+            post_header.append(poster)
+            post_header.append(time)
+            let title = document.createElement("h4")
+            title.textContent = element.Title
+            let p = document.createElement("p")
+            p.textContent = element.Content
+            let cat = document.createElement("i")
+            cat.textContent = `Categories : [${element.Categories}]`
+            cat.style.color="#b3b3b3"
+            post.append(post_header)
+            post.append(title)
+            post.append(p)
+            post.append(cat)
+            let reaction = document.createElement("div")
+            reaction.setAttribute("class", "post-actions")
+            let likes = document.createElement("div")
+            likes.innerHTML = `
     <button>👍</button>
     <button>👎</button>`
-    let comment = document.createElement("div")
-    comment.textContent = "0 💬"
-    reaction.append(likes)
-    reaction.append(comment)
-    post.append(reaction)
-    main.append(post)
-    container.append(main)
-    })
-    }else{
+            let comment = document.createElement("div")
+            comment.textContent = "0 💬"
+            reaction.append(likes)
+            reaction.append(comment)
+            post.append(reaction)
+            main.append(post)
+            container.append(main)
+        })
+    } else {
         let post = document.createElement("div")
         post.setAttribute("class", "post")
         let p = document.createElement("p")
@@ -156,7 +164,7 @@ export const Homepage = (data) => {
         main.append(post)
         container.append(main)
     }
-     //================================
+    //================================
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
     contacts.innerHTML = `
@@ -177,7 +185,7 @@ export const Homepage = (data) => {
     contacts.append(contact)
     container.append(contacts)
     document.body.append(container)
-    
+
 }
 
 
