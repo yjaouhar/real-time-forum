@@ -3,8 +3,12 @@ function HomeHandeler(){
 Homepage()
 let creatpost = document.querySelector(".create-post")
 console.log("===wwww===>");
-creatpost.addEventListener("click",CreatPostTemp)
+creatpost.addEventListener("click",handelpost)
 
+}
+
+const handelpost = ()=>{
+    CreatPostTemp()
 }
 
 export {HomeHandeler}
