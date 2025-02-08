@@ -43,7 +43,7 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 	// str = end
 	// fmt.Println("=> ", str, "==>", end)
 
-	fmt.Println("->", Postes)
+	// fmt.Println("->", Postes)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(Postes)
 }

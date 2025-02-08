@@ -116,12 +116,8 @@ func SelectComments(postid int) ([]utils.CommentPost, error) {
 			fmt.Println("moxkil f scan")
 			return nil, err
 		}
-		// fmt.Println(comment.UserID)
+
 		comment.Username = GetUser(comment.UserID)
-		// if comment.Username == "" {
-		// 	fmt.Println("moxkil f getuser ")
-		// 	return nil, err
-		// }
 
 		comments = append(comments, comment)
 		// fmt.Println("comments", comments)

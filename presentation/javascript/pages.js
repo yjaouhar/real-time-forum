@@ -150,7 +150,8 @@ export const Homepage = (data) => {
     <button>👎</button>`
             let comment = document.createElement("div")
             comment.textContent = `${element.Nembre} 💬`
-            comment.setAttribute("class", "comment")
+            comment.setAttribute("id", "comment")
+            comment.setAttribute("class", "of")
             comment.setAttribute("posteid", element.ID)
             reaction.append(likes)
             reaction.append(comment)
