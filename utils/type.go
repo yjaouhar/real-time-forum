@@ -29,3 +29,6 @@ type CommentPost struct {
 type Jsncomment struct {
 	ID         string `json:"post_id"`
 }
+
+var LastId = 0
+var Poste []Postes

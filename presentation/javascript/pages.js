@@ -65,7 +65,7 @@ export const Homepage = (data) => {
     console.log(title);
     
     let name = title.getAttribute("class")
-    console.log("=>", data[0])
+    // console.log("=>", data[0])
     document.body.innerHTML = `
     <header class="header">
         <div class="logo">FORUM</div>
@@ -202,6 +202,62 @@ export const Homepage = (data) => {
 }
 
 
+export const MoreData = (data) => {
+    let container = document.querySelector(".container")
+    let main = document.querySelector(".main-content")
+    if (data) {
+        data.forEach(element => {
+            let post = document.createElement("div")
+            post.setAttribute("class", "post")
+            let post_header = document.createElement("div")
+            let poster_profile = document.createElement("span")
+            poster_profile.setAttribute("class", "material-icons")
+            poster_profile.textContent = "account_circle"
+            post_header.append(poster_profile)
+            post_header.setAttribute("class", "post-header")
+            let poster = document.createElement("span")
+            poster.textContent = element.Username
+            let time = document.createElement("span")
+            time.textContent = Dateformat(element.CreatedAt)
+            time.style.color = "#6c757d"
+            post_header.append(poster)
+            post_header.append(time)
+            let title = document.createElement("h4")
+            title.textContent = element.Title
+            let p = document.createElement("p")
+            p.textContent = element.Content
+            let cat = document.createElement("i")
+            cat.textContent = `Categories : [${element.Categories}]`
+            cat.style.color = "#b3b3b3"
+            post.append(post_header)
+            post.append(title)
+            post.append(p)
+            post.append(cat)
+            let reaction = document.createElement("div")
+            reaction.setAttribute("class", "post-actions")
+            let likes = document.createElement("div")
+            likes.innerHTML = `
+                <button>👍</button>
+                 <button>👎</button>`
+            let comment = document.createElement("div")
+            comment.textContent = "0 💬"
+            reaction.append(likes)
+            reaction.append(comment)
+            post.append(reaction)
+            main.append(post)
+            container.append(main)
+        })
+    } else {
+        let post = document.createElement("div")
+        post.setAttribute("class", "post")
+        let p = document.createElement("p")
+        p.textContent = "no post found"
+        post.append(p)
+        main.append(post)
+        container.append(main)
+    }
+
+}
 
 export const Regester = () => {
     document.body.innerHTML = `

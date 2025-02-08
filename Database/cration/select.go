@@ -92,9 +92,9 @@ func GetPostes() ([]utils.Postes, error) {
 }
 
 func LenghtComent(postid int) (nbr int, err error) {
-	nbr = 0  // initialize the counter to 0
-    quire := "SELECT COUNT(*) FROM comments WHERE post_id =?"
-    err = DB.QueryRow(quire, postid).Scan(&nbr)
+	nbr = 0 // initialize the counter to 0
+	quire := "SELECT COUNT(*) FROM comments WHERE post_id =?"
+	err = DB.QueryRow(quire, postid).Scan(&nbr)
 	if err != nil {
 		return 0, err
 	}
@@ -111,7 +111,7 @@ func SelectComments(postid int) ([]utils.CommentPost, error) {
 	defer rows.Close()
 	for rows.Next() {
 		var comment utils.CommentPost
-		err := rows.Scan(&comment.ID, &comment.PostID ,&comment.UserID, &comment.Content, &comment.CreatedAt)
+		err := rows.Scan(&comment.ID, &comment.PostID, &comment.UserID, &comment.Content, &comment.CreatedAt)
 		if err != nil {
 			fmt.Println("moxkil f scan")
 			return nil, err
@@ -122,20 +122,29 @@ func SelectComments(postid int) ([]utils.CommentPost, error) {
 		// 	fmt.Println("moxkil f getuser ")
 		// 	return nil, err
 		// }
-		
+
 		comments = append(comments, comment)
 		// fmt.Println("comments", comments)
 	}
-	
+
 	return comments, nil
 }
 
-func SelectPostid(postid int) (error){
-	
+func SelectPostid(postid int) error {
 	query := "SELECT id FROM postes WHERE id = $1"
-    _, err := DB.Exec(query, postid)
-    if err!= nil {
-        return err
-    }
-    return nil
+	_, err := DB.Exec(query, postid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func Getlastid() (int, error) {
+	id := 0
+	query := "SELECT id FROM postes ORDER BY id DESC LIMIT 1"
+	err := DB.QueryRow(query).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
 }

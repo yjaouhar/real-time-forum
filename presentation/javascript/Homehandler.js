@@ -1,8 +1,12 @@
 import { Homepage, CreatPostTemp, Login } from "./pages.js"
 import { showError } from "./errore.js"
 import { Dateformat } from "./check.js"
+// let nb = 20
 function HomeHandeler() {
-    fetch('/getpost')
+    // const formData = new FormData();
+    // formData.append('namber', nb)
+    // { method: 'POST', body: formData }
+    fetch('/getpost', )
     .then(response => response.json())
     .then(data => {
         Homepage(data)
@@ -21,7 +25,7 @@ function HomeHandeler() {
         comment.forEach((el) => {
             el.addEventListener("click", CommentEvent)
         })
-        
+        // nb += 10
     })
     .catch(error => {
         console.log('Error:', error);
