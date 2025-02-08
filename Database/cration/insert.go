@@ -35,3 +35,17 @@ func InsertCategory(user_id int, title string, content string, catygory string) 
 	}
 	return nil
 }
+
+func InsertComment(post_id int ,user_id int,comment string ) error {
+	created_at := time.Now().Format("2006-01-02 15:04:05")
+	info, err := DB.Prepare("INSERT INTO comments (post_id , user_id , comment , created_at) VALUES (?,?,?,?)")
+	if err != nil {
+		return err
+	}
+	_, err = info.Exec(post_id, user_id, comment, created_at)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

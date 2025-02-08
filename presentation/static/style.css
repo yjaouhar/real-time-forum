@@ -498,6 +498,51 @@ a {
 
 /* ========================================================== */
 
+.input-wrapper {
+    position: relative;
+    flex-grow: 1;
+}
+
+.comment-input {
+    width: 100%;
+    background-color: red;
+    min-height: 40px;
+    padding: 8px 12px;
+    padding-right: 40px;
+    border: 2px solid black;
+    border-radius: 20px;
+    background: white;
+    resize: none;
+    font-size: 15px;
+}
+
+.comment-input:focus {
+    outline: none;
+}
+
+.send-button {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    background: none;
+    border: none;
+    color: #1877f2;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #e4e6eb;
+}
+
+
+/* ========================================================== */
+
 #login-container {
     /* display: none; */
     width: 100%;
@@ -609,6 +654,70 @@ input::placeholder {
     transition: all 0.3s;
     margin-bottom: 20px;
 }
+ /* style coment  */
+
+
+
+
+ .comment-content {
+    background-color: #ffffff; /* اللون الخلفي للتعليق */
+    border-radius: 8px; /* زوايا مستديرة */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+    padding: 16px; /* المسافة الداخلية */
+    margin-bottom: 12px; /* المسافة بين التعليقات */
+  }
+  
+  .user-name {
+    font-weight: bold; /* خط غليظ */
+    font-size: 14px; /* حجم الخط */
+    color: #333; /* لون النص */
+    margin-bottom: 8px; /* مسافة تحت الاسم */
+  }
+  
+  .comment-text {
+    font-size: 14px; /* حجم الخط */
+    line-height: 1.6; /* ارتفاع السطر */
+    color: #555; /* لون النص */
+    margin-bottom: 12px; /* مسافة تحت النص */
+  }
+  
+  .comment-actions {
+    display: flex; /* عرض أفقي */
+    align-items: center; /* محاذاة وسط العناصر */
+    gap: 12px; /* مسافة بين العناصر */
+  }
+  
+  .action-btn {
+    background: none; /* بدون خلفية */
+    border: none; /* بدون حدود */
+    color: #007bff; /* لون أزرق */
+    cursor: pointer; /* تغيير المؤشر عند التمرير */
+    font-size: 14px; /* حجم الخط */
+  }
+  
+  .action-btn:hover {
+    text-decoration: underline; /* خط تحت النص عند التمرير */
+  }
+  
+  .timestamp {
+    font-size: 12px; /* حجم صغير */
+    color: #999; /* لون رمادي */
+    margin-left: auto; /* يدفع النص للتراصف على اليمين */
+  }
+  
+
+
+
+
+
+
+
+
+
+
+/*  */
+
+
 
 #login-btn:hover {
     background: #0984e3;
@@ -634,6 +743,47 @@ input::placeholder {
     transition: all 0.3s;
     margin-top: 5px;
     /* border: 3px solid black; */
+}
+
+.input-wrapper {
+    position: relative;
+    flex-grow: 1;
+}
+
+.comment-input {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 12px;
+    padding-right: 40px;
+    border: none;
+    border-radius: 20px;
+    background: white;
+    resize: none;
+    font-size: 15px;
+}
+
+.comment-input:focus {
+    outline: none;
+}
+
+.send-button {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    background: none;
+    border: none;
+    color: #1877f2;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #e4e6eb;
 }
 
 #c-a:hover {

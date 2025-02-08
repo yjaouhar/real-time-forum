@@ -18,7 +18,7 @@ export function handle() {
         event.preventDefault()
         const formData = new FormData(login_form);
 
-        fetch('http://localhost:8080/login', {
+        fetch('/login', {
             method: 'POST',
             body: formData
 

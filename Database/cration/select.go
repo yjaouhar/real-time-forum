@@ -67,11 +67,10 @@ func GetUser(id int) string {
 	return name
 }
 
-func GetPostes(str int, end int) ([]utils.Postes, error) {
-
-	fmt.Println("///", str, "///", end)
-	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id > ? AND id <= ? ORDER BY created_at DESC "
-	rows, err := DB.Query(quire, end, str)
+func GetPostes() ([]utils.Postes, error) {
+	var postes []utils.Postes
+	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes ORDER BY created_at DESC "
+	rows, err := DB.Query(quire)
 	if err != nil {
 		return nil, err
 	}
@@ -82,22 +81,61 @@ func GetPostes(str int, end int) ([]utils.Postes, error) {
 		if err != nil {
 			return nil, err
 		}
+		post.Nembre, err = LenghtComent(post.ID)
 		post.Username = GetUser(post.UserID)
 		if post.Username == "" {
 			return nil, err
 		}
-		utils.Poste = append(utils.Poste, post)
+		postes = append(postes, post)
 	}
-
-	return utils.Poste, nil
+	return postes, nil
 }
 
-func Getlastid() (int, error) {
-	id := 0
-	query := "SELECT id FROM postes ORDER BY id DESC LIMIT 1"
-	err := DB.QueryRow(query).Scan(&id)
+func LenghtComent(postid int) (nbr int, err error) {
+	nbr = 0  // initialize the counter to 0
+    quire := "SELECT COUNT(*) FROM comments WHERE post_id =?"
+    err = DB.QueryRow(quire, postid).Scan(&nbr)
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+	return nbr, nil
+}
+
+func SelectComments(postid int) ([]utils.CommentPost, error) {
+	var comments []utils.CommentPost
+	quire := "SELECT id, post_id, user_id, comment, created_at FROM comments WHERE post_id = ? ORDER BY created_at DESC"
+	rows, err := DB.Query(quire, postid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var comment utils.CommentPost
+		err := rows.Scan(&comment.ID, &comment.PostID ,&comment.UserID, &comment.Content, &comment.CreatedAt)
+		if err != nil {
+			fmt.Println("moxkil f scan")
+			return nil, err
+		}
+		// fmt.Println(comment.UserID)
+		comment.Username = GetUser(comment.UserID)
+		// if comment.Username == "" {
+		// 	fmt.Println("moxkil f getuser ")
+		// 	return nil, err
+		// }
+		
+		comments = append(comments, comment)
+		// fmt.Println("comments", comments)
+	}
+	
+	return comments, nil
+}
+
+func SelectPostid(postid int) (error){
+	
+	query := "SELECT id FROM postes WHERE id = $1"
+    _, err := DB.Exec(query, postid)
+    if err!= nil {
+        return err
+    }
+    return nil
 }

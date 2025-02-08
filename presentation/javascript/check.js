@@ -71,7 +71,7 @@ async function Checkstuts(event){
        .then((result) => {
         
            if (!result.status) {
-            console.log(result.error);
+            console.log(result.status);
             handle()
            } else {
             let head = document.querySelector(".g")
