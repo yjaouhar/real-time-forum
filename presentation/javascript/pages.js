@@ -1,5 +1,4 @@
-import { Dateformat } from "./check.js"
-
+import { Dateformat } from "./utils.js"
 
 export const Homepage = (data) => {
     let title = document.querySelector("title")
@@ -47,6 +46,7 @@ export const Homepage = (data) => {
     container.append(sidebar)
     let main = document.createElement("main")
     main.setAttribute("class", "main-content")
+    main.id= "main-content"
     //================================
 
     let creatPost = document.createElement("div")
@@ -113,61 +113,7 @@ export const Homepage = (data) => {
     creatcontainer.style.display = "none"
     main.append(creatcontainer)
     if (data) {
-        data.forEach(element => {
-            let post = document.createElement("div")
-            post.setAttribute("postid", element.ID)
-            post.setAttribute("class", "post")
-            let post_header = document.createElement("div")
-            let poster_profile = document.createElement("span")
-            poster_profile.setAttribute("class", "material-icons")
-            poster_profile.textContent = "account_circle"
-            post_header.append(poster_profile)
-            post_header.setAttribute("class", "post-header")
-            let poster = document.createElement("span")
-            poster.textContent = element.Username
-            let time = document.createElement("span")
-            time.textContent = Dateformat(element.CreatedAt)
-            time.style.color = "#6c757d"
-            post_header.append(poster)
-            post_header.append(time)
-            let title = document.createElement("h4")
-            title.textContent = element.Title + "   ====> " + element.ID
-            let p = document.createElement("p")
-            p.textContent = element.Content
-            let cat = document.createElement("i")
-            cat.textContent = `Categories : [${element.Categories}]`
-            cat.style.color = "#b3b3b3"
-            post.append(post_header)
-            post.append(title)
-            post.append(p)
-            post.append(cat)
-            let reaction = document.createElement("div")
-            reaction.setAttribute("class", "post-actions")
-            let likes = document.createElement("div")
-            likes.innerHTML = `
-    <button>👍</button>
-    <button>👎</button>`
-            let comment = document.createElement("div")
-            comment.textContent = `${element.Nembre} 💬`
-            comment.setAttribute("id", "comment")
-            comment.setAttribute("class", "of")
-            comment.setAttribute("posteid", element.ID)
-            reaction.append(likes)
-            reaction.append(comment)
-            post.append(reaction)
-            main.append(post)
-            container.append(main)
-            post.innerHTML += `<div class="input-wrapper">
-    <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
-    <button class="send-button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M22 2L11 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-    <p id="error-message"></p>
-</div>`
-        })
+        MoreData(data)
     } else {
         let post = document.createElement("div")
         post.setAttribute("class", "post")
@@ -203,10 +149,8 @@ export const Homepage = (data) => {
 
 
 export const MoreData = (data) => {
-    // let container = document.querySelector(".container")
-    console.log("======> more data");
 
-    let main = document.querySelector(".main-content")
+    let main = document.querySelector("#main-content")
     if (data) {
         data.forEach(element => {
             let post = document.createElement("div")
@@ -343,7 +287,7 @@ export const Login = () => {
             <form id="login-form" method="post">
                 <div class="form-group">
                     <label>Nickname / Email</label>
-                    <input type="email" id="nickname" name="email" placeholder="example@email.com">
+                    <input type="email" id="nicknameDateformat" name="email" placeholder="example@email.com">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>

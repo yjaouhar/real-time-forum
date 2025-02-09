@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
@@ -21,7 +20,6 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 	if lastdata == "true" {
 		str, err = db.Getlastid()
 		if err != nil {
-
 			return
 		}
 		lastdata = "false"
@@ -34,7 +32,6 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 
 	if str > 10 {
 		end = str - 10
-
 	} else if str < 10 {
 		end = 0
 	}
@@ -54,5 +51,4 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(Postes)
-
 }

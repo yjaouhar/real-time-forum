@@ -90,25 +90,6 @@ async function Checkstuts(event) {
 
 }
 
-const Dateformat = (timestamp) => {
 
 
-    let pastDate = new Date(timestamp);
-    pastDate.setHours(pastDate.getHours() - 1)
-    // console.log("Date : ", pastDate); // 2025-02-06 17:41:25
-    let now = new Date();
-    let seconds = Math.floor((now - pastDate) / 1000); // Correction: now - pastDate
-
-    if (seconds < 60) {
-        return `${seconds} seconds`;
-    } else if (seconds < 3600) {
-        return `${Math.floor((seconds / 60))} minutes`;
-    } else if (seconds < 86400) {
-        return `${Math.floor(seconds / 3600)} heures`;
-    } else {
-        return `${Math.floor(seconds / 86400)} jours`;
-    }
-}
-
-
-export { Checkemail, validatePassword, validateName, validateAge, validateGender, Checkstuts, Dateformat } 
+export { Checkemail, validatePassword, validateName, validateAge, validateGender, Checkstuts } 
