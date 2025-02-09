@@ -67,13 +67,11 @@ func GetUser(id int) string {
 	return name
 }
 
-func GetPostes(str int, end int) ([]utils.Postes, error) {
+func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 	var postes []utils.Postes
 	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id > ? AND id <= ? ORDER BY created_at DESC"
 	rows, err := DB.Query(quire, end, str)
-
 	if err != nil {
-
 		return nil, err
 	}
 	defer rows.Close()
@@ -88,6 +86,23 @@ func GetPostes(str int, end int) ([]utils.Postes, error) {
 		if post.Username == "" {
 			return nil, err
 		}
+		sl, _ := SelecReaction(post.ID)
+
+		for i := 0; i < len(sl); i++ {
+			if sl[i].Reactione_type == "like" {
+				post.Like++
+			} else if sl[i].Reactione_type == "dislike" {
+				post.DisLike++
+			}
+
+			if sl[i].User_id == userid {
+				post.Have = sl[i].Reactione_type
+			} else {
+				post.Have = ""
+			}
+		}
+
+		fmt.Println(post)
 		postes = append(postes, post)
 	}
 	return postes, nil
@@ -145,4 +160,33 @@ func Getlastid() (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func SelecReaction(Contentid int) ([]utils.Reaction, error) {
+	var reactions []utils.Reaction
+	quire := "SELECT id, user_id, content_type, content_id, reaction_type FROM reactions WHERE content_id = ?"
+	rows, err := DB.Query(quire, Contentid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var reaction utils.Reaction
+		err := rows.Scan(&reaction.ID, &reaction.User_id, &reaction.Content_type, &reaction.Content_id, &reaction.Reactione_type)
+		if err != nil {
+			return nil, err
+		}
+		reactions = append(reactions, reaction)
+	}
+	return reactions, nil
+}
+
+func GetReactionRow(userid int, postid int) (string, error) {
+	var reaction string
+	quire := "SELECT reaction_type FROM reactions WHERE user_id = ? AND content_id = ?"
+	err := DB.QueryRow(quire, userid, postid).Scan(&reaction)
+	if err != nil {
+		return "", err
+	}
+	return reaction, nil
 }

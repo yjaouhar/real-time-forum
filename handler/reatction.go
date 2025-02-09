@@ -37,13 +37,29 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("error : ", err)
 			return
 		}
-		err = db.InsertReaction(reactione.User_id, content_id, reactione.Content_type, reactione.Reactione_type)
+		reactiontype, err := db.GetReactionRow(reactione.User_id, content_id)
 		if err != nil {
-			fmt.Println("err select")
-			return
+			err = db.InsertReaction(reactione.User_id, content_id, reactione.Content_type, reactione.Reactione_type)
+			if err != nil {
+				fmt.Println("err select 1")
+				return
+			}
+		}
+		if reactiontype == reactione.Reactione_type {
+			err = db.DeleteReaction(reactione.User_id, content_id)
+			if err != nil {
+				fmt.Println("err select 2")
+				return
+			}
+		} else {
+			err = db.Update(reactione.User_id, content_id, reactione.Reactione_type)
+			if err != nil {
+				fmt.Println("err select 3")
+				return
+			}
 		}
 		w.Header().Set("Content-Type", "application/json")
-
+		w.Write([]byte(`{"error": "Login successful", "status":true}`))
 		// json.NewEncoder(w).Encode()
 	}
 }

@@ -1,7 +1,7 @@
 import { Homepage, Login, MoreData } from "./pages.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat } from "./utils.js"
-import  {HomeHandeler } from "./Homehandler.js"
+import { HomeHandeler } from "./Homehandler.js"
 
 export function HomeListener(data) {
     Homepage(data)
@@ -32,8 +32,35 @@ const likeHandel = (event) => {
     let content_type = event.target.getAttribute("data-type")
     let content_id = event.target.getAttribute("data-id")
     let reaction_type = event.target.id
-    console.log(reaction_type);
-    
+    let status = event.target.getAttribute("data-status")
+    let b = Number(event.target.parentNode.querySelector("b").textContent)
+
+
+    let element
+    if (reaction_type == "like") {
+        element = document.querySelector(`#dislike[data-id="${content_id}"]`)
+    } else {
+        element = document.querySelector(`#like[data-id="${content_id}"]`)
+    }
+    if (status == "of" && element.getAttribute("data-status") == "of") {
+        event.target.setAttribute("data-status", "on")
+        event.target.parentNode.setAttribute("data-status", "on")
+
+        event.target.parentNode.querySelector("b").textContent = b + 1
+        // event.target.parentNode.b.textContent = "ggg"
+    } else if (status == "on" && element.getAttribute("data-status") == "of") {
+        event.target.setAttribute("data-status", "of")
+        event.target.parentNode.setAttribute("data-status", "of")
+        event.target.parentNode.querySelector("b").textContent = b - 1
+    } else if (status == "of" && element.getAttribute("data-status") == "on") {
+        event.target.setAttribute("data-status", "on")
+        event.target.parentNode.setAttribute("data-status", "on")
+        element.setAttribute("data-status", "of")
+        element.parentNode.setAttribute("data-status", "of")
+        event.target.parentNode.querySelector("b").textContent = b + 1
+        b = Number(element.parentNode.querySelector("b").textContent)
+        element.parentNode.querySelector("b").textContent = b - 1
+    }
     fetch("/reactione", {
         method: 'POST',
         headers: {
@@ -43,8 +70,8 @@ const likeHandel = (event) => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log( (data));
-           
+            console.log(data)
+
         })
         .catch(error => {
             console.log('Error:', error);
@@ -202,55 +229,68 @@ function CommentEvent(event) {//////comment
         })
             .then(response => response.json())
             .then(data => {
-                data.forEach((el) => {
-                    let commentDiv = document.createElement("div");
-                    commentDiv.classList.add("comment-content");
+                if (data) {
+                    data.forEach((el) => {
+                        let commentDiv = document.createElement("div");
+                        commentDiv.classList.add("comment-content");
 
 
-                    let userDiv = document.createElement("div");
-                    userDiv.classList.add("user-name");
-                    userDiv.textContent = el.Username; // Changeha b user dynamiquement
+                        let userDiv = document.createElement("div");
+                        userDiv.classList.add("user-name");
+                        userDiv.textContent = el.Username; // Changeha b user dynamiquement
 
-                    let commentP = document.createElement("p");
-                    commentP.classList.add("comment-text");
-                    commentP.textContent = el.Content; // Changeha b data dynamiquement
-
-
-                    let actionsDiv = document.createElement("div");
-                    actionsDiv.classList.add("comment-actions");
-
-                    let likeBtn = document.createElement("span");
-                    likeBtn.classList.add("material-icons");
-                    likeBtn.id = "like"
-                    likeBtn.setAttribute("data-type", "comment")
-                    likeBtn.setAttribute("data-id", el.ID)
-                    likeBtn.textContent = "thumb_up_off_alt";
-
-                    let dislikeBtn = document.createElement("span");
-                    dislikeBtn.classList.add("material-icons");
-                    dislikeBtn.id = "like"
-                    dislikeBtn.setAttribute("data-type", "comment")
-                    dislikeBtn.setAttribute("data-id", el.ID)
-                    dislikeBtn.textContent = "thumb_down_off_alt";
-
-                    let timeSpan = document.createElement("span");
-                    timeSpan.classList.add("timestamp");
-                    timeSpan.textContent = Dateformat(el.CreatedAt);
+                        let commentP = document.createElement("p");
+                        commentP.classList.add("comment-text");
+                        commentP.textContent = el.Content; // Changeha b data dynamiquement
 
 
-                    actionsDiv.appendChild(likeBtn);
-                    actionsDiv.appendChild(dislikeBtn);
-                    actionsDiv.appendChild(timeSpan);
+                        let actionsDiv = document.createElement("div");
+                        actionsDiv.classList.add("comment-actions");
+                        actionsDiv.innerHTML = `
+                     <div class="like-button" data-status="of">
+              <span id="like" data-type="comment" data-status="of" data-id = ${el.ID}  class="material-icons">thumb_up_off_alt</span> <b>0</b>
+               </div>
+            <div class="like-button" data-status="of">
+              <span id="dislike" data-type="comment" data-status="of" data-id = ${el.ID} class="material-icons">thumb_down_off_alt</span>  <b>0</b>
+                </div>
+                    `
+                        // let likeBtn = document.createElement("span");
+                        // likeBtn.classList.add("material-icons");
+                        // likeBtn.id = "like"
+                        // likeBtn.setAttribute("data-type", "comment")
+                        // likeBtn.setAttribute("data-id", el.ID)
+                        // likeBtn.classList.add("material-icons")
+                        // likeBtn.textContent = "thumb_up_off_alt";
 
-                    commentDiv.appendChild(userDiv);
-                    commentDiv.appendChild(commentP);
-                    commentDiv.appendChild(actionsDiv);
+                        // let dislikeBtn = document.createElement("span");
+                        // dislikeBtn.classList.add("material-icons");
+                        // dislikeBtn.id = "like"
+                        // dislikeBtn.setAttribute("data-type", "comment")
+                        // dislikeBtn.setAttribute("data-id", el.ID)
+                        // dislikeBtn.classList.add("material-icons")
+                        // dislikeBtn.textContent = "thumb_down_off_alt";
 
-                    postDiv.appendChild(commentDiv);
+                        let timeSpan = document.createElement("span");
+                        timeSpan.classList.add("timestamp");
+                        timeSpan.textContent = Dateformat(el.CreatedAt);
+                        // actionsDiv.appendChild(likeBtn);
+                        // actionsDiv.appendChild(dislikeBtn);
+                        actionsDiv.appendChild(timeSpan);
 
-                })
-                event.target.classList.remove("of")
-                event.target.classList.add("on")
+                        commentDiv.appendChild(userDiv);
+                        commentDiv.appendChild(commentP);
+                        commentDiv.appendChild(actionsDiv);
+
+                        postDiv.appendChild(commentDiv);
+
+                    })
+                    event.target.classList.remove("of")
+                    event.target.classList.add("on")
+                    let reactionLike = document.querySelectorAll("#like")
+                    reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                    let reactionDisLike = document.querySelectorAll("#dislike")
+                    reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                }
             })
             .catch(error => {
                 console.log('Error:', error);

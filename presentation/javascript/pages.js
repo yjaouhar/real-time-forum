@@ -42,7 +42,7 @@ export const Homepage = (data) => {
     container.append(sidebar)
     let main = document.createElement("main")
     main.setAttribute("class", "main-content")
-    main.id= "main-content"
+    main.id = "main-content"
     let creatPost = document.createElement("div")
     creatPost.setAttribute("class", "create-post")
     creatPost.innerHTML = "<button>+ creat a post</button>"
@@ -108,13 +108,10 @@ export const Homepage = (data) => {
     main.append(creatcontainer)
     container.append(main)
     document.body.append(container)
-    // console.log("testing",data);
-    
-    if (data && data.finish===undefined) {
-        console.log("............. 1" ,data);
+
+    if (data && data.finish === undefined) {
         MoreData(data)
     } else {
-        console.log("............. 2");
         let post = document.createElement("div")
         post.setAttribute("class", "post")
         let p = document.createElement("p")
@@ -180,19 +177,32 @@ export const MoreData = (data) => {
             let reaction = document.createElement("div")
             reaction.setAttribute("class", "post-actions")
             let likes = document.createElement("div")
+            likes.setAttribute("class", "reactions")
             likes.innerHTML = `
-                <span id="like" data-type="post"  data-id = ${element.ID}  class="material-icons">thumb_up_off_alt</span>
-                <span id="dislike" data-type="post" data-id = ${element.ID} class="material-icons">thumb_down_off_alt</span>`
+            <div class="like-button" data-status="of">
+            <span id="like" data-type="post" data-status="of" data-id = ${element.ID}  class="material-icons">thumb_up_off_alt</span> <b>${element.Like}</b>
+            </div>
+            <div class="like-button" data-status="of">
+            <span id="dislike" data-type="post" data-status="of" data-id = ${element.ID} class="material-icons">thumb_down_off_alt</span>  <b>${element.DisLike}</b>
+            </div>`
             let comment = document.createElement("div")
             comment.textContent = `${element.Nembre} 💬`
             comment.setAttribute("id", "comment")
             comment.setAttribute("class", "of")
             comment.setAttribute("posteid", element.ID)
+            if (element.Have === "like") {
+                let like = likes.querySelector("#like")
+                like.setAttribute("data-status", "on")
+                like.parentNode.setAttribute("data-status", "on")
+            } else if (element.Have === "dislike") {
+                let dislike = likes.querySelector("#dislike")
+                dislike.setAttribute("data-status", "on")
+                dislike.parentNode.setAttribute("data-status", "on")
+            }
             reaction.append(likes)
             reaction.append(comment)
             post.append(reaction)
             main.append(post)
-            // container.append(main)
             post.innerHTML += `<div class="input-wrapper">
                  <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
                     <button class="send-button">

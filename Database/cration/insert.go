@@ -62,3 +62,27 @@ func InsertComment(post_id int, user_id int, comment string) error {
 	}
 	return nil
 }
+
+func DeleteReaction(user_id int, content_id int) error {
+	info, err := DB.Prepare("DELETE FROM reactions WHERE user_id = ? AND content_id = ?")
+	if err != nil {
+		return err
+	}
+	_, err = info.Exec(user_id, content_id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func Update(userid int, postid int, reactiontype string) error {
+	info, err := DB.Prepare("UPDATE reactions SET reaction_type = ? WHERE user_id = ? AND content_id = ?")
+	if err != nil {
+		return err
+	}
+	_, err = info.Exec(reactiontype, userid, postid)
+	if err != nil {
+		return err
+	}
+	return nil
+}

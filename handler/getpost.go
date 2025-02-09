@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
+	"real-time-forum/servisse"
 )
 
 var (
@@ -14,6 +16,17 @@ var (
 
 func Getpost(w http.ResponseWriter, r *http.Request) {
 	var err error
+	_, err = servisse.IsHaveToken(r)
+	if err != nil {
+		fmt.Println("token not found")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
+		return
+	}
+	token, _ := r.Cookie("SessionToken")
+
+	userid := db.GetId("sessionToken", token.Value)
+
 	w.Header().Set("Content-Type", "application/json")
 	lastdata := r.FormValue("lastdata")
 
@@ -38,7 +51,7 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 		end = 0
 	}
 
-	Postes, err := db.GetPostes(str, end)
+	Postes, err := db.GetPostes(str, end, userid)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

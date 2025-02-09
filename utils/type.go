@@ -8,27 +8,39 @@ type Postes struct {
 	Content    string
 	Categories string
 	CreatedAt  string
-	Nembre int
+	Nembre     int
+	Like       int
+	DisLike    int
+	Have       string
 }
 
-
 type Comment struct {
-	Content       string `json:"content"`
-	PostID       string   `json:"post_id"`
+	Content string `json:"content"`
+	PostID  string `json:"post_id"`
 }
 
 type CommentPost struct {
-	ID         int
-	PostID     int
-	UserID     int
-	Content    string
-	CreatedAt  string
-	Username   string
+	ID        int
+	PostID    int
+	UserID    int
+	Content   string
+	CreatedAt string
+	Username  string
 }
 
 type Jsncomment struct {
-	ID         string `json:"post_id"`
+	ID string `json:"post_id"`
 }
 
-var LastId = 0
-var Poste []Postes
+var (
+	LastId = 0
+	Poste  []Postes
+)
+
+type Reaction struct {
+	ID             int
+	User_id        int
+	Content_type   string
+	Content_id     string
+	Reactione_type string
+}
