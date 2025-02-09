@@ -20,6 +20,8 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 	if lastdata == "true" {
 		str, err = db.Getlastid()
 		if err != nil {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"finish": true}`))
 			return
 		}
 		lastdata = "false"

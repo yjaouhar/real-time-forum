@@ -1,10 +1,9 @@
 import { Homepage, Login, MoreData } from "./pages.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat } from "./utils.js"
+import  {HomeHandeler } from "./Homehandler.js"
 
 export function HomeListener(data) {
-    console.log(data);
-    
     Homepage(data)
     let CreatPostBtn = document.querySelector(".create-post")
     CreatPostBtn.addEventListener("click", handelpost)
@@ -20,7 +19,38 @@ export function HomeListener(data) {
     comment.forEach((el) => {
         el.addEventListener("click", CommentEvent)
     })
+
+    let reactionLike = document.querySelectorAll("#like")
+    reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
+    let reactionDisLike = document.querySelectorAll("#dislike")
+    reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
 }
+
+
+
+const likeHandel = (event) => {
+    let content_type = event.target.getAttribute("data-type")
+    let content_id = event.target.getAttribute("data-id")
+    let reaction_type = event.target.id
+    console.log(reaction_type);
+    
+    fetch("/reactione", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content_type: `${content_type}`, content_id: `${content_id}`, reaction_type: `${reaction_type}` })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log( (data));
+           
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+}
+
 
 
 export const handelpost = (event) => {/////////////////formulaire dyal create post
@@ -172,8 +202,6 @@ function CommentEvent(event) {//////comment
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                // postDiv.textContent=`${data.lenght} 💬`;
                 data.forEach((el) => {
                     let commentDiv = document.createElement("div");
                     commentDiv.classList.add("comment-content");
@@ -191,13 +219,19 @@ function CommentEvent(event) {//////comment
                     let actionsDiv = document.createElement("div");
                     actionsDiv.classList.add("comment-actions");
 
-                    let likeBtn = document.createElement("button");
-                    likeBtn.classList.add("action-btn");
-                    likeBtn.textContent = "J'aime";
+                    let likeBtn = document.createElement("span");
+                    likeBtn.classList.add("material-icons");
+                    likeBtn.id = "like"
+                    likeBtn.setAttribute("data-type", "comment")
+                    likeBtn.setAttribute("data-id", el.ID)
+                    likeBtn.textContent = "thumb_up_off_alt";
 
-                    let replyBtn = document.createElement("button");
-                    replyBtn.classList.add("action-btn");
-                    replyBtn.textContent = "Répondre";
+                    let dislikeBtn = document.createElement("span");
+                    dislikeBtn.classList.add("material-icons");
+                    dislikeBtn.id = "like"
+                    dislikeBtn.setAttribute("data-type", "comment")
+                    dislikeBtn.setAttribute("data-id", el.ID)
+                    dislikeBtn.textContent = "thumb_down_off_alt";
 
                     let timeSpan = document.createElement("span");
                     timeSpan.classList.add("timestamp");
@@ -205,7 +239,7 @@ function CommentEvent(event) {//////comment
 
 
                     actionsDiv.appendChild(likeBtn);
-                    actionsDiv.appendChild(replyBtn);
+                    actionsDiv.appendChild(dislikeBtn);
                     actionsDiv.appendChild(timeSpan);
 
                     commentDiv.appendChild(userDiv);

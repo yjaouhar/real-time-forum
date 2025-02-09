@@ -3,8 +3,9 @@ function HomeHandeler() {
     const formData = new FormData();
     formData.append('lastdata', true)
     fetch('/getpost', { method: 'POST', body: formData })
+   
         .then(response => response.json())
-        .then(data => {
+        .then(data => {           
             HomeListener(data)
         })
         .catch(error => {

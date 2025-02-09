@@ -21,7 +21,7 @@ func Router() *http.ServeMux {
 	router.HandleFunc("/getpost", handler.Getpost)
 	router.HandleFunc("/sendcomment", handler.Sendcomment)
 	router.HandleFunc("/getcomment", handler.Comments)
-
+	router.HandleFunc("/reactione", handler.Reaction)
 	return router
 }
 

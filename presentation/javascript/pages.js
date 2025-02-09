@@ -3,17 +3,13 @@ import { Dateformat } from "./utils.js"
 export const Homepage = (data) => {
     let title = document.querySelector("title")
     console.log(title);
-
     let name = title.getAttribute("class")
-    // console.log("=>", data[0])
     document.body.innerHTML = `
     <header class="header">
         <div class="logo">FORUM</div>
         <button>logout</button>
     </header>
     `
-
-
     let container = document.createElement("div");
     container.setAttribute("class", "container")
     let sidebar = document.createElement("aside")
@@ -33,7 +29,7 @@ export const Homepage = (data) => {
     sidebar.append(info)
     sidebar.innerHTML += `
                 <h3>Category</h3>
-            <div class="category-list">
+                <div class="category-list">
                 <button>Tech Support</button>
                 <button>General Discussion</button>
                 <button>Tutorials</button>
@@ -47,8 +43,6 @@ export const Homepage = (data) => {
     let main = document.createElement("main")
     main.setAttribute("class", "main-content")
     main.id= "main-content"
-    //================================
-
     let creatPost = document.createElement("div")
     creatPost.setAttribute("class", "create-post")
     creatPost.innerHTML = "<button>+ creat a post</button>"
@@ -112,26 +106,30 @@ export const Homepage = (data) => {
     `
     creatcontainer.style.display = "none"
     main.append(creatcontainer)
-    if (data) {
+    container.append(main)
+    document.body.append(container)
+    // console.log("testing",data);
+    
+    if (data && data.finish===undefined) {
+        console.log("............. 1" ,data);
         MoreData(data)
     } else {
+        console.log("............. 2");
         let post = document.createElement("div")
         post.setAttribute("class", "post")
         let p = document.createElement("p")
         p.textContent = "no post found"
         post.append(p)
         main.append(post)
-        container.append(main)
     }
-    //================================
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
     contacts.innerHTML = `
      <div style=" margin-bottom: 1rem;">
-  <span class="material-icons" id="cancel">visibility_off</span>
-                <h3>contact</h3>
+            <span class="material-icons" id="cancel">visibility_off</span>
+            <h3>contact</h3>
                  
-            </div>
+     </div>
     `
     let contact = document.createElement("div")
     contact.setAttribute("class", "contact")
@@ -149,8 +147,7 @@ export const Homepage = (data) => {
 
 
 export const MoreData = (data) => {
-
-    let main = document.querySelector("#main-content")
+    let main = document.querySelector(".main-content")
     if (data) {
         data.forEach(element => {
             let post = document.createElement("div")
@@ -184,8 +181,8 @@ export const MoreData = (data) => {
             reaction.setAttribute("class", "post-actions")
             let likes = document.createElement("div")
             likes.innerHTML = `
-    <button>👍</button>
-    <button>👎</button>`
+                <span id="like" data-type="post"  data-id = ${element.ID}  class="material-icons">thumb_up_off_alt</span>
+                <span id="dislike" data-type="post" data-id = ${element.ID} class="material-icons">thumb_down_off_alt</span>`
             let comment = document.createElement("div")
             comment.textContent = `${element.Nembre} 💬`
             comment.setAttribute("id", "comment")
@@ -197,15 +194,15 @@ export const MoreData = (data) => {
             main.append(post)
             // container.append(main)
             post.innerHTML += `<div class="input-wrapper">
-    <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
-    <button class="send-button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M22 2L11 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-    <p id="error-message"></p>
-</div>`
+                 <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
+                    <button class="send-button">
+                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                             <path d="M22 2L11 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                             <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                         </svg>
+                    </button>
+                    <p id="error-message"></p>
+                    </div>`
         })
     }
 

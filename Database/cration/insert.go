@@ -36,7 +36,21 @@ func InsertCategory(user_id int, title string, content string, catygory string) 
 	return nil
 }
 
-func InsertComment(post_id int ,user_id int,comment string ) error {
+func InsertReaction(user_id int, content_id int, content_type string, reaction_type string) error {
+	info, err := DB.Prepare("INSERT INTO reactions (user_id,content_type,content_id,reaction_type) VALUES (?,?,?,?)")
+	if err != nil {
+		fmt.Println("err select 1 : ", err)
+		return err
+	}
+	_, err = info.Exec(user_id, content_type, content_id, reaction_type)
+	if err != nil {
+		fmt.Println("err select 2 :", err)
+		return err
+	}
+	return nil
+}
+
+func InsertComment(post_id int, user_id int, comment string) error {
 	created_at := time.Now().Format("2006-01-02 15:04:05")
 	info, err := DB.Prepare("INSERT INTO comments (post_id , user_id , comment , created_at) VALUES (?,?,?,?)")
 	if err != nil {
@@ -47,5 +61,4 @@ func InsertComment(post_id int ,user_id int,comment string ) error {
 		return err
 	}
 	return nil
-
 }
