@@ -1,12 +1,10 @@
-import { Homepage, CreatPostTemp, Login } from "./pages.js"
+import { Homepage, Login, MoreData } from "./pages.js"
 import { showError } from "./errore.js"
 import { Dateformat } from "./check.js"
-// let nb = 20
 function HomeHandeler() {
-    // const formData = new FormData();
-    // formData.append('namber', nb)
-    // { method: 'POST', body: formData }
-    fetch('/getpost',)
+    const formData = new FormData();
+    formData.append('lastdata', true)
+    fetch('/getpost', { method: 'POST', body: formData })
         .then(response => response.json())
         .then(data => {
             Homepage(data)
@@ -19,55 +17,79 @@ function HomeHandeler() {
             sendcomment.forEach((el) => {
                 el.addEventListener("click", send_comment)
             })
-
-
+            window.addEventListener("scroll", pagenation)
             let comment = document.querySelectorAll("#comment")
             comment.forEach((el) => {
                 el.addEventListener("click", CommentEvent)
             })
-            // nb += 10
         })
         .catch(error => {
             console.log('Error:', error);
         });
-
-
-
-
 }
 
-const handelpost = () => {
-    CreatPostTemp()
-    let canele = document.querySelector("#cancel")
-    canele.addEventListener("click", HomeHandeler)
-    let form = document.forms.creatpost
-    form.addEventListener("submit", (ev) => {
-        ev.preventDefault();
-        let title = ev.target.title.value
-        let post = ev.target.content.value
-        if (title === "" || post === "") {
-            showError("Fill in all the fields")
-        }
-        const formData = new FormData(form);
-        fetch('/pubpost', {
-            method: 'POST',
-            body: formData
-        })
+const pagenation = debounce(() => {
+    if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
+        fetch('/getpost')
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
-                    HomeHandeler()
+                if (data.finish) {
+                    window.removeEventListener("scroll", pagenation)
                 } else {
-                    showError(data.error)
+                    MoreData(data);
                 }
             })
             .catch(error => {
                 console.log('Error:', error);
-
             });
+    }
+}, 300)
+
+const handelpost = (event) => {
+    window.removeEventListener("scroll", pagenation)
+    let creat_btn = event.target
+    creat_btn.style.display = "none"
+    let creatcontainer = document.querySelector(".form-container")
+    let post = document.querySelectorAll(".post")
+    creatcontainer.style.display = "block"
+    post.forEach(elm => elm.style.display = "none")
+    let canele = document.querySelector("#close")
+    canele.addEventListener("click", () => {
+        creatcontainer.style.display = "none"
+        post.forEach(elm => elm.style.display = "block")
+        creat_btn.style.display = "inline"
+        window.addEventListener("scroll", pagenation)
     })
+    let form = document.forms.creatpost
+    form.addEventListener("submit", submitpost)
 
 
+}
+
+const submitpost = (ev) => {
+    ev.preventDefault();
+    let title = ev.target.title.value
+    let post = ev.target.content.value
+    if (title === "" || post === "") {
+        showError("Fill in all the fields")
+    }
+    const formData = new FormData(ev.target);
+    fetch('/pubpost', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status) {
+                HomeHandeler()
+            } else {
+                showError(data.error)
+            }
+        })
+        .catch(error => {
+            console.log('Error:', error);
+
+        });
 }
 
 const handelcontact = () => {
@@ -102,7 +124,7 @@ const send_comment = (event) => {
         return;
     }
     let all = commentDiv.querySelectorAll(".comment-content");
-    console.log(all,"================");
+    console.log(all, "================");
 
     if (content === "") {
         showError("Fill in all the fields");
@@ -114,41 +136,41 @@ const send_comment = (event) => {
         method: 'POST',
         body: JSON.stringify({ content: content, post_id: post_id }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status) {
-            let currentNb = parseInt(commentDiv.textContent, 10);
-            if (isNaN(currentNb)) currentNb = 0;
-            let nb = String(currentNb + 1);
-            commentDiv.textContent = `${nb} 💬`;
+        .then(response => response.json())
+        .then(data => {
+            if (data.status) {
+                let currentNb = parseInt(commentDiv.textContent, 10);
+                if (isNaN(currentNb)) currentNb = 0;
+                let nb = String(currentNb + 1);
+                commentDiv.textContent = `${nb} 💬`;
 
-            textarea.value = "";
+                textarea.value = "";
 
-            if (commentDiv.classList.contains("on")) {
-                commentDiv.classList.remove("on");
-                commentDiv.classList.add("of");
+                if (commentDiv.classList.contains("on")) {
+                    commentDiv.classList.remove("on");
+                    commentDiv.classList.add("of");
 
-                let all = commentDiv.querySelectorAll(".comment-content");
-                all.forEach((el) => {
-                    el.remove();
-                });
+                    let all = commentDiv.querySelectorAll(".comment-content");
+                    all.forEach((el) => {
+                        el.remove();
+                    });
 
-                let simulatedEvent = new Event('click', { bubbles: true });
-                commentDiv.dispatchEvent(simulatedEvent);
+                    let simulatedEvent = new Event('click', { bubbles: true });
+                    commentDiv.dispatchEvent(simulatedEvent);
 
-                // CommentEvent(simulatedEvent); // Jarrab t7aydo w chouf wach kaykhddm
+                    // CommentEvent(simulatedEvent); // Jarrab t7aydo w chouf wach kaykhddm
+                }
+            } else if (data.status == false && typeof data.tock != "undefined") {
+                console.log("mochkil f tocken");
+                Login();
+            } else {
+                console.log("mochkil");
+                showError(data.error);
             }
-        } else if (data.status == false && typeof data.tock != "undefined") {
-            console.log("mochkil f tocken");
-            Login();
-        } else {
-            console.log("mochkil");
-            showError(data.error);
-        }
-    })
-    .catch(error => {
-        console.log('Error:', error);
-    });
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
 };
 
 
@@ -157,7 +179,6 @@ function CommentEvent(event) {
 
     let post_id = event.target.getAttribute("posteid");
     let postDiv = document.querySelector(`[postid="${post_id}"]`);
-    //  let comment = post.querySelector(".comment-section");
 
     console.log(event.target.getAttribute("class"));
 
@@ -221,9 +242,9 @@ function CommentEvent(event) {
                 console.log('Error:', error);
 
             });
-       
 
-    }else{
+
+    } else {
         let comment = postDiv.querySelectorAll(".comment-content")
         comment.forEach((el) => {
             el.remove()
@@ -233,5 +254,15 @@ function CommentEvent(event) {
     }
 
 }
+
+
+function debounce(func, wait = 300) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
 
 export { HomeHandeler }

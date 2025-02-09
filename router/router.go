@@ -28,6 +28,6 @@ func Router() *http.ServeMux {
 // Function bach yrun server
 func StartServer() error {
 	router := Router()
-	fmt.Println("✅ Server running on: http://localhost:8082")
-	return http.ListenAndServe(":8082", router)
+	fmt.Println("✅ Server running on: http://localhost:8080")
+	return http.ListenAndServe(":8080", router)
 }

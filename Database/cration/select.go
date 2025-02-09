@@ -67,11 +67,13 @@ func GetUser(id int) string {
 	return name
 }
 
-func GetPostes() ([]utils.Postes, error) {
+func GetPostes(str int, end int) ([]utils.Postes, error) {
 	var postes []utils.Postes
-	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes ORDER BY created_at DESC "
-	rows, err := DB.Query(quire)
+	quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id > ? AND id <= ? ORDER BY created_at DESC"
+	rows, err := DB.Query(quire, end, str)
+
 	if err != nil {
+
 		return nil, err
 	}
 	defer rows.Close()

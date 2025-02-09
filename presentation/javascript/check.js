@@ -1,7 +1,7 @@
 import { showError } from "./errore.js"
-import {Login,Regester,Homepage} from "./pages.js"
-import {handle} from "./login-register.js"
-import {HomeHandeler} from "./Homehandler.js"
+import { Login, Regester, Homepage } from "./pages.js"
+import { handle } from "./login-register.js"
+import { HomeHandeler } from "./Homehandler.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -16,7 +16,7 @@ function validatePassword(password) {
     const hasTwoNumbers = (/\d{2,}/).test(password);
 
     const hasTwoLetters = (/[a-zA-Z]{3,}/).test(password);
-    if (password.length > 20 || !hasTwoLetters || !hasTwoNumbers ) {
+    if (password.length > 20 || !hasTwoLetters || !hasTwoNumbers) {
         showError("Password must be less than 20 characters and contain at least 2 numbers and 3 letters")
         return false;
     }
@@ -57,48 +57,48 @@ function validateGender(gender) {
 //     return hasTwoLetters;
 // }
 
-async function Checkstuts(event){
- 
+async function Checkstuts(event) {
+
     event.preventDefault()
-   
+
     fetch('/stuts', {
-       method: 'GET',
-       headers: {
-           'Content-Type': 'application/json',
-       },
-   })
-       .then((response) => response.json())
-       .then((result) => {
-        
-           if (!result.status) {
-            console.log(result.status);
-            handle()
-           } else {
-            let head = document.querySelector(".g")
-            head.setAttribute("class",result.name)
-            HomeHandeler()
-           }
-        
-       })
-       .catch((error) => {
-           console.error("Error:", error);
-       });
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => response.json())
+        .then((result) => {
+
+            if (!result.status) {
+                console.log(result.status);
+                handle()
+            } else {
+                let head = document.querySelector(".g")
+                head.setAttribute("class", result.name)
+                HomeHandeler()
+            }
+
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
 
     // Delay l'appel handle jusqu'à ce que l'élément soit disponible dans DOM
 
-       
-       
+
+
 }
 
 const Dateformat = (timestamp) => {
-  
-    
+
+
     let pastDate = new Date(timestamp);
-    pastDate.setHours(pastDate.getHours()-1)
-    console.log("Date : ",pastDate); // 2025-02-06 17:41:25
+    pastDate.setHours(pastDate.getHours() - 1)
+    // console.log("Date : ", pastDate); // 2025-02-06 17:41:25
     let now = new Date();
-    let seconds = Math.floor((now-pastDate) / 1000); // Correction: now - pastDate
-    
+    let seconds = Math.floor((now - pastDate) / 1000); // Correction: now - pastDate
+
     if (seconds < 60) {
         return `${seconds} seconds`;
     } else if (seconds < 3600) {
@@ -110,4 +110,5 @@ const Dateformat = (timestamp) => {
     }
 }
 
-export { Checkemail, validatePassword, validateName, validateAge, validateGender,Checkstuts ,Dateformat} 
+
+export { Checkemail, validatePassword, validateName, validateAge, validateGender, Checkstuts, Dateformat } 

@@ -203,6 +203,17 @@ body {
     background-color: #e7e7e7;
 }
 
+#close {
+    cursor: pointer;
+    /* height: 25px; */
+    margin-left: 96%;
+}
+
+#close:hover {
+    border-radius: 100%;
+    background-color: #e7e7e7;
+}
+
 h3 {
     color: #111827;
     font-weight: 600;
@@ -229,6 +240,7 @@ h3 {
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin: auto;
 }
 
 .form-group {
@@ -654,57 +666,83 @@ input::placeholder {
     transition: all 0.3s;
     margin-bottom: 20px;
 }
- /* style coment  */
+
+/* style coment  */
 
 
 
 
- .comment-content {
-    background-color: #ffffff; /* اللون الخلفي للتعليق */
-    border-radius: 8px; /* زوايا مستديرة */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
-    padding: 16px; /* المسافة الداخلية */
-    margin-bottom: 12px; /* المسافة بين التعليقات */
-  }
-  
-  .user-name {
-    font-weight: bold; /* خط غليظ */
-    font-size: 14px; /* حجم الخط */
-    color: #333; /* لون النص */
-    margin-bottom: 8px; /* مسافة تحت الاسم */
-  }
-  
-  .comment-text {
-    font-size: 14px; /* حجم الخط */
-    line-height: 1.6; /* ارتفاع السطر */
-    color: #555; /* لون النص */
-    margin-bottom: 12px; /* مسافة تحت النص */
-  }
-  
-  .comment-actions {
-    display: flex; /* عرض أفقي */
-    align-items: center; /* محاذاة وسط العناصر */
-    gap: 12px; /* مسافة بين العناصر */
-  }
-  
-  .action-btn {
-    background: none; /* بدون خلفية */
-    border: none; /* بدون حدود */
-    color: #007bff; /* لون أزرق */
-    cursor: pointer; /* تغيير المؤشر عند التمرير */
-    font-size: 14px; /* حجم الخط */
-  }
-  
-  .action-btn:hover {
-    text-decoration: underline; /* خط تحت النص عند التمرير */
-  }
-  
-  .timestamp {
-    font-size: 12px; /* حجم صغير */
-    color: #999; /* لون رمادي */
-    margin-left: auto; /* يدفع النص للتراصف على اليمين */
-  }
-  
+.comment-content {
+    background-color: #ffffff;
+    /* اللون الخلفي للتعليق */
+    border-radius: 8px;
+    /* زوايا مستديرة */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* ظل خفيف */
+    padding: 16px;
+    /* المسافة الداخلية */
+    margin-bottom: 12px;
+    /* المسافة بين التعليقات */
+}
+
+.user-name {
+    font-weight: bold;
+    /* خط غليظ */
+    font-size: 14px;
+    /* حجم الخط */
+    color: #333;
+    /* لون النص */
+    margin-bottom: 8px;
+    /* مسافة تحت الاسم */
+}
+
+.comment-text {
+    font-size: 14px;
+    /* حجم الخط */
+    line-height: 1.6;
+    /* ارتفاع السطر */
+    color: #555;
+    /* لون النص */
+    margin-bottom: 12px;
+    /* مسافة تحت النص */
+}
+
+.comment-actions {
+    display: flex;
+    /* عرض أفقي */
+    align-items: center;
+    /* محاذاة وسط العناصر */
+    gap: 12px;
+    /* مسافة بين العناصر */
+}
+
+.action-btn {
+    background: none;
+    /* بدون خلفية */
+    border: none;
+    /* بدون حدود */
+    color: #007bff;
+    /* لون أزرق */
+    cursor: pointer;
+    /* تغيير المؤشر عند التمرير */
+    font-size: 14px;
+    /* حجم الخط */
+}
+
+.action-btn:hover {
+    text-decoration: underline;
+    /* خط تحت النص عند التمرير */
+}
+
+.timestamp {
+    font-size: 12px;
+    /* حجم صغير */
+    color: #999;
+    /* لون رمادي */
+    margin-left: auto;
+    /* يدفع النص للتراصف على اليمين */
+}
+
 
 
 

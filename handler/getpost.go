@@ -6,44 +6,53 @@ import (
 	"net/http"
 
 	db "real-time-forum/Database/cration"
-	"real-time-forum/utils"
 )
 
 var (
-	count int
-	str   int
+	end = 0
+	str = 0
 )
 
 func Getpost(w http.ResponseWriter, r *http.Request) {
 	var err error
 	w.Header().Set("Content-Type", "application/json")
-	// nb, err := strconv.Atoi(r.FormValue("namber"))
-	// if err != nil {
-	// 	fmt.Println("error f nb :", err)
-	// 	return
-	// }
-	utils.LastId, err = db.Getlastid()
-	if err != nil {
-		fmt.Println("-------")
+	lastdata := r.FormValue("lastdata")
+
+	if lastdata == "true" {
+		str, err = db.Getlastid()
+		if err != nil {
+
+			return
+		}
+		lastdata = "false"
+	}
+	if str == 0 {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"finish": true}`))
 		return
 	}
 
-	if count == 0 {
-		str = utils.LastId
-		count++
-	}
-	// end := utils.LastId - nb
+	if str > 10 {
+		end = str - 10
 
-	Postes, err := db.GetPostes()
+	} else if str < 10 {
+		end = 0
+	}
+
+	Postes, err := db.GetPostes(str, end)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"error": "Internal ServerError", "status":false}`))
 		return
 	}
-	// str = end
-	// fmt.Println("=> ", str, "==>", end)
+	if end-10 >= 0 {
+		str = end
+		end -= 10
+	} else {
+		str = end
+		end = 0
+	}
 
-	// fmt.Println("->", Postes)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(Postes)
+
 }

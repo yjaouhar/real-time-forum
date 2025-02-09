@@ -1,69 +1,10 @@
 import { Dateformat } from "./check.js"
-export const CreatPostTemp = () => {
-    let publ = document.querySelector(".main-content")
-    publ.innerHTML = `
-      <div class="form-container">
-        <form name="creatpost">
-            <div class="form-group">
-            <div>
-            <span class="material-icons" id="cancel">
-                        close
-                </span>
-                <label>Post Title</label>
-                <input type="text" name="title" class="form-control" placeholder="Enter post title" required >
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label>Post Content</label>
-                <textarea class="form-control" name="content"  rows="5" placeholder="Write your post content" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Select Categories</label>
-                <div class="category-grid">
-                    <label class="category-checkbox"> 
-                        <input type="checkbox" name="categories" value="Tech Support">
-                        Tech Support
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories" value="General Discussion" >
-                        General Discussion
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories"  value="Tutorials"  >
-                        Tutorials
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories" value="Gaming">
-                        Gaming
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories" value="Hobbies & Interests">
-                        Hobbies & Interests
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories" value="Job Listings">
-                        Job Listings
-                    </label>
-                    <label class="category-checkbox">
-                        <input type="checkbox" name="categories" value="Announcements">
-                        Announcements
-                    </label>
-                </div>
-            </div>
-                <p id="error-message"></p>
-            <button type="submit" class="submit-btn">Submit Post</button>
-        </form>
-    </div>
-    `
-    publ.style.flex = "none"
-}
 
 export const Homepage = (data) => {
     let title = document.querySelector("title")
     console.log(title);
-    
+
     let name = title.getAttribute("class")
     // console.log("=>", data[0])
     document.body.innerHTML = `
@@ -113,6 +54,64 @@ export const Homepage = (data) => {
     creatPost.innerHTML = "<button>+ creat a post</button>"
     main.append(creatPost)
     container.append(main)
+    let creatcontainer = document.createElement("div")
+    creatcontainer.setAttribute("class", "form-container")
+    creatcontainer.innerHTML = `
+        <form name="creatpost">
+            <div class="form-group">
+            <div>
+            <span class="material-icons" id="close">
+                        close
+                </span>
+                <label>Post Title</label>
+                <input type="text" name="title" class="form-control" placeholder="Enter post title" required >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Post Content</label>
+                <textarea class="form-control" name="content"  rows="5" placeholder="Write your post content" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Select Categories</label>
+                <div class="category-grid">
+                    <label class="category-checkbox"> 
+                        <input type="checkbox" name="categories" value="Tech Support">
+                        Tech Support
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories" value="General Discussion" >
+                        General Discussion
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories"  value="Tutorials"  >
+                        Tutorials
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories" value="Gaming">
+                        Gaming
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories" value="Hobbies & Interests">
+                        Hobbies & Interests
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories" value="Job Listings">
+                        Job Listings
+                    </label>
+                    <label class="category-checkbox">
+                        <input type="checkbox" name="categories" value="Announcements">
+                        Announcements
+                    </label>
+                </div>
+            </div>
+                <p id="error-message"></p>
+            <button type="submit" class="submit-btn">Submit Post</button>
+        </form>
+    `
+    creatcontainer.style.display = "none"
+    main.append(creatcontainer)
     if (data) {
         data.forEach(element => {
             let post = document.createElement("div")
@@ -132,12 +131,12 @@ export const Homepage = (data) => {
             post_header.append(poster)
             post_header.append(time)
             let title = document.createElement("h4")
-            title.textContent = element.Title
+            title.textContent = element.Title + "   ====> " + element.ID
             let p = document.createElement("p")
             p.textContent = element.Content
             let cat = document.createElement("i")
             cat.textContent = `Categories : [${element.Categories}]`
-            cat.style.color="#b3b3b3"
+            cat.style.color = "#b3b3b3"
             post.append(post_header)
             post.append(title)
             post.append(p)
@@ -168,7 +167,7 @@ export const Homepage = (data) => {
     </button>
     <p id="error-message"></p>
 </div>`
-      })
+        })
     } else {
         let post = document.createElement("div")
         post.setAttribute("class", "post")
@@ -204,11 +203,14 @@ export const Homepage = (data) => {
 
 
 export const MoreData = (data) => {
-    let container = document.querySelector(".container")
+    // let container = document.querySelector(".container")
+    console.log("======> more data");
+
     let main = document.querySelector(".main-content")
     if (data) {
         data.forEach(element => {
             let post = document.createElement("div")
+            post.setAttribute("postid", element.ID)
             post.setAttribute("class", "post")
             let post_header = document.createElement("div")
             let poster_profile = document.createElement("span")
@@ -224,7 +226,7 @@ export const MoreData = (data) => {
             post_header.append(poster)
             post_header.append(time)
             let title = document.createElement("h4")
-            title.textContent = element.Title
+            title.textContent = element.Title + "   ====> " + element.ID
             let p = document.createElement("p")
             p.textContent = element.Content
             let cat = document.createElement("i")
@@ -238,24 +240,29 @@ export const MoreData = (data) => {
             reaction.setAttribute("class", "post-actions")
             let likes = document.createElement("div")
             likes.innerHTML = `
-                <button>👍</button>
-                 <button>👎</button>`
+    <button>👍</button>
+    <button>👎</button>`
             let comment = document.createElement("div")
-            comment.textContent = "0 💬"
+            comment.textContent = `${element.Nembre} 💬`
+            comment.setAttribute("id", "comment")
+            comment.setAttribute("class", "of")
+            comment.setAttribute("posteid", element.ID)
             reaction.append(likes)
             reaction.append(comment)
             post.append(reaction)
             main.append(post)
-            container.append(main)
+            // container.append(main)
+            post.innerHTML += `<div class="input-wrapper">
+    <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
+    <button class="send-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M22 2L11 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    <p id="error-message"></p>
+</div>`
         })
-    } else {
-        let post = document.createElement("div")
-        post.setAttribute("class", "post")
-        let p = document.createElement("p")
-        p.textContent = "no post found"
-        post.append(p)
-        main.append(post)
-        container.append(main)
     }
 
 }
