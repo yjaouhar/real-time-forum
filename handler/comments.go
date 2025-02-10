@@ -4,17 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+
 	db "real-time-forum/Database/cration"
 	"real-time-forum/servisse"
 	"real-time-forum/utils"
-	"strconv"
 )
 
 func Comments(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		var err error
 		idpost := utils.Jsncomment{}
-		err := json.NewDecoder(r.Body).Decode(&idpost)
-		id , err := strconv.Atoi(idpost.ID)
+		err = json.NewDecoder(r.Body).Decode(&idpost)
+		id, err := strconv.Atoi(idpost.ID)
 		if err != nil {
 			fmt.Println("err jsn")
 			w.WriteHeader(http.StatusOK)
@@ -22,19 +24,29 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		allcoments, err := db.SelectComments(id)
+
+		_, err = servisse.IsHaveToken(r)
+		if err != nil {
+			fmt.Println("token not found")
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
+			return
+		}
+		token, _ := r.Cookie("SessionToken")
+		userid := db.GetId("sessionToken", token.Value)
+		allcoments, err := db.SelectComments(id, userid)
 		if err != nil {
 			fmt.Println("err select")
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
 			return
 		}
+
 		json.NewEncoder(w).Encode(allcoments)
 	}
 }
 
 func Sendcomment(w http.ResponseWriter, r *http.Request) {
-
 	if r.Method == "POST" {
 
 		var comment utils.Comment

@@ -190,6 +190,8 @@ export const MoreData = (data) => {
             comment.setAttribute("id", "comment")
             comment.setAttribute("class", "of")
             comment.setAttribute("posteid", element.ID)
+            console.log(element.Like);
+            
             if (element.Have === "like") {
                 let like = likes.querySelector("#like")
                 like.setAttribute("data-status", "on")

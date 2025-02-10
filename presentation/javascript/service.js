@@ -28,39 +28,16 @@ export function HomeListener(data) {
 
 
 
-const likeHandel = (event) => {
+export const likeHandel = (event) => {
     let content_type = event.target.getAttribute("data-type")
     let content_id = event.target.getAttribute("data-id")
     let reaction_type = event.target.id
     let status = event.target.getAttribute("data-status")
-    let b = Number(event.target.parentNode.querySelector("b").textContent)
+    let b = event.target.parentNode.querySelector("b")
+    let id = event.target.id
 
 
-    let element
-    if (reaction_type == "like") {
-        element = document.querySelector(`#dislike[data-id="${content_id}"]`)
-    } else {
-        element = document.querySelector(`#like[data-id="${content_id}"]`)
-    }
-    if (status == "of" && element.getAttribute("data-status") == "of") {
-        event.target.setAttribute("data-status", "on")
-        event.target.parentNode.setAttribute("data-status", "on")
 
-        event.target.parentNode.querySelector("b").textContent = b + 1
-        // event.target.parentNode.b.textContent = "ggg"
-    } else if (status == "on" && element.getAttribute("data-status") == "of") {
-        event.target.setAttribute("data-status", "of")
-        event.target.parentNode.setAttribute("data-status", "of")
-        event.target.parentNode.querySelector("b").textContent = b - 1
-    } else if (status == "of" && element.getAttribute("data-status") == "on") {
-        event.target.setAttribute("data-status", "on")
-        event.target.parentNode.setAttribute("data-status", "on")
-        element.setAttribute("data-status", "of")
-        element.parentNode.setAttribute("data-status", "of")
-        event.target.parentNode.querySelector("b").textContent = b + 1
-        b = Number(element.parentNode.querySelector("b").textContent)
-        element.parentNode.querySelector("b").textContent = b - 1
-    }
     fetch("/reactione", {
         method: 'POST',
         headers: {
@@ -70,12 +47,44 @@ const likeHandel = (event) => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
+
+            let element
+            if (reaction_type == "like") {
+                element = document.querySelector(`#dislike[data-id="${content_id}"]`)
+            } else {
+                element = document.querySelector(`#like[data-id="${content_id}"]`)
+            }
+            if (status == "of" && element.getAttribute("data-status") == "of" && data.content_type !== "") {
+                event.target.setAttribute("data-status", "on")
+                event.target.parentNode.setAttribute("data-status", "on")
+                console.log("of on", data[id]);
+
+                event.target.parentNode.querySelector("b").textContent = data[id]
+                // event.target.parentNode.b.textContent = "ggg"
+            } else if (status == "on" && element.getAttribute("data-status") == "of" && data.content_type == "") {
+                event.target.setAttribute("data-status", "of")
+                event.target.parentNode.setAttribute("data-status", "of")
+                event.target.parentNode.querySelector("b").textContent = data[id]
+            } else if (status == "of" && element.getAttribute("data-status") == "on") {
+                event.target.setAttribute("data-status", "on")
+                event.target.parentNode.setAttribute("data-status", "on")
+                element.setAttribute("data-status", "of")
+                element.parentNode.setAttribute("data-status", "of")
+                event.target.parentNode.querySelector("b").textContent = data[id]
+                let elementid = element.id
+                element.parentNode.querySelector("b").textContent = data[elementid]
+            }
 
         })
         .catch(error => {
             console.log('Error:', error);
         });
+
+
+
+
+
 }
 
 
@@ -230,6 +239,10 @@ function CommentEvent(event) {//////comment
             .then(response => response.json())
             .then(data => {
                 if (data) {
+                    let lebel = document.createElement("label");
+                    lebel.textContent = "Comments : ";
+                    lebel.classList.add("comment-label");
+                    postDiv.append(lebel);
                     data.forEach((el) => {
                         let commentDiv = document.createElement("div");
                         commentDiv.classList.add("comment-content");
@@ -248,27 +261,21 @@ function CommentEvent(event) {//////comment
                         actionsDiv.classList.add("comment-actions");
                         actionsDiv.innerHTML = `
                      <div class="like-button" data-status="of">
-              <span id="like" data-type="comment" data-status="of" data-id = ${el.ID}  class="material-icons">thumb_up_off_alt</span> <b>0</b>
+              <span id="like" data-type="comment" data-status="of" data-id = ${el.ID}  class="material-icons">thumb_up_off_alt</span> <b>${el.Like}</b>
                </div>
             <div class="like-button" data-status="of">
-              <span id="dislike" data-type="comment" data-status="of" data-id = ${el.ID} class="material-icons">thumb_down_off_alt</span>  <b>0</b>
+              <span id="dislike" data-type="comment" data-status="of" data-id = ${el.ID} class="material-icons">thumb_down_off_alt</span>  <b>${el.DisLike}</b>
                 </div>
                     `
-                        // let likeBtn = document.createElement("span");
-                        // likeBtn.classList.add("material-icons");
-                        // likeBtn.id = "like"
-                        // likeBtn.setAttribute("data-type", "comment")
-                        // likeBtn.setAttribute("data-id", el.ID)
-                        // likeBtn.classList.add("material-icons")
-                        // likeBtn.textContent = "thumb_up_off_alt";
-
-                        // let dislikeBtn = document.createElement("span");
-                        // dislikeBtn.classList.add("material-icons");
-                        // dislikeBtn.id = "like"
-                        // dislikeBtn.setAttribute("data-type", "comment")
-                        // dislikeBtn.setAttribute("data-id", el.ID)
-                        // dislikeBtn.classList.add("material-icons")
-                        // dislikeBtn.textContent = "thumb_down_off_alt";
+                        if (el.Have === "like") {
+                            let like = actionsDiv.querySelector("#like")
+                            like.setAttribute("data-status", "on")
+                            like.parentNode.setAttribute("data-status", "on")
+                        } else if (el.Have === "dislike") {
+                            let dislike = actionsDiv.querySelector("#dislike")
+                            dislike.setAttribute("data-status", "on")
+                            dislike.parentNode.setAttribute("data-status", "on")
+                        }
 
                         let timeSpan = document.createElement("span");
                         timeSpan.classList.add("timestamp");
@@ -300,6 +307,8 @@ function CommentEvent(event) {//////comment
 
     } else {
         let comment = postDiv.querySelectorAll(".comment-content")
+        let label = document.querySelector(".comment-label")
+        label.remove()
         comment.forEach((el) => {
             el.remove()
         })

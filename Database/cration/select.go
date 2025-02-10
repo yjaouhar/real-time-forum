@@ -88,21 +88,7 @@ func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 		}
 		sl, _ := SelecReaction(post.ID)
 
-		for i := 0; i < len(sl); i++ {
-			if sl[i].Reactione_type == "like" {
-				post.Like++
-			} else if sl[i].Reactione_type == "dislike" {
-				post.DisLike++
-			}
-
-			if sl[i].User_id == userid {
-				post.Have = sl[i].Reactione_type
-			} else {
-				post.Have = ""
-			}
-		}
-
-		fmt.Println(post)
+		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
 		postes = append(postes, post)
 	}
 	return postes, nil
@@ -118,7 +104,7 @@ func LenghtComent(postid int) (nbr int, err error) {
 	return nbr, nil
 }
 
-func SelectComments(postid int) ([]utils.CommentPost, error) {
+func SelectComments(postid int, userid int) ([]utils.CommentPost, error) {
 	var comments []utils.CommentPost
 	quire := "SELECT id, post_id, user_id, comment, created_at FROM comments WHERE post_id = ? ORDER BY created_at DESC"
 	rows, err := DB.Query(quire, postid)
@@ -135,9 +121,9 @@ func SelectComments(postid int) ([]utils.CommentPost, error) {
 		}
 
 		comment.Username = GetUser(comment.UserID)
-
+		sl, _ := SelecReaction(comment.ID)
+		comment.Like, comment.DisLike, comment.Have = Liklength(sl, userid)
 		comments = append(comments, comment)
-		// fmt.Println("comments", comments)
 	}
 
 	return comments, nil
@@ -189,4 +175,21 @@ func GetReactionRow(userid int, postid int) (string, error) {
 		return "", err
 	}
 	return reaction, nil
+}
+
+func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
+	like := 0
+	dislike := 0
+	reactin := ""
+	for i := 0; i < len(sl); i++ {
+		if sl[i].Reactione_type == "like" {
+			like++
+		} else if sl[i].Reactione_type == "dislike" {
+			dislike++
+		}
+		if sl[i].User_id == userid {
+			reactin = sl[i].Reactione_type
+		}
+	}
+	return like, dislike, reactin
 }

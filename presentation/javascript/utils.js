@@ -1,4 +1,5 @@
 import { MoreData } from "./pages.js"
+import { likeHandel } from "./service.js"
 
 export const pagenation = debounce(() => {
     if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
@@ -9,6 +10,10 @@ export const pagenation = debounce(() => {
                     window.removeEventListener("scroll", pagenation)
                 } else {
                     MoreData(data);
+                    let reactionLike = document.querySelectorAll("#like")
+                    reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                    let reactionDisLike = document.querySelectorAll("#dislike")
+                    reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
                 }
             })
             .catch(error => {

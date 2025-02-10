@@ -26,6 +26,9 @@ type CommentPost struct {
 	Content   string
 	CreatedAt string
 	Username  string
+	Like      int
+	DisLike   int
+	Have      string
 }
 
 type Jsncomment struct {

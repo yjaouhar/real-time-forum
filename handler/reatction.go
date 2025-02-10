@@ -19,6 +19,7 @@ type reac struct {
 
 func Reaction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		fmt.Println("post")
 		var reactione reac
 		err := json.NewDecoder(r.Body).Decode(&reactione)
 		if err != nil {
@@ -58,8 +59,19 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
+		id, err := strconv.Atoi(reactione.Content_id)
+		if err != nil {
+			fmt.Println("err select 4")
+			return
+		}
+		sl, err := db.SelecReaction(id)
+		if err != nil {
+			fmt.Println("err select 5")
+			return
+		}
+		like, dislike, contenttype := db.Liklength(sl, reactione.User_id)
+
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"error": "Login successful", "status":true}`))
-		// json.NewEncoder(w).Encode()
+		w.Write([]byte(`{"error": "Login successful", "status":true , "like":"` + strconv.Itoa(like) + `", "dislike":"` + strconv.Itoa(dislike) + `", "content_type":"` + contenttype + `"}`))
 	}
 }
