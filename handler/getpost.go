@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
@@ -18,9 +17,8 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 	var err error
 	_, err = servisse.IsHaveToken(r)
 	if err != nil {
-		fmt.Println("token not found")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"error": "Unauthorized", "status":false, "tocken":false}`))
 		return
 	}
 	token, _ := r.Cookie("SessionToken")

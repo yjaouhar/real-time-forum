@@ -296,7 +296,7 @@ export const Login = () => {
             <form id="login-form" method="post">
                 <div class="form-group">
                     <label>Nickname / Email</label>
-                    <input type="email" id="nicknameDateformat" name="email" placeholder="example@email.com">
+                    <input type="text" id="userInput" name="email" placeholder="Nickname ola Email">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>

@@ -28,7 +28,8 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 		}
 		_, err = servisse.IsHaveToken(r)
 		if err != nil {
-			fmt.Println("error : ", err)
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte(`{"error": "Unauthorized", "status":false, "tocken":false}`))
 			return
 		}
 		token, _ := r.Cookie("SessionToken")

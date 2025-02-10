@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -12,8 +13,9 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_, ishave := servisse.IsHaveToken(r)
 		if ishave != nil {
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false}`))
+			fmt.Println("token not found POST")
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false , "tocken":false}`))
 			return
 		}
 		title := r.FormValue("title")

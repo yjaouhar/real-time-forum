@@ -13,23 +13,27 @@ import (
 
 func Comments(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
+		w.Header().Set("Content-Type", "application/json")
 		var err error
 		idpost := utils.Jsncomment{}
 		err = json.NewDecoder(r.Body).Decode(&idpost)
-		id, err := strconv.Atoi(idpost.ID)
 		if err != nil {
-			fmt.Println("err jsn")
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(`{"error": "Invalid JSON", "status":false}`))
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
+		id, err := strconv.Atoi(idpost.ID)
+		if err != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity) // 422
+			w.Write([]byte(`{"error": "ID must be a number", "status": false}`))
+			return
+		}
 
 		_, err = servisse.IsHaveToken(r)
 		if err != nil {
 			fmt.Println("token not found")
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false ,"token":false}`))
 			return
 		}
 		token, _ := r.Cookie("SessionToken")
@@ -54,8 +58,8 @@ func Sendcomment(w http.ResponseWriter, r *http.Request) {
 		_, ishave := servisse.IsHaveToken(r)
 		if ishave != nil {
 			fmt.Println("token not found")
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false, "tock":false}`))
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte(`{"error": "` + ishave.Error() + `", "status":false, "tocken":false}`))
 			return
 		}
 		tocken, _ := r.Cookie("SessionToken")

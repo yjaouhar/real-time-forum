@@ -33,7 +33,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		if !validatEmail {
 			message = "Email already exists"
 		}
-		
+
 		validatNikname := db.CheckInfo(info.Nickname, "nikname")
 		if !validatNikname {
 			message = "Nickname already exists"
@@ -42,14 +42,21 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			message = "Email and nickname already exist"
 		}
 		if message != "" {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusConflict)
 			json.NewEncoder(w).Encode(map[string]interface{}{"success": true, "message": message})
 			return
 		}
-		info.Password, _ = utils.HashPassword(info.Password)
-		err := db.Insertuser(info.FirstName, info.LastName, info.Email, info.Gender, info.Age, info.Nickname, info.Password)
+		var err error
+		info.Password, err = utils.HashPassword(info.Password)
 		if err != nil {
-			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error"})
+			return
+		}
+		err = db.Insertuser(info.FirstName, info.LastName, info.Email, info.Gender, info.Age, info.Nickname, info.Password)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error"})
 			return
 		}
 		w.WriteHeader(http.StatusOK)

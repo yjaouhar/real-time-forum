@@ -1,5 +1,4 @@
 import { showError } from "./errore.js"
-import { Login, Regester, Homepage } from "./pages.js"
 import { handle } from "./login-register.js"
 import { HomeHandeler } from "./Homehandler.js"
 function Checkemail(email) {
@@ -59,7 +58,6 @@ function validateGender(gender) {
 
 async function Checkstuts(event) {
 
-    event.preventDefault()
 
     fetch('/stuts', {
         method: 'GET',
@@ -74,8 +72,10 @@ async function Checkstuts(event) {
                 console.log(result.status);
                 handle()
             } else {
-                let head = document.querySelector(".g")
-                head.setAttribute("class", result.name)
+                if ( document.querySelector(".g")){
+                    let head = document.querySelector(".g")
+                    head.setAttribute("class", result.name)
+                }
                 HomeHandeler()
             }
 
