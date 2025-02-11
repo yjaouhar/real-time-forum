@@ -33,7 +33,8 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		}
 		tocken, _ := r.Cookie("SessionToken")
 		user_id := db.GetId("sessionToken", tocken.Value)
-		errore := db.InsertCategory(user_id, title, content, strings.Join(categories, " "))
+		errore := db.InsertPostes(user_id, title, content, strings.Join(categories, " "))
+		
 		if errore != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{"error": "Internal ServerError", "status":false}`))

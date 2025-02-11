@@ -22,7 +22,7 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func InsertCategory(user_id int, title string, content string, catygory string) error {
+func InsertPostes(user_id int, title string, content string, catygory string) error {
 	created_at := time.Now().Format("2006-01-02 15:04:05")
 	fmt.Println(created_at)
 	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,created_at,categories) VALUES (?,?,?,?,?)")
@@ -30,6 +30,28 @@ func InsertCategory(user_id int, title string, content string, catygory string) 
 		return err
 	}
 	_, err = info.Exec(user_id, title, content, created_at, catygory)
+	if err != nil {
+		return err
+	}
+	var post_id string
+	err = DB.QueryRow(`SELECT id FROM posts WHERE user_id = ? AND title = ? AND content = ? AND created_at = ?`, user_id, title, content, created_at).Scan(&post_id)
+	if err != nil {
+		return err
+	}
+	id, err := strconv.Atoi(post_id)
+	if err != nil {
+		return err
+	}
+	InsertCategory(id, catygory)
+	return nil
+}
+
+func InsertCategory(post_id int, catygory string) error {
+	info, err := DB.Prepare("INSERT INTO categories (post_id,categories) VALUES (?,?)")
+	if err != nil {
+		return err
+	}
+	_, err = info.Exec(post_id, catygory)
 	if err != nil {
 		return err
 	}
@@ -86,7 +108,6 @@ func Update(userid int, postid int, reactiontype string) error {
 	}
 	return nil
 }
-
 
 func UpdateTocken(tocken string) error {
 	info, err := DB.Prepare("UPDATE users SET sessionToken = NULL WHERE sessionToken = ?")
