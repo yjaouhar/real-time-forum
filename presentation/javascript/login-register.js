@@ -1,6 +1,5 @@
 import { Regester, Login } from "./pages.js"
 import { showError } from "./errore.js"
-import {HomeHandeler}from "./Homehandler.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts } from "./check.js"
 console.log("=======>");
 document.addEventListener("DOMContentLoaded", Checkstuts)
@@ -8,7 +7,7 @@ document.addEventListener("DOMContentLoaded", Checkstuts)
 
 export function handle() {
     Login()
-    let creat_account = document.getElementById("c-a")
+    let creat_account = document.getElementById("resgesterlogin")
     let login_form = document.getElementById("login-form")
 
     login_form.addEventListener("submit", loginHandel)

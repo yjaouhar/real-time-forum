@@ -310,7 +310,7 @@ export const Login = () => {
                 <p id="error-message"></p>
                 <button type="submit" id="login-btn">Login</button>
                 <div class="register-link">
-                    Pas encore de compte? <button id="c-a">Create an account</button>
+                    Pas encore de compte? <button id="resgesterlogin">Create an account</button>
                 </div>
             </form>
             
