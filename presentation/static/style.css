@@ -984,3 +984,15 @@ label {
     font-size: 12px;
     margin-top: 4px;
 }
+
+#error-message {
+    color: #dc2626;
+    font-size: 14px;
+    margin-bottom: 15px;
+    min-height: 20px;
+    text-align: center;
+    position: relative;
+    /* Adjust this if necessary */
+    top: 0;
+    /* Move it to the desired location */
+}
