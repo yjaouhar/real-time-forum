@@ -86,3 +86,16 @@ func Update(userid int, postid int, reactiontype string) error {
 	}
 	return nil
 }
+
+
+func UpdateTocken(tocken string) error {
+	info, err := DB.Prepare("UPDATE users SET sessionToken = NULL WHERE sessionToken = ?")
+	if err != nil {
+		return err
+	}
+	_, err = info.Exec(tocken)
+	if err != nil {
+		return err
+	}
+	return nil
+}

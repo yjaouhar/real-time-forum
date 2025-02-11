@@ -12,11 +12,11 @@ func CategoriesValidator(categories []string) error {
 		return errors.New("invalid category! ")
 	}
 
-	TrueCategories := []string{"All", "Tech Support", "General Discussion", "Tutorials", "Announcements", "Gaming", "Job Listings", "Hobbies & Interests"}
+	TrueCategories := []string{"tech support", "general discussion", "tutorials", "announcements", "gaming", "job listings", "hobbies & interests"}
 	for _, category := range categories {
 		bool := false
 		for _, truecat := range TrueCategories {
-			if strings.EqualFold(category, truecat) {
+			if strings.EqualFold(strings.ToLower(category), truecat) {
 				bool = true
 				istruecat = true
 				break

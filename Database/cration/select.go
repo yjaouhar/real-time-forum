@@ -193,3 +193,23 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 	}
 	return like, dislike, reactin
 }
+
+
+func GetCategories(categore string) ([]int, error) {
+	var postesid []int
+	quire := "SELECT post_id FROM categories WHERE categories = ? "
+	rows, err := DB.Query(quire, categore)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		postesid = append(postesid, id)
+	}
+	return postesid, nil
+}

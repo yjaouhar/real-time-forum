@@ -7,7 +7,7 @@ export const Homepage = (data) => {
     document.body.innerHTML = `
     <header class="header">
         <div class="logo">FORUM</div>
-        <button>logout</button>
+        <button id="logout">logout</button>
     </header>
     `
     let container = document.createElement("div");
@@ -30,13 +30,13 @@ export const Homepage = (data) => {
     sidebar.innerHTML += `
                 <h3>Category</h3>
                 <div class="category-list">
-                <button>Tech Support</button>
-                <button>General Discussion</button>
-                <button>Tutorials</button>
-                <button>Gaming</button>
-                <button>Hobbies & Interests</button>
-                <button>Job Listings</button>
-                <button>Announcements</button>
+                <button class="cat" value="Tech Support" >Tech Support</button>
+                <button class="cat" value="General Discussion">General Discussion</button>
+                <button class="cat" value="Tutorials">Tutorials</button>
+                <button class="cat" value="Gaming">Gaming</button>
+                <button class="cat" value="Hobbies & Interests">Hobbies & Interests</button>
+                <button class="cat" value="Job Listings">Job Listings</button>
+                <button class="cat" value="Announcements">Announcements</button>
             </div>
     `
     container.append(sidebar)
@@ -145,67 +145,71 @@ export const Homepage = (data) => {
 
 export const MoreData = (data) => {
     let main = document.querySelector(".main-content")
+    let post = document.querySelectorAll(".post")
+    let arr = []
+    post.forEach((ele) => arr.push(ele.getAttribute("postid")))
     if (data) {
         data.forEach(element => {
-            let post = document.createElement("div")
-            post.setAttribute("postid", element.ID)
-            post.setAttribute("class", "post")
-            let post_header = document.createElement("div")
-            let poster_profile = document.createElement("span")
-            poster_profile.setAttribute("class", "material-icons")
-            poster_profile.textContent = "account_circle"
-            post_header.append(poster_profile)
-            post_header.setAttribute("class", "post-header")
-            let poster = document.createElement("span")
-            poster.textContent = element.Username
-            let time = document.createElement("span")
-            time.textContent = Dateformat(element.CreatedAt)
-            time.style.color = "#6c757d"
-            post_header.append(poster)
-            post_header.append(time)
-            let title = document.createElement("h4")
-            title.textContent = element.Title + "   ====> " + element.ID
-            let p = document.createElement("p")
-            p.textContent = element.Content
-            let cat = document.createElement("i")
-            cat.textContent = `Categories : [${element.Categories}]`
-            cat.style.color = "#b3b3b3"
-            post.append(post_header)
-            post.append(title)
-            post.append(p)
-            post.append(cat)
-            let reaction = document.createElement("div")
-            reaction.setAttribute("class", "post-actions")
-            let likes = document.createElement("div")
-            likes.setAttribute("class", "reactions")
-            likes.innerHTML = `
+            if (!arr.includes(String(element.ID))) {
+                let post = document.createElement("div")
+                post.setAttribute("postid", element.ID)
+                post.setAttribute("class", "post")
+                let post_header = document.createElement("div")
+                let poster_profile = document.createElement("span")
+                poster_profile.setAttribute("class", "material-icons")
+                poster_profile.textContent = "account_circle"
+                post_header.append(poster_profile)
+                post_header.setAttribute("class", "post-header")
+                let poster = document.createElement("span")
+                poster.textContent = element.Username
+                let time = document.createElement("span")
+                time.textContent = Dateformat(element.CreatedAt)
+                time.style.color = "#6c757d"
+                post_header.append(poster)
+                post_header.append(time)
+                let title = document.createElement("h4")
+                title.textContent = element.Title + "   ====> " + element.ID
+                let p = document.createElement("p")
+                p.textContent = element.Content
+                let cat = document.createElement("i")
+                cat.textContent = `Categories : [${element.Categories}]`
+                cat.style.color = "#b3b3b3"
+                post.append(post_header)
+                post.append(title)
+                post.append(p)
+                post.append(cat)
+                let reaction = document.createElement("div")
+                reaction.setAttribute("class", "post-actions")
+                let likes = document.createElement("div")
+                likes.setAttribute("class", "reactions")
+                likes.innerHTML = `
             <div class="like-button" data-status="of">
             <span id="like" data-type="post" data-status="of" data-id = ${element.ID}  class="material-icons">thumb_up_off_alt</span> <b>${element.Like}</b>
             </div>
             <div class="like-button" data-status="of">
             <span id="dislike" data-type="post" data-status="of" data-id = ${element.ID} class="material-icons">thumb_down_off_alt</span>  <b>${element.DisLike}</b>
             </div>`
-            let comment = document.createElement("div")
-            comment.textContent = `${element.Nembre} 💬`
-            comment.setAttribute("id", "comment")
-            comment.setAttribute("class", "of")
-            comment.setAttribute("posteid", element.ID)
-            console.log(element.Like);
-            
-            if (element.Have === "like") {
-                let like = likes.querySelector("#like")
-                like.setAttribute("data-status", "on")
-                like.parentNode.setAttribute("data-status", "on")
-            } else if (element.Have === "dislike") {
-                let dislike = likes.querySelector("#dislike")
-                dislike.setAttribute("data-status", "on")
-                dislike.parentNode.setAttribute("data-status", "on")
-            }
-            reaction.append(likes)
-            reaction.append(comment)
-            post.append(reaction)
-            main.append(post)
-            post.innerHTML += `<div class="input-wrapper">
+                let comment = document.createElement("div")
+                comment.textContent = `${element.Nembre} 💬`
+                comment.setAttribute("id", "comment")
+                comment.setAttribute("class", "of")
+                comment.setAttribute("posteid", element.ID)
+                console.log(element.Like);
+
+                if (element.Have === "like") {
+                    let like = likes.querySelector("#like")
+                    like.setAttribute("data-status", "on")
+                    like.parentNode.setAttribute("data-status", "on")
+                } else if (element.Have === "dislike") {
+                    let dislike = likes.querySelector("#dislike")
+                    dislike.setAttribute("data-status", "on")
+                    dislike.parentNode.setAttribute("data-status", "on")
+                }
+                reaction.append(likes)
+                reaction.append(comment)
+                post.append(reaction)
+                main.append(post)
+                post.innerHTML += `<div class="input-wrapper">
                  <textarea placeholder="Kteb commentaire..." class="comment-input" data-idpost = ${element.ID}></textarea>
                     <button class="send-button">
                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -215,6 +219,7 @@ export const MoreData = (data) => {
                     </button>
                     <p id="error-message"></p>
                     </div>`
+            }
         })
     }
 

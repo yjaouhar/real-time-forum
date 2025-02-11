@@ -1,7 +1,7 @@
 import { Homepage, Login, MoreData } from "./pages.js"
 import {Checkstuts} from "./check.js"
 import { showError } from "./errore.js"
-import { pagenation, Dateformat } from "./utils.js"
+import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
 export function HomeListener(data) {
@@ -15,17 +15,43 @@ export function HomeListener(data) {
     sendcomment.forEach((el) => {
         el.addEventListener("click", send_comment)
     })
+
+    let logout = document.querySelector("#logout")
+    logout.addEventListener("click", logoutHandel)
+
     window.addEventListener("scroll", pagenation)
     let comment = document.querySelectorAll("#comment")
     comment.forEach((el) => {
         el.addEventListener("click", CommentEvent)
     })
+    let categories = document.querySelectorAll(".cat")
+    categories.forEach(elem => { elem.addEventListener("click", CatHandel) })
 
     let reactionLike = document.querySelectorAll("#like")
     reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
     let reactionDisLike = document.querySelectorAll("#dislike")
     reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
 }
+
+const CatHandel = debounce((eve) => {
+    console.log(".........>", eve.target.value);
+    let categories = eve.target.value
+    const formData = new FormData();
+    formData.set("categories", categories)
+    if (validateCategories(categories)) {
+        fetch("/categories", { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+                console.log("==> categores data :", data);
+
+            })
+            .catch(error => {
+                console.log(error);
+
+            })
+    }
+
+}, 100)
 
 
 
@@ -337,6 +363,21 @@ function CommentEvent(event) {//////comment
 
 }
 
+
+function logoutHandel(){
+    fetch("/logout", {
+        method: 'POST',
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == true) {
+                Checkstuts()
+            }
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+}
 
 
 

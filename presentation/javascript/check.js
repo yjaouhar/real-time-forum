@@ -50,6 +50,10 @@ function validateGender(gender) {
     }
     return true;
 }
+export function validateCategories(cat) {
+    let arr = ["Tech Support", "General Discussion", "Tutorials", "Gaming", "Hobbies & Interests", "Job Listings", "Announcements"]
+    return arr.includes(cat)
+}
 
 // function validateNickname(name) {
 //     const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
@@ -72,7 +76,7 @@ async function Checkstuts(event) {
                 console.log(result.status);
                 handle()
             } else {
-                if ( document.querySelector(".g")){
+                if (document.querySelector(".g")) {
                     let head = document.querySelector(".g")
                     head.setAttribute("class", result.name)
                 }
@@ -89,6 +93,7 @@ async function Checkstuts(event) {
 
 
 }
+
 
 
 

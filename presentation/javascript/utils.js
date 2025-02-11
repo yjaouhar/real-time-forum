@@ -24,7 +24,7 @@ export const pagenation = debounce(() => {
 
 
 
-function debounce(func, wait = 300) {
+export function debounce(func, wait = 300) {
     let timeout;
     return function (...args) {
         clearTimeout(timeout);

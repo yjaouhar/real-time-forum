@@ -21,8 +21,9 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
 		categories := r.Form["categories"]
-		if len(categories) == 0 {
-			categories = append(categories, "All")
+		if len(categories) == 0 || title == "" || content == "" {
+			fmt.Println("bad request")
+			return
 		}
 		err := servisse.CategoriesValidator(categories)
 		if err != nil {
