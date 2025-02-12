@@ -158,12 +158,15 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
         .then(data => {
             if (data.status) {
                 HomeHandeler()
+                return
             } else {
                 console.log(data.tocken)
                 if (data.tocken == false) {
                     Checkstuts()
+                    return
                 } else {
                     showError(data.error)
+                    return 
                 }
             }
         })

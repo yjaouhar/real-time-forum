@@ -194,7 +194,6 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 	return like, dislike, reactin
 }
 
-
 func GetCategories(categore string) ([]int, error) {
 	var postesid []int
 	quire := "SELECT post_id FROM categories WHERE categories = ? "
