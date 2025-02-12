@@ -1,11 +1,12 @@
 import { Homepage, Login, MoreData } from "./pages.js"
-import { Checkstuts ,validateCategories } from "./check.js"
+import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
 export function HomeListener(data) {
     Homepage(data)
+
     let CreatPostBtn = document.querySelector(".create-post")
     CreatPostBtn.addEventListener("click", handelpost)
     let cancel = document.querySelector("#cancel")
@@ -25,6 +26,7 @@ export function HomeListener(data) {
         el.addEventListener("click", CommentEvent)
     })
     let categories = document.querySelectorAll(".cat")
+    console.log("........>", categories);
     categories.forEach(elem => { elem.addEventListener("click", CatHandel) })
 
     let reactionLike = document.querySelectorAll("#like")
@@ -34,7 +36,13 @@ export function HomeListener(data) {
 }
 
 const CatHandel = debounce((eve) => {
+    console.log("........");
+    eve.preventDefault();
     let categories = eve.target.value
+    if (categories === "all") {
+        HomeHandeler()
+        return
+    }
     const formData = new FormData();
     formData.set("categories", categories)
     formData.append('lastdata', true)
@@ -42,7 +50,28 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                console.log("==> categores data :", data);
+                HomeListener(data)
+                window.addEventListener("scroll", debounce((event) => {
+                    if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
+                        formData.delete('lastdata')
+                        fetch('/categories', { method: "POST", body: formData })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.finish) {
+                                    window.removeEventListener("scroll", debounce)
+                                } else {
+                                    MoreData(data);
+                                    let reactionLike = document.querySelectorAll("#like")
+                                    reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                                    let reactionDisLike = document.querySelectorAll("#dislike")
+                                    reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Error:', error);
+                            });
+                    }
+                }, 100))
             })
             .catch(error => {
                 console.log(error);
@@ -108,10 +137,6 @@ export const likeHandel = (event) => {
             console.log('Error:', error);
         });
 
-
-
-
-
 }
 
 
@@ -163,7 +188,7 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
                     return
                 } else {
                     showError(data.error)
-                    return 
+                    return
                 }
             }
         })

@@ -1,8 +1,9 @@
 import { Dateformat } from "./utils.js"
+import { HomeListener } from "./service.js"
 
 export const Homepage = (data) => {
+    console.log("==== data ", data);
     let title = document.querySelector("title")
-    console.log(title);
     let name = title.getAttribute("class")
     document.body.innerHTML = `
     <header class="header">
@@ -30,6 +31,7 @@ export const Homepage = (data) => {
     sidebar.innerHTML += `
                 <h3>Category</h3>
                 <div class="category-list">
+                 <button class="cat" value="all" >All</button>
                 <button class="cat" value="Tech Support" >Tech Support</button>
                 <button class="cat" value="General Discussion">General Discussion</button>
                 <button class="cat" value="Tutorials">Tutorials</button>
@@ -111,6 +113,8 @@ export const Homepage = (data) => {
 
     if (data && data.finish === undefined) {
         MoreData(data)
+
+
     } else {
         let post = document.createElement("div")
         post.setAttribute("class", "post")
@@ -222,8 +226,8 @@ export const MoreData = (data) => {
             }
         })
     }
-
 }
+
 
 export const Regester = () => {
     document.body.innerHTML = `

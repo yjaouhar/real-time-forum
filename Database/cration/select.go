@@ -92,13 +92,16 @@ func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
 		postes = append(postes, post)
 	}
+	fmt.Println("======")
 	return postes, nil
 }
 
-func GetCategories(category string, start int) ([]utils.Postes, int, error) {
+var count int
 
+func GetCategories(category string, start int, userid int) ([]utils.Postes, int, error) {
+	end := 0
 	var postes []utils.Postes
-	quire := "SELECT post_id FROM categories WHERE category = ? AND id >= ? ORDER BY id DESC LIMIT 10"
+	quire := "SELECT post_id FROM categories WHERE category = ? AND id <= ? ORDER BY id DESC LIMIT 10"
 	rows, err := DB.Query(quire, strings.ToLower(category), start)
 	if err != nil {
 		return nil, 0, err
@@ -106,35 +109,33 @@ func GetCategories(category string, start int) ([]utils.Postes, int, error) {
 	defer rows.Close()
 
 	for rows.Next() {
+
+		count++
 		var id int
 		err := rows.Scan(&id)
 		if err != nil {
 			return nil, 0, err
 		}
-
+		var post utils.Postes
 		quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id = ?"
-		row , err := DB.Query(quire, id)
+		err = DB.QueryRow(quire, id).Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Categories, &post.CreatedAt)
 		if err != nil {
 			return nil, 0, err
 		}
-		for row.Next() {
-			var post utils.Postes
-			err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Categories, &post.CreatedAt)
-			if err != nil {
-				return nil, 0 
-			}
-			post.Nembre, err = LenghtComent(post.ID)
-			post.Username = GetUser(post.UserID)
-			if post.Username == "" {
-				return nil, err
-			}
-			sl, _ := SelecReaction(post.ID)
-
-			post.Like, post.DisLike, post.Have = Liklength(sl, userid)
-			postes = append(postes, post)
+		post.Nembre, err = LenghtComent(post.ID)
+		post.Username = GetUser(post.UserID)
+		if post.Username == "" {
+			return nil, 0, err
 		}
+		sl, _ := SelecReaction(post.ID)
+
+		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
+		postes = append(postes, post)
+		end = id
 
 	}
+
+	return postes, end, nil
 
 }
 
@@ -182,14 +183,17 @@ func SelectPostid(postid int) error {
 	return nil
 }
 
-func Getlastid(str string) (int, error) {
+func Getlastid(cat string) (int, error) {
 	id := 0
 	query := "SELECT id FROM postes ORDER BY id DESC LIMIT 1"
-	if str == "catigores" {
-		query = "SELECT id FROM categories WHERE category = ? ORDER BY id DESC LIMIT 1"
-	}
 	err := DB.QueryRow(query).Scan(&id)
+	if cat != "" {
+		query = "SELECT id FROM categories WHERE category = ? ORDER BY id DESC LIMIT 1"
+		err = DB.QueryRow(query, strings.ToLower(cat)).Scan(&id)
+	}
+
 	if err != nil {
+		fmt.Println("===> last id :", cat)
 		return 0, err
 	}
 	return id, nil
