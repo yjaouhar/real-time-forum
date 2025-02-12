@@ -95,6 +95,49 @@ func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 	return postes, nil
 }
 
+func GetCategories(category string, start int) ([]utils.Postes, int, error) {
+
+	var postes []utils.Postes
+	quire := "SELECT post_id FROM categories WHERE category = ? AND id >= ? ORDER BY id DESC LIMIT 10"
+	rows, err := DB.Query(quire, strings.ToLower(category), start)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		quire := "SELECT id, user_id, title, content, categories, created_at FROM postes WHERE id = ?"
+		row , err := DB.Query(quire, id)
+		if err != nil {
+			return nil, 0, err
+		}
+		for row.Next() {
+			var post utils.Postes
+			err := rows.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Categories, &post.CreatedAt)
+			if err != nil {
+				return nil, 0 
+			}
+			post.Nembre, err = LenghtComent(post.ID)
+			post.Username = GetUser(post.UserID)
+			if post.Username == "" {
+				return nil, err
+			}
+			sl, _ := SelecReaction(post.ID)
+
+			post.Like, post.DisLike, post.Have = Liklength(sl, userid)
+			postes = append(postes, post)
+		}
+
+	}
+
+}
+
 func LenghtComent(postid int) (nbr int, err error) {
 	nbr = 0 // initialize the counter to 0
 	quire := "SELECT COUNT(*) FROM comments WHERE post_id =?"
@@ -139,9 +182,12 @@ func SelectPostid(postid int) error {
 	return nil
 }
 
-func Getlastid() (int, error) {
+func Getlastid(str string) (int, error) {
 	id := 0
 	query := "SELECT id FROM postes ORDER BY id DESC LIMIT 1"
+	if str == "catigores" {
+		query = "SELECT id FROM categories WHERE category = ? ORDER BY id DESC LIMIT 1"
+	}
 	err := DB.QueryRow(query).Scan(&id)
 	if err != nil {
 		return 0, err
@@ -193,24 +239,4 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 		}
 	}
 	return like, dislike, reactin
-}
-
-func GetCategories(category string) ([]int, error) {
-	var postesid []int
-	quire := "SELECT post_id FROM categories WHERE category = ? ORDER BY id DESC"
-	rows, err := DB.Query(quire, strings.ToLower(category))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-
-		var id int
-		err := rows.Scan(&id)
-		if err != nil {
-			return nil, err
-		}
-		postesid = append(postesid, id)
-	}
-	return postesid, nil
 }

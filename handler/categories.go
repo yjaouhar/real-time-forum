@@ -30,7 +30,20 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error categore :", err)
 		return
 	}
+	if lastdata == "true" {
+		sr , err = db.Getlastid("catigores")
+		if err != nil {
+			fmt.Println("err in selection last id")
+			return
+		}
+	}
+
 	sl, err = db.GetCategories(categories[0])
+		if err != nil {
+			fmt.Println("error categore :", err)
+			return
+		}
+
 
 	// fmt.Println("===> categories :", sl)
 
