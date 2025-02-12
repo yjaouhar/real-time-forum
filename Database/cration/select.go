@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"strings"
 
 	"real-time-forum/utils"
 )
@@ -194,15 +195,16 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 	return like, dislike, reactin
 }
 
-func GetCategories(categore string) ([]int, error) {
+func GetCategories(category string) ([]int, error) {
 	var postesid []int
-	quire := "SELECT post_id FROM categories WHERE categories = ? "
-	rows, err := DB.Query(quire, categore)
+	quire := "SELECT post_id FROM categories WHERE category = ? ORDER BY id DESC"
+	rows, err := DB.Query(quire, strings.ToLower(category))
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
+
 		var id int
 		err := rows.Scan(&id)
 		if err != nil {

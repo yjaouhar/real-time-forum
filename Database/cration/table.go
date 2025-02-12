@@ -28,7 +28,7 @@ func CreateTable() error {
 	CREATE TABLE IF NOT EXISTS categories (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		post_id INTEGER NOT NULL,
-		categories TEXT NOT NULL,
+		category TEXT NOT NULL,
 		FOREIGN KEY (post_id) REFERENCES postes(id) ON DELETE CASCADE
 	);
 	CREATE TABLE IF NOT EXISTS comments (

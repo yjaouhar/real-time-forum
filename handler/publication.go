@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
 	db "real-time-forum/Database/cration"
 	"real-time-forum/servisse"
@@ -34,7 +33,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		}
 		tocken, _ := r.Cookie("SessionToken")
 		user_id := db.GetId("sessionToken", tocken.Value)
-		errore := db.InsertPostes(user_id, title, content, strings.Join(categories, " "))
+		errore := db.InsertPostes(user_id, title, content, categories)
 
 		if errore != nil {
 			fmt.Println("===> er : ", errore)

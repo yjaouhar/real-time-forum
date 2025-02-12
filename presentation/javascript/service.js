@@ -1,5 +1,5 @@
 import { Homepage, Login, MoreData } from "./pages.js"
-import { Checkstuts } from "./check.js"
+import { Checkstuts ,validateCategories } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
@@ -34,23 +34,20 @@ export function HomeListener(data) {
 }
 
 const CatHandel = debounce((eve) => {
-    console.log(".........>", eve.target.value);
     let categories = eve.target.value
     const formData = new FormData();
     formData.set("categories", categories)
+    formData.append('lastdata', true)
     if (validateCategories(categories)) {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
                 console.log("==> categores data :", data);
-
             })
             .catch(error => {
                 console.log(error);
-
             })
     }
-
 }, 100)
 
 

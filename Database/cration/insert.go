@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,7 +23,7 @@ func Insertuser(first_name string, last_name string, email string, gender string
 	return nil
 }
 
-func InsertPostes(user_id int, title string, content string, catygory string) error {
+func InsertPostes(user_id int, title string, content string, catygory []string) error {
 	created_at := time.Now().Format("2006-01-02 15:04:05")
 	fmt.Println(created_at)
 	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,created_at,categories) VALUES (?,?,?,?,?)")
@@ -30,7 +31,7 @@ func InsertPostes(user_id int, title string, content string, catygory string) er
 		fmt.Println("==> E : ", err)
 		return err
 	}
-	_, err = info.Exec(user_id, title, content, created_at, catygory)
+	_, err = info.Exec(user_id, title, content, created_at, strings.Join(catygory, " "))
 	if err != nil {
 		return err
 	}
@@ -47,15 +48,18 @@ func InsertPostes(user_id int, title string, content string, catygory string) er
 	return nil
 }
 
-func InsertCategory(post_id int, catygory string) error {
-	info, err := DB.Prepare("INSERT INTO categories (post_id,categories) VALUES (?,?)")
-	if err != nil {
-		return err
+func InsertCategory(post_id int, catygory []string) error {
+	for _, v := range catygory {
+		info, err := DB.Prepare("INSERT INTO categories (post_id,category) VALUES (?,?)")
+		if err != nil {
+			return err
+		}
+		_, err = info.Exec(post_id, strings.ToLower(v))
+		if err != nil {
+			return err
+		}
 	}
-	_, err = info.Exec(post_id, catygory)
-	if err != nil {
-		return err
-	}
+
 	return nil
 }
 
