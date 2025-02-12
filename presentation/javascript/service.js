@@ -1,5 +1,5 @@
 import { Homepage, Login, MoreData } from "./pages.js"
-import {Checkstuts} from "./check.js"
+import { Checkstuts } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
@@ -74,37 +74,37 @@ export const likeHandel = (event) => {
     })
         .then(response => response.json())
         .then(data => {
-          if (data.tocken==false){
-            Checkstuts()
-          }else{
-
-            let element
-            if (reaction_type == "like") {
-                element = document.querySelector(`#dislike[data-id="${content_id}"]`)
+            if (data.tocken == false) {
+                Checkstuts()
             } else {
-                element = document.querySelector(`#like[data-id="${content_id}"]`)
-            }
-            if (status == "of" && element.getAttribute("data-status") == "of" && data.content_type !== "") {
-                event.target.setAttribute("data-status", "on")
-                event.target.parentNode.setAttribute("data-status", "on")
-                console.log("of on", data[id]);
 
-                event.target.parentNode.querySelector("b").textContent = data[id]
-                // event.target.parentNode.b.textContent = "ggg"
-            } else if (status == "on" && element.getAttribute("data-status") == "of" && data.content_type == "") {
-                event.target.setAttribute("data-status", "of")
-                event.target.parentNode.setAttribute("data-status", "of")
-                event.target.parentNode.querySelector("b").textContent = data[id]
-            } else if (status == "of" && element.getAttribute("data-status") == "on") {
-                event.target.setAttribute("data-status", "on")
-                event.target.parentNode.setAttribute("data-status", "on")
-                element.setAttribute("data-status", "of")
-                element.parentNode.setAttribute("data-status", "of")
-                event.target.parentNode.querySelector("b").textContent = data[id]
-                let elementid = element.id
-                element.parentNode.querySelector("b").textContent = data[elementid]
+                let element
+                if (reaction_type == "like") {
+                    element = document.querySelector(`#dislike[data-id="${content_id}"]`)
+                } else {
+                    element = document.querySelector(`#like[data-id="${content_id}"]`)
+                }
+                if (status == "of" && element.getAttribute("data-status") == "of" && data.content_type !== "") {
+                    event.target.setAttribute("data-status", "on")
+                    event.target.parentNode.setAttribute("data-status", "on")
+                    console.log("of on", data[id]);
+
+                    event.target.parentNode.querySelector("b").textContent = data[id]
+                    // event.target.parentNode.b.textContent = "ggg"
+                } else if (status == "on" && element.getAttribute("data-status") == "of" && data.content_type == "") {
+                    event.target.setAttribute("data-status", "of")
+                    event.target.parentNode.setAttribute("data-status", "of")
+                    event.target.parentNode.querySelector("b").textContent = data[id]
+                } else if (status == "of" && element.getAttribute("data-status") == "on") {
+                    event.target.setAttribute("data-status", "on")
+                    event.target.parentNode.setAttribute("data-status", "on")
+                    element.setAttribute("data-status", "of")
+                    element.parentNode.setAttribute("data-status", "of")
+                    event.target.parentNode.querySelector("b").textContent = data[id]
+                    let elementid = element.id
+                    element.parentNode.querySelector("b").textContent = data[elementid]
+                }
             }
-        }
 
         })
         .catch(error => {
@@ -147,6 +147,7 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
     let post = ev.target.content.value
     if (title === "" || post === "") {
         showError("Fill in all the fields")
+        return
     }
     const formData = new FormData(ev.target);
     fetch('/pubpost', {
@@ -156,13 +157,13 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
         .then(response => response.json())
         .then(data => {
             if (data.status) {
-                 HomeHandeler()
+                HomeHandeler()
             } else {
                 console.log(data.tocken)
-                if (data.tocken== false) {
+                if (data.tocken == false) {
                     Checkstuts()
                 } else {
-                showError(data.error)
+                    showError(data.error)
                 }
             }
         })
@@ -250,7 +251,7 @@ const send_comment = (event) => {/////send comment
                 showError(data.error);
             }
             console.log(data.tocken);
-            
+
         })
         .catch(error => {
             console.log('Error:', error);
@@ -260,8 +261,8 @@ const send_comment = (event) => {/////send comment
 
 
 function CommentEvent(event) {//////comment
-  
-    
+
+
     console.log(event.target);
 
     let post_id = event.target.getAttribute("posteid");
@@ -278,9 +279,9 @@ function CommentEvent(event) {//////comment
             .then(response => response.json())
             .then(data => {
                 if (data) {
-                    if (data.token == false){
+                    if (data.token == false) {
                         Checkstuts()
-                    }else{
+                    } else {
                         console.log(data.token);
                         let lebel = document.createElement("label");
                         lebel.textContent = "Comments : ";
@@ -289,17 +290,17 @@ function CommentEvent(event) {//////comment
                         data.forEach((el) => {
                             let commentDiv = document.createElement("div");
                             commentDiv.classList.add("comment-content");
-    
-    
+
+
                             let userDiv = document.createElement("div");
                             userDiv.classList.add("user-name");
                             userDiv.textContent = el.Username; // Changeha b user dynamiquement
-    
+
                             let commentP = document.createElement("p");
                             commentP.classList.add("comment-text");
                             commentP.textContent = el.Content; // Changeha b data dynamiquement
-    
-    
+
+
                             let actionsDiv = document.createElement("div");
                             actionsDiv.classList.add("comment-actions");
                             actionsDiv.innerHTML = `
@@ -319,20 +320,20 @@ function CommentEvent(event) {//////comment
                                 dislike.setAttribute("data-status", "on")
                                 dislike.parentNode.setAttribute("data-status", "on")
                             }
-    
+
                             let timeSpan = document.createElement("span");
                             timeSpan.classList.add("timestamp");
                             timeSpan.textContent = Dateformat(el.CreatedAt);
                             // actionsDiv.appendChild(likeBtn);
                             // actionsDiv.appendChild(dislikeBtn);
                             actionsDiv.appendChild(timeSpan);
-    
+
                             commentDiv.appendChild(userDiv);
                             commentDiv.appendChild(commentP);
                             commentDiv.appendChild(actionsDiv);
-    
+
                             postDiv.appendChild(commentDiv);
-    
+
                         })
                         event.target.classList.remove("of")
                         event.target.classList.add("on")
@@ -341,7 +342,7 @@ function CommentEvent(event) {//////comment
                         let reactionDisLike = document.querySelectorAll("#dislike")
                         reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
                     }
-                   
+
                 }
             })
             .catch(error => {
@@ -364,13 +365,14 @@ function CommentEvent(event) {//////comment
 }
 
 
-function logoutHandel(){
+function logoutHandel() {
     fetch("/logout", {
         method: 'POST',
     })
         .then(response => response.json())
         .then(data => {
             if (data.status == true) {
+                document.cookie = "SessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 Checkstuts()
             }
         })
