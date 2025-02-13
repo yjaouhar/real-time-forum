@@ -92,7 +92,7 @@ func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
 		postes = append(postes, post)
 	}
-	fmt.Println("======")
+	
 	return postes, nil
 }
 
@@ -132,7 +132,6 @@ func GetCategories(category string, start int, userid int) ([]utils.Postes, int,
 		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
 		postes = append(postes, post)
 		end = id
-
 	}
 
 	return postes, end, nil
@@ -193,7 +192,6 @@ func Getlastid(cat string) (int, error) {
 	}
 
 	if err != nil {
-		fmt.Println("===> last id :", cat)
 		return 0, err
 	}
 	return id, nil

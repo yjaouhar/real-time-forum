@@ -76,10 +76,10 @@ async function Checkstuts(event) {
                 console.log(result.status);
                 handle()
             } else {
-                if (document.querySelector(".g")) {
-                    let head = document.querySelector(".g")
+            
+                    let head = document.querySelector("title")
                     head.setAttribute("class", result.name)
-                }
+                
                 HomeHandeler()
             }
 

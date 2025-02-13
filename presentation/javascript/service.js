@@ -4,9 +4,19 @@ import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
+export function Listener(){
+    let sendcomment = document.querySelectorAll(".send-button")
+    sendcomment.forEach((el) => {
+        el.addEventListener("click", send_comment)
+    })
+    let comment = document.querySelectorAll("#comment")
+    comment.forEach((el) => {
+        el.addEventListener("click", CommentEvent)
+    })
+}
+
 export function HomeListener(data) {
     Homepage(data)
-
     let CreatPostBtn = document.querySelector(".create-post")
     CreatPostBtn.addEventListener("click", handelpost)
     let cancel = document.querySelector("#cancel")
@@ -26,7 +36,6 @@ export function HomeListener(data) {
         el.addEventListener("click", CommentEvent)
     })
     let categories = document.querySelectorAll(".cat")
-    console.log("........>", categories);
     categories.forEach(elem => { elem.addEventListener("click", CatHandel) })
 
     let reactionLike = document.querySelectorAll("#like")
@@ -36,8 +45,11 @@ export function HomeListener(data) {
 }
 
 const CatHandel = debounce((eve) => {
-    console.log("........");
     eve.preventDefault();
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
     let categories = eve.target.value
     if (categories === "all") {
         HomeHandeler()
@@ -50,32 +62,49 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                HomeListener(data)
-                window.addEventListener("scroll", debounce((event) => {
-                    if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
-                        formData.delete('lastdata')
-                        fetch('/categories', { method: "POST", body: formData })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.finish) {
-                                    window.removeEventListener("scroll", debounce)
-                                } else {
-                                    MoreData(data);
-                                    let reactionLike = document.querySelectorAll("#like")
-                                    reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
-                                    let reactionDisLike = document.querySelectorAll("#dislike")
-                                    reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
-                                }
-                            })
-                            .catch(error => {
-                                console.log('Error:', error);
-                            });
-                    }
-                }, 100))
+
+                if (data.status === undefined) {
+                    console.log("===> status : ", data)
+                    HomeListener(data)
+                } else {
+                    HomeListener()
+                }
+                window.removeEventListener("scroll", pagenation);
+                if (data.length==10){
+                     window.addEventListener("scroll",scrollHandel)
+                }else{
+                    console.log("NOTE DATA VALABLE");
+                    
+                }
+               
             })
             .catch(error => {
                 console.log(error);
             })
+        const scrollHandel = debounce((event) => {
+            event.preventDefault();
+            if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
+                formData.delete('lastdata')
+                fetch('/categories', { method: "POST", body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.status && data.finish) {
+                            console.log("vvv", data);
+                            window.removeEventListener("scroll", scrollHandel)
+                        } else {
+                            MoreData(data);
+                            let reactionLike = document.querySelectorAll("#like")
+                            reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                            let reactionDisLike = document.querySelectorAll("#dislike")
+                            reactionDisLike.forEach(elm => elm.addEventListener("click", likeHandel))
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Error:', error);
+                    });
+            }
+        }, 100)
+
     }
 }, 100)
 
@@ -116,7 +145,6 @@ export const likeHandel = (event) => {
                     console.log("of on", data[id]);
 
                     event.target.parentNode.querySelector("b").textContent = data[id]
-                    // event.target.parentNode.b.textContent = "ggg"
                 } else if (status == "on" && element.getAttribute("data-status") == "of" && data.content_type == "") {
                     event.target.setAttribute("data-status", "of")
                     event.target.parentNode.setAttribute("data-status", "of")
@@ -141,7 +169,7 @@ export const likeHandel = (event) => {
 
 
 
-export const handelpost = (event) => {/////////////////formulaire dyal create post
+export const handelpost = (event) => {
     window.removeEventListener("scroll", pagenation)
     let creat_btn = event.target
     creat_btn.style.display = "none"
@@ -307,11 +335,6 @@ function CommentEvent(event) {//////comment
                     if (data.token == false) {
                         Checkstuts()
                     } else {
-                        console.log(data.token);
-                        let lebel = document.createElement("label");
-                        lebel.textContent = "Comments : ";
-                        lebel.classList.add("comment-label");
-                        postDiv.append(lebel);
                         data.forEach((el) => {
                             let commentDiv = document.createElement("div");
                             commentDiv.classList.add("comment-content");
@@ -378,8 +401,7 @@ function CommentEvent(event) {//////comment
 
     } else {
         let comment = postDiv.querySelectorAll(".comment-content")
-        let label = document.querySelector(".comment-label")
-        label.remove()
+    
         comment.forEach((el) => {
             el.remove()
         })

@@ -1,5 +1,5 @@
 import { Dateformat } from "./utils.js"
-import { HomeListener } from "./service.js"
+import { Listener } from "./service.js"
 
 export const Homepage = (data) => {
     console.log("==== data ", data);
@@ -225,6 +225,14 @@ export const MoreData = (data) => {
                     </div>`
             }
         })
+        Listener()
+    } else {
+        let post = document.createElement("div")
+        post.setAttribute("class", "post")
+        let p = document.createElement("p")
+        p.textContent = "no post found"
+        post.append(p)
+        main.append(post)
     }
 }
 

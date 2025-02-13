@@ -30,17 +30,16 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 
 	if lastdata == "true" {
 		str, err = db.Getlastid("")
-
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"finish": true}`))
+			w.Write([]byte(`{"error": "400", "status":false, "finish": true ,"tocken":false}`))
 			return
 		}
 		lastdata = "false"
 	}
 	if str == 0 {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"finish": true}`))
+		w.Write([]byte(`{"error": "400", "status":false, "finish": true ,"tocken":false}`))
 		return
 	}
 
