@@ -115,7 +115,6 @@ export const likeHandel = (event) => {
     let content_id = event.target.getAttribute("data-id")
     let reaction_type = event.target.id
     let status = event.target.getAttribute("data-status")
-    let b = event.target.parentNode.querySelector("b")
     let id = event.target.id
 
 
