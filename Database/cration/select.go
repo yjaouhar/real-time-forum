@@ -92,7 +92,7 @@ func GetPostes(str int, end int, userid int) ([]utils.Postes, error) {
 		post.Like, post.DisLike, post.Have = Liklength(sl, userid)
 		postes = append(postes, post)
 	}
-	
+
 	return postes, nil
 }
 
@@ -135,7 +135,6 @@ func GetCategories(category string, start int, userid int) ([]utils.Postes, int,
 	}
 
 	return postes, end, nil
-
 }
 
 func LenghtComent(postid int) (nbr int, err error) {
@@ -241,4 +240,23 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 		}
 	}
 	return like, dislike, reactin
+}
+
+func Select_all_nakname() ([]utils.AllNakename, error) {
+	var All []utils.AllNakename
+	quire := "SELECT id, nikname FROM users ORDER BY nikname ASC"
+	rows, err := DB.Query(quire)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var Name utils.AllNakename
+		err := rows.Scan(&Name.Id, &Name.Nickname)
+		if err != nil {
+			return nil , err
+		}
+		All = append(All, Name)
+	}
+	return All, nil
 }

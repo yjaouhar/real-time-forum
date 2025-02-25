@@ -1,5 +1,5 @@
 import { Dateformat } from "./utils.js"
-import { Listener } from "./service.js"
+import { Listener , handelcontact } from "./service.js"
 
 export const Homepage = (data) => {
     console.log("==== data ", data);
@@ -135,14 +135,46 @@ export const Homepage = (data) => {
     let contact = document.createElement("div")
     contact.setAttribute("class", "contact")
     contact.setAttribute("id", "contact")
+    fetch("/getcontact", {
+        method: "GET"
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("contact data ====>",data);
+        
+        data.forEach(element => {
 
-    let sp = document.createElement("span")
-    sp.textContent = "yjaouhar"
-    contact.append(profile)
-    contact.append(sp)
-    contacts.append(contact)
-    container.append(contacts)
-    document.body.append(container)
+            let profile = document.createElement("p")
+            profile.textContent = element.Nickname
+            profile.setAttribute("class", "profile")
+            profile.setAttribute("data-id", element.Id)
+            contact.append(profile)
+            profile.addEventListener("click", (event) => {
+               console.log(event.target);
+               
+            })
+        });
+        contacts.append(contact)
+        container.append(contacts)
+        document.body.append(container)
+        let cancel = document.querySelector("#cancel")
+        cancel.addEventListener("click", handelcontact)
+
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    })
+
+    
+
+
+ 
+
+    // let sp = document.createElement("span")
+    // sp.textContent = "yjaouhar"
+    // contact.append(profile)
+    // contact.append(sp)
+  
 
 }
 

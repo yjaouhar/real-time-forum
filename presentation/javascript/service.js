@@ -19,8 +19,7 @@ export function HomeListener(data) {
     Homepage(data)
     let CreatPostBtn = document.querySelector(".create-post")
     CreatPostBtn.addEventListener("click", handelpost)
-    let cancel = document.querySelector("#cancel")
-    cancel.addEventListener("click", handelcontact)
+   
 
     let sendcomment = document.querySelectorAll(".send-button")
     sendcomment.forEach((el) => {
@@ -227,7 +226,7 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
 
 
 
-const handelcontact = () => {///cancel contact
+export const handelcontact = () => {///cancel contact
     let cancel = document.querySelector("#cancel")
     if (cancel.textContent == "visibility_off") {
         let contact = document.querySelector("#contact")

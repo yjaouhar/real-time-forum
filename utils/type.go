@@ -47,3 +47,8 @@ type Reaction struct {
 	Content_id     string
 	Reactione_type string
 }
+
+type AllNakename struct {
+	Id       int
+	Nickname string
+}
