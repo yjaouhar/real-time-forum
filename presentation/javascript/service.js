@@ -234,7 +234,7 @@ export const handelcontact = () => {///cancel contact
         cancel.textContent = "visibility"
     } else {
         let contact = document.querySelector("#contact")
-        contact.style.display = "flex"
+        contact.style.display = "block"
         cancel.textContent = "visibility_off"
     }
 

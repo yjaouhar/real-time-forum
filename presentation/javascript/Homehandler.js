@@ -6,7 +6,6 @@ function HomeHandeler() {
 
         .then(response => response.json())
         .then(data => {
-           
             HomeListener(data)
         })
         .catch(error => {

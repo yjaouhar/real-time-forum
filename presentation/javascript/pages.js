@@ -1,5 +1,5 @@
 import { Dateformat } from "./utils.js"
-import { Listener , handelcontact } from "./service.js"
+import { Listener, handelcontact } from "./service.js"
 
 export const Homepage = (data) => {
     console.log("==== data ", data);
@@ -125,6 +125,9 @@ export const Homepage = (data) => {
     }
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
+    let contact = document.createElement("div")
+    contact.setAttribute("class", "contact")
+    contact.setAttribute("id", "contact")
     contacts.innerHTML = `
      <div style=" margin-bottom: 1rem;">
             <span class="material-icons" id="cancel">visibility_off</span>
@@ -132,51 +135,76 @@ export const Homepage = (data) => {
                  
      </div>
     `
-    let contact = document.createElement("div")
-    contact.setAttribute("class", "contact")
-    contact.setAttribute("id", "contact")
+
     fetch("/getcontact", {
         method: "GET"
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("contact data ====>",data);
-        
-        data.forEach(element => {
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(element => {
 
-            let profile = document.createElement("p")
-            profile.textContent = element.Nickname
-            profile.setAttribute("class", "profile")
-            profile.setAttribute("data-id", element.Id)
-            contact.append(profile)
-            profile.addEventListener("click", (event) => {
-               console.log(event.target);
-               
-            })
-        });
-        contacts.append(contact)
-        container.append(contacts)
-        document.body.append(container)
-        let cancel = document.querySelector("#cancel")
-        cancel.addEventListener("click", handelcontact)
+                let profile = document.createElement("p")
+                profile.textContent = element.Nickname
+                profile.setAttribute("class", "profile")
+                profile.setAttribute("data-id", element.Id)
+                contact.append(profile)
+                profile.addEventListener("click", (event) => {
+                    chatContainer.style.display = "flex"
+                    contacts.style.display = "none"
+                })
+            });
+            contacts.append(contact)
+            container.append(contacts)
+            document.body.append(container)
+            let cancel = document.querySelector("#cancel")
+            cancel.addEventListener("click", handelcontact)
 
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+
+    let chatContainer = document.createElement("div")
+    chatContainer.classList.add("chat-container")
+    chatContainer.innerHTML = ` 
+<div class="chat-header">
+<span class="material-icons" id="back" style="cursor: pointer;">arrow_back</span>
+<span class="material-icons" style="margin-left: 30%">account_circle</span>
+yjaouhar
+</div>
+    <div class="chat-messages">
+      <div class="message">Hello! How are you?</div>
+      <div class="message sent">I'm good, thanks! And you?</div>
+       <div class="message">Hello! How are you?</div>
+      <div class="message sent">I'm good, thanks! And you?</div>
+       <div class="message">Hello! How are you?</div>
+      <div class="message sent">I'm good, thanks! And you?</div>
+       <div class="message">Hello! How are you?</div>
+      <div class="message sent">I'm good, thanks! And you?</div>
+       <div class="message">Hello! How are you?</div>
+      <div class="message sent">I'm good, thanks! And you?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type a message...">
+      <button>Send</button>
+    </div>`
+
+    chatContainer.style.display = "none"
+    container.append(chatContainer)
+
+    document.querySelector("#back").addEventListener("click", () => {
+        chatContainer.style.display = "none"
+        contacts.style.display = "block"
     })
-    .catch(error => {
-        console.error("Error:", error);
-    })
-
-    
-
-
- 
-
     // let sp = document.createElement("span")
     // sp.textContent = "yjaouhar"
     // contact.append(profile)
     // contact.append(sp)
-  
+
 
 }
+
+
 
 
 export const MoreData = (data) => {
