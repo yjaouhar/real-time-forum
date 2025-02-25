@@ -1,4 +1,4 @@
-import { Homepage, Login, MoreData } from "./pages.js"
+import { Homepage, Login, MoreData , Contact ,Chatemp} from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
@@ -13,6 +13,16 @@ export function Listener(){
     comment.forEach((el) => {
         el.addEventListener("click", CommentEvent)
     })
+// let b = document.getElementById("back")
+// if (!b){
+// console.log("=====");
+
+// }
+//    b.addEventListener("click", () => {
+//      document.querySelector(".contacts").style.display = "block"
+//      document.querySelector(".chat-container").style.display = "none"
+
+//     })
 }
 
 export function HomeListener(data) {
@@ -427,7 +437,33 @@ function logoutHandel() {
 }
 
 
+export const QueryChat = (id, nickname) => {
+    const formData = new FormData()
+    formData.set("id", id)
+    formData.set("nickname", nickname)
+    // fetch("/message", { method: "GET", body: formData })
+    //     .then(response => response.json())
+    //     .then(data => {
+            Chatemp()
+        // })
+        // .catch(err => {
+        //     console.log("error in fetch message", err);
+
+        // })
+}
 
 
-
-
+export const QueryContact = ()=>{
+    fetch("/getcontact", {
+        method: "GET"
+    })
+        .then(response => response.json())
+        .then(data => {
+            Contact(data)
+            let cancel = document.querySelector("#cancel")
+            cancel.addEventListener("click", handelcontact)
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+}

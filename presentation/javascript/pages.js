@@ -1,8 +1,8 @@
 import { Dateformat } from "./utils.js"
-import { Listener, handelcontact } from "./service.js"
+import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 
 export const Homepage = (data) => {
-    console.log("==== data ", data);
+
     let title = document.querySelector("title")
     let name = title.getAttribute("class")
     document.body.innerHTML = `
@@ -110,11 +110,9 @@ export const Homepage = (data) => {
     main.append(creatcontainer)
     container.append(main)
     document.body.append(container)
-
+    QueryContact()
     if (data && data.finish === undefined) {
         MoreData(data)
-
-
     } else {
         let post = document.createElement("div")
         post.setAttribute("class", "post")
@@ -123,6 +121,18 @@ export const Homepage = (data) => {
         post.append(p)
         main.append(post)
     }
+
+    // document.querySelector("#back").addEventListener("click", () => {
+    //     chatContainer.style.display = "none"
+    //     contacts.style.display = "block"
+    // })
+
+
+
+}
+
+export const Contact = (data) => {
+    let container = document.querySelector(".container")
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
     let contact = document.createElement("div")
@@ -135,78 +145,93 @@ export const Homepage = (data) => {
                  
      </div>
     `
+    if (data) {
+        data.forEach(element => {
+            let profile = document.createElement("p")
+            profile.innerHTML = `
+        <p class="profile" , data-id="${element.Id}" style="display: flex;align-items: flex-end;">
+        <span class="material-icons" style="margin-right: 10px;">account_circle</span>
+        ${element.Nickname}</p>
+        `
+            contact.append(profile)
+            profile.addEventListener("click", (event) => {
+                let id = event.target.getAttribute("data-id")
+                QueryChat(id)
+            })
+        });
+    } else {
+        let profile = document.createElement("p")
+        profile.textContent = "Not a contact"
+        profile.setAttribute("class", "profile")
+        profile.setAttribute("data-id", element.Id)
+        contact.append(profile)
+    }
 
-    fetch("/getcontact", {
-        method: "GET"
-    })
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(element => {
-
-                let profile = document.createElement("p")
-                profile.textContent = element.Nickname
-                profile.setAttribute("class", "profile")
-                profile.setAttribute("data-id", element.Id)
-                contact.append(profile)
-                profile.addEventListener("click", (event) => {
-                    chatContainer.style.display = "flex"
-                    contacts.style.display = "none"
-                })
-            });
-            contacts.append(contact)
-            container.append(contacts)
-            document.body.append(container)
-            let cancel = document.querySelector("#cancel")
-            cancel.addEventListener("click", handelcontact)
-
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        })
-
-    let chatContainer = document.createElement("div")
-    chatContainer.classList.add("chat-container")
-    chatContainer.innerHTML = ` 
-<div class="chat-header">
-<span class="material-icons" id="back" style="cursor: pointer;">arrow_back</span>
-<span class="material-icons" style="margin-left: 30%">account_circle</span>
-yjaouhar
-</div>
-    <div class="chat-messages">
-      <div class="message">Hello! How are you?</div>
-      <div class="message sent">I'm good, thanks! And you?</div>
-       <div class="message">Hello! How are you?</div>
-      <div class="message sent">I'm good, thanks! And you?</div>
-       <div class="message">Hello! How are you?</div>
-      <div class="message sent">I'm good, thanks! And you?</div>
-       <div class="message">Hello! How are you?</div>
-      <div class="message sent">I'm good, thanks! And you?</div>
-       <div class="message">Hello! How are you?</div>
-      <div class="message sent">I'm good, thanks! And you?</div>
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Type a message...">
-      <button>Send</button>
-    </div>`
-
-    chatContainer.style.display = "none"
-    container.append(chatContainer)
-
-    document.querySelector("#back").addEventListener("click", () => {
-        chatContainer.style.display = "none"
-        contacts.style.display = "block"
-    })
-    // let sp = document.createElement("span")
-    // sp.textContent = "yjaouhar"
-    // contact.append(profile)
-    // contact.append(sp)
-
-
+    contacts.append(contact)
+    container.append(contacts)
+    document.body.append(container)
 }
 
 
 
+export const Chatemp = () => {
+    let contact = document.querySelector(".contacts")
+    contact.style.display = "none"
+    let container = document.querySelector(".container")
+    let chatContainer
+    if (document.querySelector(".chat-container")) {
+        chatContainer = document.querySelector(".chat-container")
+    } else {
+        chatContainer = document.createElement("div")
+        chatContainer.classList.add("chat-container")
+    }
 
+    chatContainer.innerHTML = ` 
+        <div class="chat-header">
+        <span class="material-icons" id="back" style="cursor: pointer;">arrow_back</span>
+        <span class="material-icons" style="margin-left: 30%">account_circle</span>
+        yjaouhar
+        </div>`
+    container.append(chatContainer)
+    let div = document.createElement("div")
+    div.classList.add("chat-messages")
+    // if (data) {
+    for (let i = 0; i < 20; i++) {
+        let msg = document.createElement("div")
+        msg.classList.add("message")
+        let nickname = document.createElement("div")
+        nickname.innerHTML = `
+         <span class="material-icons" >account_circle</span>
+        yjaouhar
+        `
+        let message = document.createElement("P")
+        message.textContent = "hello"
+        msg.append(nickname)
+        msg.append(message)
+    
+        div.append(msg)
+    }
+    // } else {
+    //     let msg = document.createElement("div")
+    //     msg.style.textAlign="center"
+    //     msg.textContent = "Not a message available"
+    //     div.append(msg)
+    // }
+
+    chatContainer.append(div)
+    chatContainer.innerHTML += `
+  <div class="chat-input">
+      <input type="text" placeholder="Type a message...">
+      <button >Send</button>
+    </div>`
+    chatContainer.style.display = "flex"
+    container.append(chatContainer)
+    document.getElementById("back").addEventListener("click", () => {
+        contact.style.display = "block"
+        chatContainer.style.display = "none"
+    })
+
+}
 export const MoreData = (data) => {
     let main = document.querySelector(".main-content")
     let post = document.querySelectorAll(".post")
