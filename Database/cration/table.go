@@ -50,14 +50,23 @@ func CreateTable() error {
 		
 );
 	CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  
-    sender_id INTEGER NOT NULL,            
-    receiver_id INTEGER NOT NULL,          
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+	connection_id INTEGER NOT NULL,  
+    sender_id TEXT NOT NULL,            
+    receiver_id TEXT NOT NULL,          
     message TEXT NOT NULL,                 
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    is_read BOOLEAN DEFAULT 0,             
+    is_read BOOLEAN DEFAULT 0, 
+	FOREIGN KEY (connection_id) REFERENCES connection(id),            
     FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (receiver_id) REFERENCES users(id)
+);
+	CREATE TABLE IF NOT EXISTS connection (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,  
+    user_1 TEXT NOT NULL,            
+    user_2 TEXT NOT NULL,                      
+    FOREIGN KEY (user_1) REFERENCES users(id),
+    FOREIGN KEY (user_2) REFERENCES users(id)
 );
 `
 

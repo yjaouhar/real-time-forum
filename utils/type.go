@@ -52,3 +52,11 @@ type AllNakename struct {
 	Id       int
 	Nickname string
 }
+
+type Messages struct {
+	Sender  string
+	Recever string
+	Message string
+	Time    string
+	Isread  string
+}

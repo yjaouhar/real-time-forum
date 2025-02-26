@@ -255,9 +255,45 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 		err := rows.Scan(&Name.Id, &Name.Nickname)
 
 		if err != nil {
-			return nil , err
+			return nil, err
 		}
 		All = append(All, Name)
 	}
 	return All, nil
+}
+
+func QueryConnection(user_1 string, user_2 string) (int, error) {
+	id := 0
+	quire := "SELECT id FROM connection WHERE  (user_1 = ? AND user_2 = ?) OR (user_2 = ? AND user_1 = ?)"
+	err := DB.QueryRow(quire, user_1, user_2).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+
+}
+
+func QueryMessage(sender string, recever string) (string, error) {
+	id, err := QueryConnection(sender, recever)
+	if err != nil {
+		return "error to gat id connection", err
+	}
+	var Msg []utils.Messages
+	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY created_at DESC"
+	rows, err := DB.Query(quire, id)
+	if err != nil {
+		return "error get message", err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var msg utils.Messages
+		err := rows.Scan(&msg.Sender, &msg.Recever, &msg.Message, &msg.Time, &msg.Isread)
+		if err != nil {
+			return "err", err
+		}
+		Msg = append(Msg, msg)
+	}
+
+	fmt.Println(Msg)
+	return "kolxi howa hadak", nil
 }
