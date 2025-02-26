@@ -441,15 +441,7 @@ export const QueryChat = (id, nickname) => {
     const formData = new FormData()
     formData.set("id", id)
     formData.set("nickname", nickname)
-    // fetch("/message", { method: "GET", body: formData })
-    //     .then(response => response.json())
-    //     .then(data => {
-            Chatemp()
-        // })
-        // .catch(err => {
-        //     console.log("error in fetch message", err);
-
-        // })
+    Chatemp(id , nickname)
 }
 
 

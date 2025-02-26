@@ -1,5 +1,6 @@
 import { Dateformat } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
+import {sendMessage} from "./websocket.js"
 
 export const Homepage = (data) => {
 
@@ -132,6 +133,8 @@ export const Homepage = (data) => {
 }
 
 export const Contact = (data) => {
+   
+    
     let container = document.querySelector(".container")
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
@@ -156,7 +159,8 @@ export const Contact = (data) => {
             contact.append(profile)
             profile.addEventListener("click", (event) => {
                 let id = event.target.getAttribute("data-id")
-                QueryChat(id)
+                
+                QueryChat(id, element.Nickname)
             })
         });
     } else {
@@ -174,7 +178,7 @@ export const Contact = (data) => {
 
 
 
-export const Chatemp = () => {
+export const Chatemp = (id , name) => {
     let contact = document.querySelector(".contacts")
     contact.style.display = "none"
     let container = document.querySelector(".container")
@@ -221,15 +225,24 @@ export const Chatemp = () => {
     chatContainer.append(div)
     chatContainer.innerHTML += `
   <div class="chat-input">
-      <input type="text" placeholder="Type a message...">
-      <button >Send</button>
+      <input type="text" placeholder="Type a message..." class="message-input">
+      <button>Send</button>
     </div>`
+    
     chatContainer.style.display = "flex"
     container.append(chatContainer)
+
+    let divchat = document.querySelector(".chat-input button")
+    divchat.id = id
+    console.log(name);
+    
+    divchat.setAttribute("class", name)
+    
     document.getElementById("back").addEventListener("click", () => {
         contact.style.display = "block"
         chatContainer.style.display = "none"
     })
+    divchat.addEventListener("click", sendMessage)
 
 }
 export const MoreData = (data) => {

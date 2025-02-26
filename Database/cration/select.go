@@ -253,6 +253,7 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 	for rows.Next() {
 		var Name utils.AllNakename
 		err := rows.Scan(&Name.Id, &Name.Nickname)
+
 		if err != nil {
 			return nil , err
 		}
