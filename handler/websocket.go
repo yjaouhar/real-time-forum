@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	db "real-time-forum/Database/cration"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -29,12 +30,14 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer ws.Close()
+	
 
 	mutex.Lock()
 	Clients[ws] = true
 	mutex.Unlock()
 
 	for {
+
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -44,8 +47,11 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			mutex.Unlock()
 			break
 		}
-		fmt.Println("Message received:", msg)
-		HandleMessages(msg)
+		if (!db.CheckInfo(msg.Nickname,"nikname")){
+			fmt.Println("Message received:", msg)
+			HandleMessages(msg)
+		}
+		
 	}
 }
 

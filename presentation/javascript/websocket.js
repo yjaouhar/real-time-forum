@@ -3,7 +3,10 @@ const socket = new WebSocket("ws://localhost:8080/ws");
 function sendMessage(event) {
     let name = event.target.id;
 
-    
+    let token = localStorage.getItem("SessionToken");
+
+    console.log(document.cookie.slice(13));
+
     let messageInput = document.querySelector(".message-input");
     let message = messageInput.value.trim();
     
