@@ -62,6 +62,7 @@ func GetUser(id int) string {
 	var name string
 	quire := "SELECT nikname FROM users WHERE id = ?"
 	err := DB.QueryRow(quire, id).Scan(&name)
+	fmt.Println("==> id user :",id)
 	if err != nil {
 		return ""
 	}
@@ -265,8 +266,9 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 func QueryConnection(user_1 string, user_2 string) (int, error) {
 	id := 0
 	quire := "SELECT id FROM connection WHERE  (user_1 = ? AND user_2 = ?) OR (user_2 = ? AND user_1 = ?)"
-	err := DB.QueryRow(quire, user_1, user_2).Scan(&id)
+	err := DB.QueryRow(quire, user_1, user_2,user_2,user_1).Scan(&id)
 	if err != nil {
+		fmt.Println("===> moxkila f Qeuryconnection :",err)
 		return 0, err
 	}
 	return id, nil

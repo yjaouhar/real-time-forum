@@ -17,7 +17,7 @@ var Clients = make(map[*websocket.Conn]bool)
 var mutex = sync.Mutex{}
 
 type Message struct {
-	ID       string    `json:"id"`
+	Token    string `json:"token"`
 	Nickname string `json:"username"`
 	Message  string `json:"text"`
 }
@@ -30,7 +30,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer ws.Close()
-	
 
 	mutex.Lock()
 	Clients[ws] = true
@@ -40,18 +39,40 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 		var msg Message
 		err := ws.ReadJSON(&msg)
-		if err != nil {
-			fmt.Println("Error reading message:", err)
-			mutex.Lock()
-			delete(Clients, ws)
-			mutex.Unlock()
-			break
-		}
-		if (!db.CheckInfo(msg.Nickname,"nikname")){
-			fmt.Println("Message received:", msg)
-			HandleMessages(msg)
-		}
+		fmt.Println("toooooken :", msg.Token)
+		if db.HaveToken(msg.Token) {
 		
+			name := db.GetUser(db.GetId("sessionToken", msg.Token))
+			if err != nil {
+				fmt.Println("Error reading message:", err)
+				mutex.Lock()
+				delete(Clients, ws)
+				mutex.Unlock()
+				break
+			}
+			if !db.CheckInfo(msg.Nickname, "nikname") {
+				fmt.Println("====> name :", name)
+				_,err := db.QueryConnection(name, msg.Nickname)
+				if err!=nil{
+					err = db.InsertConnection(name, msg.Nickname)
+				if err != nil {
+					fmt.Println("Error to insert connection :",err)
+					return
+				}
+				}else{
+					fmt.Println("connection kayna yad")
+				}
+				
+
+				err = db.InsertMessage(name, msg.Nickname, msg.Message)
+				if err!=nil{
+					fmt.Println("Errore for insert msg in db :",err)
+				}
+
+				HandleMessages(msg)
+			}
+		}
+
 	}
 }
 

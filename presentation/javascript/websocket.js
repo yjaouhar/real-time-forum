@@ -3,21 +3,21 @@ const socket = new WebSocket("ws://localhost:8080/ws");
 function sendMessage(event) {
     let name = event.target.id;
 
-    let token = localStorage.getItem("SessionToken");
-
-    console.log(document.cookie.slice(13));
+    // let token = localStorage.getItem("SessionToken");
+    let token = document.cookie.slice(13)
+    console.log("==> token :", token);
 
     let messageInput = document.querySelector(".message-input");
     let message = messageInput.value.trim();
-    
+    message = message.replaceAll("\n", "")
+
 
     if (message !== "") {
         console.log("Sending:", message);
-
-        // Convert message to JSON before sending
         let msgObject = {
-            username: name,  // T9dar tbdlha b variable dial username
-            text: message
+            token: token,
+            username: name,
+            text: message,
         };
 
         // Verify WebSocket state before sending message

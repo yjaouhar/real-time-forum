@@ -133,8 +133,6 @@ export const Homepage = (data) => {
 }
 
 export const Contact = (data) => {
-   
-    
     let container = document.querySelector(".container")
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
@@ -194,7 +192,7 @@ export const Chatemp = (id , name) => {
         <div class="chat-header">
         <span class="material-icons" id="back" style="cursor: pointer;">arrow_back</span>
         <span class="material-icons" style="margin-left: 30%">account_circle</span>
-        yjaouhar
+        ${name}
         </div>`
     container.append(chatContainer)
     let div = document.createElement("div")
