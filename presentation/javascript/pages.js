@@ -233,10 +233,8 @@ export const Chatemp = (id , name) => {
     container.append(chatContainer)
 
     let divchat = document.querySelector(".chat-input button")
-    divchat.id = id
-    console.log(name);
-    
-    divchat.setAttribute("class", name)
+    divchat.id = name
+
     
     document.getElementById("back").addEventListener("click", () => {
         contact.style.display = "block"

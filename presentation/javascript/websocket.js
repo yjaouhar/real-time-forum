@@ -1,8 +1,8 @@
 const socket = new WebSocket("ws://localhost:8080/ws");
 
 function sendMessage(event) {
-    let id = event.target.id;
-    let name = event.target.getAttribute("class");
+    let name = event.target.id;
+
     
     let messageInput = document.querySelector(".message-input");
     let message = messageInput.value.trim();
@@ -13,7 +13,6 @@ function sendMessage(event) {
 
         // Convert message to JSON before sending
         let msgObject = {
-            id : id,
             username: name,  // T9dar tbdlha b variable dial username
             text: message
         };
