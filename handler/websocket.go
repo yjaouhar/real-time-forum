@@ -40,7 +40,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		fmt.Println("toooooken :", msg.Token)
-		if db.HaveToken(msg.Token) {
+		if db.HaveToken(msg.Token) && !db.CheckInfo(msg.Nickname, "nikname") {
 		
 			name := db.GetUser(db.GetId("sessionToken", msg.Token))
 			if err != nil {
@@ -50,8 +50,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 				mutex.Unlock()
 				break
 			}
-			if !db.CheckInfo(msg.Nickname, "nikname") {
-				fmt.Println("====> name :", name)
+			
 				_,err := db.QueryConnection(name, msg.Nickname)
 				if err!=nil{
 					err = db.InsertConnection(name, msg.Nickname)
@@ -70,7 +69,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 				}
 
 				HandleMessages(msg)
-			}
+			
 		}
 
 	}
