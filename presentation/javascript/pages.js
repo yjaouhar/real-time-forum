@@ -202,13 +202,13 @@ export const Chatemp = (data, name) => {
             let msg = document.createElement("div")
             msg.classList.add("message")
             let nickname = document.createElement("div")
-            if (elem.Sender === "youssef") {
-                msg.setAttribute("class","sendr")
+            if (elem.Sender === name) {
                 nickname.innerHTML = `
                  <span class="material-icons" >account_circle</span>
-                youssef
+                ${elem.Sender}
                 `
             } else {
+                msg.setAttribute("class","sendr")
                 nickname.innerHTML = `
                  <span class="material-icons" >account_circle</span>
                 ${elem.Sender}

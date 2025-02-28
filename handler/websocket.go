@@ -91,10 +91,8 @@ func SendMessage(msg Message) {
 }
 
 func QueryMsg(w http.ResponseWriter, r *http.Request) {
-
 	nickname := r.FormValue("nickname")
 	token := r.FormValue("token")
-
 	if db.HaveToken(token) {
 		user := db.GetUser(db.GetId("sessionToken", token))
 		messge, err := db.QueryMessage(user, nickname)
