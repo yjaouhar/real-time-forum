@@ -149,14 +149,13 @@ func InsertMessage(sender string, recever string, message string) error {
 			return err
 		}
 	}
-	fmt.Println("....",id)
 	info, err := DB.Prepare("INSERT INTO messages (connection_id,sender_id,receiver_id,message,timestamp,is_read) VALUES (?,?,?,?,?,?)")
 	if err != nil {
 		fmt.Println("error insert message :", err)
 		return err
 	}
-	
-	_, err = info.Exec( id,sender, recever, message, date, "no")
+
+	_, err = info.Exec(id, sender, recever, message, date, "no")
 	if err != nil {
 		fmt.Println("error exucet message in database :", err)
 		return err

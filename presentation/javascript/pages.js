@@ -1,6 +1,6 @@
 import { Dateformat } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
-import {sendMessage} from "./websocket.js"
+import { sendMessage } from "./websocket.js"
 
 export const Homepage = (data) => {
 
@@ -157,7 +157,7 @@ export const Contact = (data) => {
             contact.append(profile)
             profile.addEventListener("click", (event) => {
                 let id = event.target.getAttribute("data-id")
-                
+
                 QueryChat(id, element.Nickname)
             })
         });
@@ -176,7 +176,7 @@ export const Contact = (data) => {
 
 
 
-export const Chatemp = (id , name) => {
+export const Chatemp = (data, name) => {
     let contact = document.querySelector(".contacts")
     contact.style.display = "none"
     let container = document.querySelector(".container")
@@ -197,28 +197,30 @@ export const Chatemp = (id , name) => {
     container.append(chatContainer)
     let div = document.createElement("div")
     div.classList.add("chat-messages")
-    // if (data) {
-    for (let i = 0; i < 20; i++) {
-        let msg = document.createElement("div")
-        msg.classList.add("message")
-        let nickname = document.createElement("div")
-        nickname.innerHTML = `
+    if (data) {
+        data.forEach(elem => {
+            let msg = document.createElement("div")
+            msg.classList.add("message")
+            let nickname = document.createElement("div")
+            nickname.innerHTML = `
          <span class="material-icons" >account_circle</span>
         yjaouhar
         `
-        let message = document.createElement("P")
-        message.textContent = "hello"
-        msg.append(nickname)
-        msg.append(message)
-    
+            let message = document.createElement("P")
+            message.textContent = elem.Message
+            msg.append(nickname)
+            msg.append(message)
+
+            div.append(msg)
+        })
+
+
+    } else {
+        let msg = document.createElement("div")
+        msg.style.textAlign = "center"
+        msg.textContent = "Not a message available"
         div.append(msg)
     }
-    // } else {
-    //     let msg = document.createElement("div")
-    //     msg.style.textAlign="center"
-    //     msg.textContent = "Not a message available"
-    //     div.append(msg)
-    // }
 
     chatContainer.append(div)
     chatContainer.innerHTML += `
@@ -226,14 +228,14 @@ export const Chatemp = (id , name) => {
       <input type="text" placeholder="Type a message..." class="message-input">
       <button>Send</button>
     </div>`
-    
+
     chatContainer.style.display = "flex"
     container.append(chatContainer)
 
     let divchat = document.querySelector(".chat-input button")
     divchat.id = name
 
-    
+
     document.getElementById("back").addEventListener("click", () => {
         contact.style.display = "block"
         chatContainer.style.display = "none"

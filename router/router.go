@@ -26,6 +26,8 @@ func Router() *http.ServeMux {
 	router.HandleFunc("/categories", handler.Categore)
 	router.HandleFunc("/getcontact", handler.Contact)
 	router.HandleFunc("/ws", handler.HandleWebSocket)
+	router.HandleFunc("/querychat", handler.QueryMsg)
+
 	return router
 }
 

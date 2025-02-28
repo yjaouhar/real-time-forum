@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	db "real-time-forum/Database/cration"
@@ -86,5 +87,22 @@ func SendMessage(msg Message) {
 			}
 		}
 
+	}
+}
+
+func QueryMsg(w http.ResponseWriter, r *http.Request) {
+
+	nickname := r.FormValue("nickname")
+	token := r.FormValue("token")
+
+	if db.HaveToken(token) {
+		user := db.GetUser(db.GetId("sessionToken", token))
+		messge, err := db.QueryMessage(user, nickname)
+		if err != nil {
+			fmt.Println("Error wer query message")
+		}
+
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(messge)
 	}
 }

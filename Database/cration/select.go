@@ -62,7 +62,6 @@ func GetUser(id int) string {
 	var name string
 	quire := "SELECT nikname FROM users WHERE id = ?"
 	err := DB.QueryRow(quire, id).Scan(&name)
-	fmt.Println("==> id user :",id)
 	if err != nil {
 		return ""
 	}
@@ -269,7 +268,7 @@ func QueryConnection(user_1 string, user_2 string) (int, error) {
 	err := DB.QueryRow(quire, user_1, user_2).Scan(&id)
 	if err != nil {
 		quire = "SELECT id FROM connection WHERE (user_1 = ? AND user_2 = ?)"
-		err = DB.QueryRow(quire,user_2,user_1).Scan(&id)
+		err = DB.QueryRow(quire, user_2, user_1).Scan(&id)
 		if err != nil {
 			return 0, err
 		}
@@ -278,27 +277,25 @@ func QueryConnection(user_1 string, user_2 string) (int, error) {
 
 }
 
-func QueryMessage(sender string, recever string) (string, error) {
+func QueryMessage(sender string, recever string) ([]utils.Messages, error) {
 	id, err := QueryConnection(sender, recever)
 	if err != nil {
-		return "error to gat id connection", err
+		return nil, err
 	}
 	var Msg []utils.Messages
-	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY created_at DESC"
+	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY timestamp DESC"
 	rows, err := DB.Query(quire, id)
 	if err != nil {
-		return "error get message", err
+		return  nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var msg utils.Messages
 		err := rows.Scan(&msg.Sender, &msg.Recever, &msg.Message, &msg.Time, &msg.Isread)
 		if err != nil {
-			return "err", err
+			return nil, err
 		}
 		Msg = append(Msg, msg)
 	}
-
-	fmt.Println(Msg)
-	return "kolxi howa hadak", nil
+	return Msg, nil
 }

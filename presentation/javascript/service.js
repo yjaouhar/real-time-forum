@@ -1,10 +1,10 @@
-import { Homepage, Login, MoreData , Contact ,Chatemp} from "./pages.js"
+import { Homepage, Login, MoreData, Contact, Chatemp } from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
-export function Listener(){
+export function Listener() {
     let sendcomment = document.querySelectorAll(".send-button")
     sendcomment.forEach((el) => {
         el.addEventListener("click", send_comment)
@@ -13,23 +13,23 @@ export function Listener(){
     comment.forEach((el) => {
         el.addEventListener("click", CommentEvent)
     })
-// let b = document.getElementById("back")
-// if (!b){
-// console.log("=====");
+    // let b = document.getElementById("back")
+    // if (!b){
+    // console.log("=====");
 
-// }
-//    b.addEventListener("click", () => {
-//      document.querySelector(".contacts").style.display = "block"
-//      document.querySelector(".chat-container").style.display = "none"
+    // }
+    //    b.addEventListener("click", () => {
+    //      document.querySelector(".contacts").style.display = "block"
+    //      document.querySelector(".chat-container").style.display = "none"
 
-//     })
+    //     })
 }
 
 export function HomeListener(data) {
     Homepage(data)
     let CreatPostBtn = document.querySelector(".create-post")
     CreatPostBtn.addEventListener("click", handelpost)
-   
+
 
     let sendcomment = document.querySelectorAll(".send-button")
     sendcomment.forEach((el) => {
@@ -79,13 +79,13 @@ const CatHandel = debounce((eve) => {
                     HomeListener()
                 }
                 window.removeEventListener("scroll", pagenation);
-                if (data.length==10){
-                     window.addEventListener("scroll",scrollHandel)
-                }else{
+                if (data.length == 10) {
+                    window.addEventListener("scroll", scrollHandel)
+                } else {
                     console.log("NOTE DATA VALABLE");
-                    
+
                 }
-               
+
             })
             .catch(error => {
                 console.log(error);
@@ -409,7 +409,7 @@ function CommentEvent(event) {//////comment
 
     } else {
         let comment = postDiv.querySelectorAll(".comment-content")
-    
+
         comment.forEach((el) => {
             el.remove()
         })
@@ -439,13 +439,26 @@ function logoutHandel() {
 
 export const QueryChat = (id, nickname) => {
     const formData = new FormData()
-    formData.set("id", id)
-    formData.set("nickname", nickname)
-    Chatemp(id , nickname)
+
+    // formData.append("id", id)
+    formData.append("nickname", nickname)
+    formData.append("token", document.cookie.slice(13))
+    fetch("/querychat", { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => {
+            console.log("!!!!!!! ", data);
+            Chatemp(data, nickname)
+
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+
+   
 }
 
 
-export const QueryContact = ()=>{
+export const QueryContact = () => {
     fetch("/getcontact", {
         method: "GET"
     })
