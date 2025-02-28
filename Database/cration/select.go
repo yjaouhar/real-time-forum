@@ -265,11 +265,14 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 
 func QueryConnection(user_1 string, user_2 string) (int, error) {
 	id := 0
-	quire := "SELECT id FROM connection WHERE  (user_1 = ? AND user_2 = ?) OR (user_2 = ? AND user_1 = ?)"
-	err := DB.QueryRow(quire, user_1, user_2,user_2,user_1).Scan(&id)
+	quire := "SELECT id FROM connection WHERE  (user_1 = ? AND user_2 = ?)"
+	err := DB.QueryRow(quire, user_1, user_2).Scan(&id)
 	if err != nil {
-		fmt.Println("===> moxkila f Qeuryconnection :",err)
-		return 0, err
+		quire = "SELECT id FROM connection WHERE (user_1 = ? AND user_2 = ?)"
+		err = DB.QueryRow(quire,user_2,user_1).Scan(&id)
+		if err != nil {
+			return 0, err
+		}
 	}
 	return id, nil
 
