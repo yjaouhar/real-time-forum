@@ -13,7 +13,7 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-var Clients = make(map[*websocket.Conn]bool)
+var Clients = make(map[string]*websocket.Conn)
 var mutex = sync.Mutex{}
 
 type Message struct {
@@ -23,7 +23,6 @@ type Message struct {
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println("Error upgrading:", err)
@@ -31,60 +30,61 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
+	var firstMsg Message
+	err = ws.ReadJSON(&firstMsg)
+	if err != nil {
+		fmt.Println("Error reading first message:", err)
+		return
+	}
+
+	if !db.HaveToken(firstMsg.Token) {
+		fmt.Println("Invalid token")
+		return
+	}
+
+	username := db.GetUser(db.GetId("sessionToken", firstMsg.Token))
+
 	mutex.Lock()
-	Clients[ws] = true
+	Clients[username] = ws
 	mutex.Unlock()
 
-	for {
+	fmt.Println("Connected user:", username)
 
+	for {
 		var msg Message
 		err := ws.ReadJSON(&msg)
-		fmt.Println("toooooken :", msg.Token)
-		if db.HaveToken(msg.Token) && !db.CheckInfo(msg.Nickname, "nikname") {
-		
-			name := db.GetUser(db.GetId("sessionToken", msg.Token))
-			if err != nil {
-				fmt.Println("Error reading message:", err)
-				mutex.Lock()
-				delete(Clients, ws)
-				mutex.Unlock()
-				break
-			}
-			
-				_,err := db.QueryConnection(name, msg.Nickname)
-				if err!=nil{
-					err = db.InsertConnection(name, msg.Nickname)
-				if err != nil {
-					fmt.Println("Error to insert connection :",err)
-					return
-				}
-				}else{
-					fmt.Println("connection kayna yad")
-				}
-				
-
-				err = db.InsertMessage(name, msg.Nickname, msg.Message)
-				if err!=nil{
-					fmt.Println("Errore for insert msg in db :",err)
-				}
-
-				HandleMessages(msg)
-			
+		if err != nil {
+			fmt.Println("Error reading message:", err)
+			mutex.Lock()
+			delete(Clients, username)
+			mutex.Unlock()
+			break
 		}
+		if !db.CheckInfo(msg.Nickname, "nikname") && db.HaveToken(msg.Token) {
 
+			err = db.InsertMessage(username, msg.Nickname, msg.Message)
+			if err != nil {
+				fmt.Println("Error inserting message in DB:", err)
+			}
+			SendMessage(msg)
+		}
 	}
 }
 
-func HandleMessages(msg Message) {
+func SendMessage(msg Message) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	for client := range Clients {
-		err := client.WriteJSON(msg)
-		if err != nil {
-			fmt.Println("Error sending message:", err)
-			client.Close()
-			delete(Clients, client)
+	for nikname, client := range Clients {
+		if nikname == msg.Nickname {
+			fmt.Println("==> nikname :", nikname)
+			err := client.WriteJSON(msg.Message)
+			if err != nil {
+				fmt.Println("Error sending message:", err)
+				client.Close()
+				delete(Clients, nikname)
+			}
 		}
+
 	}
 }

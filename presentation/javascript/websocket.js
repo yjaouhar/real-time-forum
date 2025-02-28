@@ -36,7 +36,10 @@ function sendMessage(event) {
 
 socket.onmessage = (event) => {  // Ila server b3t message
     console.log("jak message");
-    // let receivedData = JSON.parse(event.data);
+
+    let receivedData = JSON.parse(event.data);
+    console.log(receivedData); 
+    
     // console.log(`${receivedData.username}: ${receivedData.text}`);
 };
 

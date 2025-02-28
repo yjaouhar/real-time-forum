@@ -142,8 +142,12 @@ func InsertMessage(sender string, recever string, message string) error {
 	date := time.Now().Format("2006-01-02 15:04:05")
 	id, err := QueryConnection(sender, recever)
 	if err != nil {
-		fmt.Println("error query id connection :", err)
-		return err
+		InsertConnection(sender, recever)
+		id, err = QueryConnection(sender, recever)
+		if err != nil {
+			fmt.Println("error insert message :", err)
+			return err
+		}
 	}
 	fmt.Println("....",id)
 	info, err := DB.Prepare("INSERT INTO messages (connection_id,sender_id,receiver_id,message,timestamp,is_read) VALUES (?,?,?,?,?,?)")

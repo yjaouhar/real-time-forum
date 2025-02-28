@@ -38,7 +38,7 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 
 	lastdata := r.FormValue("lastdata")
 	if lastdata == "true" {
-		fmt.Println("lllllllllll")
+		
 		sr, err = db.Getlastid(categories[0])
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
@@ -60,7 +60,7 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("==> categories len :", post)
 	if len(post) < 10 {
-		fmt.Println("xxxxxxxxx")
+	
 		sr = -1
 	}
 
