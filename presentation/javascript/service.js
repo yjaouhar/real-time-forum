@@ -4,6 +4,7 @@ import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
+
 export function Listener() {
     let sendcomment = document.querySelectorAll(".send-button")
     sendcomment.forEach((el) => {
@@ -430,6 +431,7 @@ function logoutHandel() {
                 document.cookie = "SessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 Checkstuts()
             }
+
         })
         .catch(error => {
             console.log('Error:', error);

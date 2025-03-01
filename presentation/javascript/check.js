@@ -1,6 +1,7 @@
 import { showError } from "./errore.js"
 import { handle } from "./login-register.js"
 import { HomeHandeler } from "./Homehandler.js"
+import { sendLogin , closee} from "./websocket.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -75,12 +76,13 @@ async function Checkstuts(event) {
             if (!result.status) {
                 console.log(result.status);
                 handle()
+                closee()
             } else {
             
-                    let head = document.querySelector("title")
-                    head.setAttribute("class", result.name)
-                
+                let head = document.querySelector("title")
+                head.setAttribute("class", result.name)
                 HomeHandeler()
+                sendLogin()
             }
 
         })

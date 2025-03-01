@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	db "real-time-forum/Database/cration"
 	"sync"
+
+	db "real-time-forum/Database/cration"
 
 	"github.com/gorilla/websocket"
 )
@@ -14,8 +15,10 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-var Clients = make(map[string]*websocket.Conn)
-var mutex = sync.Mutex{}
+var (
+	Clients = make(map[string]*websocket.Conn)
+	mutex   = sync.Mutex{}
+)
 
 type Message struct {
 	Token    string `json:"token"`
@@ -33,21 +36,13 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	tocken := r.URL.Query().Get("token")
 	fmt.Println("tocken:", tocken)
-	
-	if tocken == "" || !db.HaveToken(tocken){
-		fmt.Println("Invalid token")
-		return
-	}
-
 
 	username := db.GetUser(db.GetId("sessionToken", tocken))
-
-	mutex.Lock()
-	Clients[username] = ws
-	mutex.Unlock()
-
-	fmt.Println("Connected user:", username)
-
+	if db.HaveToken(tocken) {
+		mutex.Lock()
+		Clients[username] = ws
+		mutex.Unlock()
+	}
 	for {
 		fmt.Println("Waiting for message")
 		var msg Message
@@ -58,6 +53,16 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			delete(Clients, username)
 			mutex.Unlock()
 			break
+		}
+		
+		username := db.GetUser(db.GetId("sessionToken", msg.Token))
+		fmt.Println("Message received:", msg , username)
+		if Clients[username] == nil {
+			Clients[username] = ws
+		}
+		if msg.Nickname == "" && msg.Message == "" {
+			fmt.Println("no message")
+			continue
 		}
 		if !db.CheckInfo(msg.Nickname, "nikname") && db.HaveToken(msg.Token) {
 
@@ -88,7 +93,6 @@ func SendMessage(msg Message, username string) {
 			}
 			break
 		}
-
 	}
 }
 
