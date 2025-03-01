@@ -21,7 +21,15 @@ export const pagenation = debounce(() => {
             });
     }
 }, 300)
-
+export const LoadCaht = debounce((event)=>{
+    let message_chate = event.target
+    if (message_chate.scrollTop <= -720){ 
+        console.log(".........................");
+        
+        document.createElement("div").getAttribute
+        QuertMoreChat(message_chate.getAttribute("data-name"))
+    }
+},100)
 
 
 export function debounce(func, wait = 300) {

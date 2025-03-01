@@ -253,7 +253,6 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 	for rows.Next() {
 		var Name utils.AllNakename
 		err := rows.Scan(&Name.Id, &Name.Nickname)
-
 		if err != nil {
 			return nil, err
 		}
@@ -274,28 +273,46 @@ func QueryConnection(user_1 string, user_2 string) (int, error) {
 		}
 	}
 	return id, nil
-
 }
 
-func QueryMessage(sender string, recever string) ([]utils.Messages, error) {
-	id, err := QueryConnection(sender, recever)
+var last int
+
+func QueryMessage(sender string, recever string, first string) ([]utils.Messages, error) {
+	id := 0
+	connectionid, err := QueryConnection(sender, recever)
 	if err != nil {
 		return nil, err
 	}
+	if first == "true" {
+		last = Getlastmessage(connectionid)
+	}
+
 	var Msg []utils.Messages
-	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY timestamp"
-	rows, err := DB.Query(quire, id)
+	quire := "SELECT id, sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ? AND id<= ?  ORDER BY timestamp DESC LIMIT 10"
+	rows, err := DB.Query(quire, connectionid, last)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var msg utils.Messages
-		err := rows.Scan(&msg.Sender, &msg.Recever, &msg.Message, &msg.Time, &msg.Isread)
+		err := rows.Scan(&id, &msg.Sender, &msg.Recever, &msg.Message, &msg.Time, &msg.Isread)
 		if err != nil {
 			return nil, err
 		}
 		Msg = append(Msg, msg)
+		last = id
 	}
+
 	return Msg, nil
+}
+
+func Getlastmessage(id int) int {
+	lastid := 0
+	quire := "SELECT id FROM messages WHERE connection_id = ? ORDER BY timestamp DESC LIMIT 1"
+	err := DB.QueryRow(quire, id).Scan(&lastid)
+	if err != nil {
+		return 0
+	}
+	return lastid
 }

@@ -441,24 +441,38 @@ function logoutHandel() {
 
 export const QueryChat = (id, nickname) => {
     const formData = new FormData()
-
-    // formData.append("id", id)
     formData.append("nickname", nickname)
     formData.append("token", document.cookie.slice(13))
+    formData.append("first", true)
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            console.log("!!!!!!! ", data);
             Chatemp(data, nickname)
-
         })
         .catch(error => {
             console.log('Error:', error);
         });
-
-   
 }
 
+export const QuertMoreChat=(name)=>{
+    const formData = new FormData()
+    formData.append("nickname", name)
+    formData.append("token", document.cookie.slice(13))
+    formData.append("first", false)
+    fetch("/querychat", { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.length<10){
+                console.log("??????????" , data.length);
+                let chat_container = document.querySelector(".chat-messages")
+                chat_container.removeEventListener("scroll",LoadCaht)
+            }
+           MoreMessage(data)
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+}
 
 export const QueryContact = () => {
     fetch("/getcontact", {

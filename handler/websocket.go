@@ -54,9 +54,9 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			mutex.Unlock()
 			break
 		}
-		
+
 		username := db.GetUser(db.GetId("sessionToken", msg.Token))
-		fmt.Println("Message received:", msg , username)
+		fmt.Println("Message received:", msg, username)
 		if Clients[username] == nil {
 			Clients[username] = ws
 		}
@@ -97,15 +97,19 @@ func SendMessage(msg Message, username string) {
 }
 
 func QueryMsg(w http.ResponseWriter, r *http.Request) {
+	sr := 1
 	nickname := r.FormValue("nickname")
 	token := r.FormValue("token")
-	if db.HaveToken(token) {
+	first := r.FormValue("first")
+	if db.HaveToken(token) && sr != 0 {
 		user := db.GetUser(db.GetId("sessionToken", token))
-		messge, err := db.QueryMessage(user, nickname)
+		messge, err := db.QueryMessage(user, nickname, first)
 		if err != nil {
-			fmt.Println("Error wer query message")
+			fmt.Println("Error wer query message : ", err)
 		}
-
+		if len(messge) < 10 {
+			sr = 0
+		}
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(messge)
 	}

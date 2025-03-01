@@ -1,4 +1,4 @@
-import { Dateformat } from "./utils.js"
+import { Dateformat , LoadCaht} from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
@@ -175,7 +175,6 @@ export const Contact = (data) => {
 }
 
 
-
 export const Chatemp = (data, name) => {
     let contact = document.querySelector(".contacts")
     contact.style.display = "none"
@@ -197,6 +196,7 @@ export const Chatemp = (data, name) => {
     container.append(chatContainer)
     let div = document.createElement("div")
     div.classList.add("chat-messages")
+    div.setAttribute("data-name",name)
     if (data) {
         data.forEach(elem => {
             let msg = document.createElement("div")
@@ -216,10 +216,13 @@ export const Chatemp = (data, name) => {
             }
 
             let message = document.createElement("P")
+            let time = document.createElement("p")
             message.textContent = elem.Message
+            time.textContent=Dateformat(elem.Time)
+            time.style.textAlign="end"
             msg.append(nickname)
             msg.append(message)
-
+            msg.append(time)
             div.append(msg)
         })
 
@@ -240,18 +243,57 @@ export const Chatemp = (data, name) => {
 
     chatContainer.style.display = "flex"
     container.append(chatContainer)
-
     let divchat = document.querySelector(".chat-input button")
     divchat.id = name
-
 
     document.getElementById("back").addEventListener("click", () => {
         contact.style.display = "block"
         chatContainer.style.display = "none"
     })
+    // 
+    let message_chate = document.querySelector(".chat-messages")
+
+    
+    message_chate.addEventListener("scroll",LoadCaht)
     divchat.addEventListener("click", sendMessage)
 
 }
+
+export const MoreMessage = (data)=>{
+    let div = document.querySelector(".chat-messages")
+        if (data) {
+            data.forEach(elem => {
+                let msg = document.createElement("div")
+                msg.classList.add("message")
+                let nickname = document.createElement("div")
+                if (elem.Sender === name) {
+                    nickname.innerHTML = `
+                     <span class="material-icons" >account_circle</span>
+                    ${elem.Sender}
+                    `
+                } else {
+                    msg.setAttribute("class","sendr")
+                    nickname.innerHTML = `
+                     <span class="material-icons" >account_circle</span>
+                    ${elem.Sender}
+                    `
+                }
+                let message = document.createElement("P")
+                let time = document.createElement("p")
+                message.textContent = elem.Message
+                time.textContent=Dateformat(elem.Time)
+                time.style.textAlign="end"
+                msg.append(nickname)
+                msg.append(message)
+                msg.append(time)
+                div.append(msg)
+            })
+    
+        }
+    }
+
+
+
 export const MoreData = (data) => {
     let main = document.querySelector(".main-content")
     let post = document.querySelectorAll(".post")
