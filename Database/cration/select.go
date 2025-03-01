@@ -283,7 +283,7 @@ func QueryMessage(sender string, recever string) ([]utils.Messages, error) {
 		return nil, err
 	}
 	var Msg []utils.Messages
-	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY timestamp DESC"
+	quire := "SELECT  sender_id, receiver_id, message, timestamp, is_read FROM messages WHERE connection_id = ?  ORDER BY timestamp"
 	rows, err := DB.Query(quire, id)
 	if err != nil {
 		return  nil, err
