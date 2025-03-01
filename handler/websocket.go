@@ -31,19 +31,16 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
-	var firstMsg Message
-	err = ws.ReadJSON(&firstMsg)
-	if err != nil {
-		fmt.Println("Error reading first message:", err)
-		return
-	}
-
-	if !db.HaveToken(firstMsg.Token) {
+	tocken := r.URL.Query().Get("token")
+	fmt.Println("tocken:", tocken)
+	
+	if tocken == "" || !db.HaveToken(tocken)  {
 		fmt.Println("Invalid token")
 		return
 	}
 
-	username := db.GetUser(db.GetId("sessionToken", firstMsg.Token))
+
+	username := db.GetUser(db.GetId("sessionToken", tocken))
 
 	mutex.Lock()
 	Clients[username] = ws
@@ -52,6 +49,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Connected user:", username)
 
 	for {
+		fmt.Println("Waiting for message")
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -67,7 +65,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("Error inserting message in DB:", err)
 			}
-			
+
 			msg.Token = ""
 			SendMessage(msg, username)
 		}

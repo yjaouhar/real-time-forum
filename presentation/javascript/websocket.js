@@ -1,4 +1,7 @@
-const socket = new WebSocket("ws://localhost:8080/ws");
+let tock = document.cookie.slice(13)
+console.log("==> tock hna :", tock);
+
+const socket = new WebSocket(`ws://localhost:8080/ws?token=${tock}`);
 
 function sendMessage(event) {
     let name = event.target.id;
