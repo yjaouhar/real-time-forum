@@ -34,7 +34,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	tocken := r.URL.Query().Get("token")
 	fmt.Println("tocken:", tocken)
 	
-	if tocken == "" || !db.HaveToken(tocken)  {
+	if tocken == "" || !db.HaveToken(tocken){
 		fmt.Println("Invalid token")
 		return
 	}
