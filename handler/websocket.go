@@ -67,24 +67,28 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("Error inserting message in DB:", err)
 			}
-			SendMessage(msg)
+			
+			msg.Token = ""
+			SendMessage(msg, username)
 		}
 	}
 }
 
-func SendMessage(msg Message) {
+func SendMessage(msg Message, username string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	for nikname, client := range Clients {
 		if nikname == msg.Nickname {
+			msg.Nickname = username
 			fmt.Println("==> nikname :", nikname)
-			err := client.WriteJSON(msg.Message)
+			err := client.WriteJSON(msg)
 			if err != nil {
 				fmt.Println("Error sending message:", err)
 				client.Close()
 				delete(Clients, nikname)
 			}
+			break
 		}
 
 	}

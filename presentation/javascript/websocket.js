@@ -2,6 +2,7 @@ const socket = new WebSocket("ws://localhost:8080/ws");
 
 function sendMessage(event) {
     let name = event.target.id;
+  
 
     // let token = localStorage.getItem("SessionToken");
     let token = document.cookie.slice(13)
@@ -26,10 +27,20 @@ function sendMessage(event) {
             console.log("Message sent");
         } else {
             console.log("WebSocket is not open. ReadyState:", socket.readyState);
-            // Optionally, try to reconnect or notify user
         }
-
-        // Clear input after sending
+        let chatBox =  document.querySelector(".chat-messages");
+        let messageElement = document.createElement("div");
+        messageElement.className = "message";
+        messageElement.setAttribute("class", "sendr");
+        let messageSender = document.createElement("span");
+        messageSender.className = "message-sender";
+        messageSender.textContent = "ana";
+        let messageText = document.createElement("p");
+        messageText.className = "message-text";
+        messageText.textContent = message;
+        messageElement.appendChild(messageSender);
+        messageElement.appendChild(messageText);
+        chatBox.appendChild(messageElement);
         messageInput.value = "";
     }
 }
@@ -37,10 +48,22 @@ function sendMessage(event) {
 socket.onmessage = (event) => {  // Ila server b3t message
     console.log("jak message");
 
-    let receivedData = JSON.parse(event.data);
-    console.log(receivedData); 
     
-    // console.log(`${receivedData.username}: ${receivedData.text}`);
+    let receivedData = JSON.parse(event.data);
+    console.log("Received:", receivedData);
+        let chatBox = document.querySelector(".chat-messages");
+        console.log(chatBox);
+        let messageElement = document.createElement("div");
+        messageElement.className = "message";
+        let messageSender = document.createElement("span");
+        messageSender.className = "message-sender";
+        messageSender.textContent = receivedData.username;
+        let messageText = document.createElement("p");
+        messageText.className = "message-text";
+        messageText.textContent = receivedData.text;
+        messageElement.appendChild(messageSender);
+        messageElement.appendChild(messageText);
+        chatBox.appendChild(messageElement);
 };
 
 export { sendMessage };
