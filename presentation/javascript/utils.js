@@ -1,5 +1,5 @@
 import { MoreData } from "./pages.js"
-import { likeHandel } from "./service.js"
+import { likeHandel, QuertMoreChat } from "./service.js"
 
 export const pagenation = debounce(() => {
     if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
@@ -21,15 +21,14 @@ export const pagenation = debounce(() => {
             });
     }
 }, 300)
-export const LoadCaht = debounce((event)=>{
+export const LoadCaht = debounce((event) => {
+
     let message_chate = event.target
-    if (message_chate.scrollTop <= -720){ 
-        console.log(".........................");
-        
+    if (message_chate.scrollTop <= -600) {
         document.createElement("div").getAttribute
         QuertMoreChat(message_chate.getAttribute("data-name"))
     }
-},100)
+}, 100)
 
 
 export function debounce(func, wait = 300) {
@@ -47,7 +46,7 @@ export const Dateformat = (timestamp) => {
 
 
     let pastDate = new Date(timestamp);
-    pastDate.setHours(pastDate.getHours() - 1)
+    // pastDate.setHours(pastDate.getHours())
     // console.log("Date : ", pastDate); // 2025-02-06 17:41:25
     let now = new Date();
     let seconds = Math.floor((now - pastDate) / 1000); // Correction: now - pastDate

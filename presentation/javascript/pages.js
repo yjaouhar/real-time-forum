@@ -1,4 +1,4 @@
-import { Dateformat , LoadCaht} from "./utils.js"
+import { Dateformat, LoadCaht } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
@@ -196,7 +196,7 @@ export const Chatemp = (data, name) => {
     container.append(chatContainer)
     let div = document.createElement("div")
     div.classList.add("chat-messages")
-    div.setAttribute("data-name",name)
+    div.setAttribute("data-name", name)
     if (data) {
         data.forEach(elem => {
             let msg = document.createElement("div")
@@ -204,22 +204,22 @@ export const Chatemp = (data, name) => {
             let nickname = document.createElement("div")
             if (elem.Sender === name) {
                 nickname.innerHTML = `
-                 <span class="material-icons" >account_circle</span>
+                 <span class="material-icons" style="margin-right: 10px" >account_circle</span>
                 ${elem.Sender}
                 `
             } else {
-                msg.setAttribute("class","sendr")
+                msg.setAttribute("class", "sendr")
                 nickname.innerHTML = `
-                 <span class="material-icons" >account_circle</span>
+                 <span class="material-icons" style="margin-right: 10px">account_circle</span>
                 ${elem.Sender}
                 `
             }
-
+nickname.style.display="flex"
             let message = document.createElement("P")
-            let time = document.createElement("p")
+            let time = document.createElement("small")
             message.textContent = elem.Message
-            time.textContent=Dateformat(elem.Time)
-            time.style.textAlign="end"
+            time.textContent = Dateformat(elem.Time)
+            time.style.marginLeft = "50%"
             msg.append(nickname)
             msg.append(message)
             msg.append(time)
@@ -253,44 +253,45 @@ export const Chatemp = (data, name) => {
     // 
     let message_chate = document.querySelector(".chat-messages")
 
-    
-    message_chate.addEventListener("scroll",LoadCaht)
+
+
+    message_chate.addEventListener("scroll", LoadCaht)
     divchat.addEventListener("click", sendMessage)
 
 }
 
-export const MoreMessage = (data)=>{
+export const MoreMessage = (data) => {
     let div = document.querySelector(".chat-messages")
-        if (data) {
-            data.forEach(elem => {
-                let msg = document.createElement("div")
-                msg.classList.add("message")
-                let nickname = document.createElement("div")
-                if (elem.Sender === name) {
-                    nickname.innerHTML = `
+    if (data) {
+        data.forEach(elem => {
+            let msg = document.createElement("div")
+            msg.classList.add("message")
+            let nickname = document.createElement("div")
+            if (elem.Sender === name) {
+                nickname.innerHTML = `
                      <span class="material-icons" >account_circle</span>
                     ${elem.Sender}
                     `
-                } else {
-                    msg.setAttribute("class","sendr")
-                    nickname.innerHTML = `
+            } else {
+                msg.setAttribute("class", "sendr")
+                nickname.innerHTML = `
                      <span class="material-icons" >account_circle</span>
                     ${elem.Sender}
                     `
-                }
-                let message = document.createElement("P")
-                let time = document.createElement("p")
-                message.textContent = elem.Message
-                time.textContent=Dateformat(elem.Time)
-                time.style.textAlign="end"
-                msg.append(nickname)
-                msg.append(message)
-                msg.append(time)
-                div.append(msg)
-            })
-    
-        }
+            }
+            let message = document.createElement("P")
+            let time = document.createElement("p")
+            message.textContent = elem.Message
+            time.textContent = Dateformat(elem.Time)
+            time.style.textAlign = "end"
+            msg.append(nickname)
+            msg.append(message)
+            msg.append(time)
+            div.append(msg)
+        })
+
     }
+}
 
 
 

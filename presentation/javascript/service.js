@@ -1,7 +1,7 @@
-import { Homepage, Login, MoreData, Contact, Chatemp } from "./pages.js"
+import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage } from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
-import { pagenation, Dateformat, debounce } from "./utils.js"
+import { pagenation, Dateformat, debounce, LoadCaht } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
 
@@ -14,16 +14,7 @@ export function Listener() {
     comment.forEach((el) => {
         el.addEventListener("click", CommentEvent)
     })
-    // let b = document.getElementById("back")
-    // if (!b){
-    // console.log("=====");
 
-    // }
-    //    b.addEventListener("click", () => {
-    //      document.querySelector(".contacts").style.display = "block"
-    //      document.querySelector(".chat-container").style.display = "none"
-
-    //     })
 }
 
 export function HomeListener(data) {
@@ -454,7 +445,7 @@ export const QueryChat = (id, nickname) => {
         });
 }
 
-export const QuertMoreChat=(name)=>{
+export const QuertMoreChat = (name) => {
     const formData = new FormData()
     formData.append("nickname", name)
     formData.append("token", document.cookie.slice(13))
@@ -462,12 +453,12 @@ export const QuertMoreChat=(name)=>{
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            if (data.length<10){
-                console.log("??????????" , data.length);
+            if (data.length < 10) {
+                console.log("??????????", data.length);
                 let chat_container = document.querySelector(".chat-messages")
-                chat_container.removeEventListener("scroll",LoadCaht)
+                chat_container.removeEventListener("scroll", LoadCaht)
             }
-           MoreMessage(data)
+            MoreMessage(data)
         })
         .catch(error => {
             console.log('Error:', error);
