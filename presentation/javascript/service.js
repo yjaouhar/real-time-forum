@@ -454,7 +454,6 @@ export const QuertMoreChat = (name) => {
         .then(response => response.json())
         .then(data => {
             if (data.length < 10) {
-                console.log("??????????", data.length);
                 let chat_container = document.querySelector(".chat-messages")
                 chat_container.removeEventListener("scroll", LoadCaht)
             }
@@ -478,4 +477,20 @@ export const QueryContact = () => {
         .catch(error => {
             console.error("Error:", error);
         })
+}
+
+export const MessageRead = () => {
+    fetch("/read", {
+        method: "POST",
+        body: { user: ``, frind: `` }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("message dont read :", data);
+
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+
 }

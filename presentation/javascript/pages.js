@@ -147,10 +147,9 @@ export const Contact = (data) => {
                  
      </div>
     `
-    console.log("uuuuuuu :", username);
-
     if (data) {
         data.forEach(element => {
+            
             if (element.Nickname !== username) {
                 let profile = document.createElement("p")
                 profile.innerHTML = `
@@ -222,7 +221,6 @@ export const Chatemp = (data, name) => {
                  <small style="margin-left: 30%;">${Dateformat(elem.Time)}</small>
                 `
             }
-            console.log("=========>", elem.Sender, "====> time :", elem.Time);
 
             nickname.style.display = "flex"
             let message = document.createElement("P")

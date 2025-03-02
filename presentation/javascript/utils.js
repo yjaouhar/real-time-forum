@@ -23,8 +23,10 @@ export const pagenation = debounce(() => {
 }, 300)
 export const LoadCaht = debounce((event) => {
 
+
     let message_chate = event.target
-    if (message_chate.scrollTop <= -600) {
+    // console.log("=============> scrool :", Math.abs(-message_chate.scrollTop + message_chate.clientHeight - message_chate.scrollHeight));
+    if (Math.abs(-message_chate.scrollTop + message_chate.clientHeight - message_chate.scrollHeight)<5) {
         document.createElement("div").getAttribute
         QuertMoreChat(message_chate.getAttribute("data-name"))
     }
