@@ -24,6 +24,7 @@ type Message struct {
 	Token    string `json:"token"`
 	Nickname string `json:"username"`
 	Message  string `json:"text"`
+	Id       int
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +85,7 @@ func SendMessage(msg Message, username string) {
 	for nikname, client := range Clients {
 		if nikname == msg.Nickname {
 			msg.Nickname = username
-			fmt.Println("==> nikname :", nikname)
+			msg.Id = db.GetId("nikname", msg.Nickname)
 			err := client.WriteJSON(msg)
 			if err != nil {
 				fmt.Println("Error sending message:", err)

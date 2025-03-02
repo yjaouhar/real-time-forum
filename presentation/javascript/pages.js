@@ -1,4 +1,4 @@
-import { Dateformat, LoadCaht } from "./utils.js"
+import { Dateformat, LoadCaht , Users } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
@@ -152,17 +152,14 @@ export const Contact = (data) => {
             
             if (element.Nickname !== username) {
                 let profile = document.createElement("p")
+                profile.setAttribute("class", "users")
                 profile.innerHTML = `
         <p class="profile" , data-id="${element.Id}">
-        <span class="material-icons" style="margin-right: 10px;">account_circle</span>
-        ${element.Nickname}</p>
+        <span class="material-icons" style="margin-right: 10px;">account_circle</span>${element.Nickname}</p>
         `
                 contact.append(profile)
-                profile.addEventListener("click", (event) => {
-                    let id = event.target.getAttribute("data-id")
-
-                    QueryChat(id, element.Nickname)
-                })
+                Users(profile , element.Nickname)
+             
             }
 
         });
@@ -180,7 +177,7 @@ export const Contact = (data) => {
 }
 
 
-export const Chatemp = (data, name) => {
+export const Chatemp = (data, name,id) => {
     let contact = document.querySelector(".contacts")
     contact.style.display = "none"
     let container = document.querySelector(".container")
@@ -249,6 +246,7 @@ export const Chatemp = (data, name) => {
     container.append(chatContainer)
     let divchat = document.querySelector(".chat-input button")
     divchat.id = name
+    divchat.setAttribute("data-id", id)
 
     document.getElementById("back").addEventListener("click", () => {
         contact.style.display = "block"

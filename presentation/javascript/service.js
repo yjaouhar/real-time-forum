@@ -438,7 +438,7 @@ export const QueryChat = (id, nickname) => {
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            Chatemp(data, nickname)
+            Chatemp(data, nickname, id)
         })
         .catch(error => {
             console.log('Error:', error);

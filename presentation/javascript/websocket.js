@@ -1,4 +1,4 @@
-import { Dateformat } from "./utils.js";
+import { Dateformat, Users } from "./utils.js";
 
 let socket = null;
 
@@ -19,22 +19,44 @@ function connectWebSocket() {
 
     socket.onmessage = (event) => {
         let receivedData = JSON.parse(event.data);
+        let contact = document.querySelector("#contact")
+        let user = contact.querySelector(`[data-id="${receivedData.Id}"]`)
+        contact.prepend(user)
+        Users(user, receivedData.username)
         let chatBox = document.querySelector(".chat-messages");
-        let messageElement = document.createElement("div");
-        messageElement.className = "message";
-        let messageSender = document.createElement("div");
-        messageSender.className = "message-sender";
-        messageSender.innerHTML = ` <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
-                                       <small> ${receivedData.username}</small>
-                                       <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`;
-        messageSender.style.display = "flex"
-        let messageText = document.createElement("p");
-        messageText.className = "message-text";
-        messageText.textContent = receivedData.text;
-        alert(`« ${receivedData.username} »  send a message `)
-        messageElement.append(messageSender);
-        messageElement.append(messageText);
-        chatBox.prepend(messageElement);
+        if (chatBox.getAttribute("data-name") === receivedData.username) {
+            
+            let messageElement = document.createElement("div");
+            messageElement.className = "message";
+            let messageSender = document.createElement("div");
+            messageSender.className = "message-sender";
+            messageSender.innerHTML = ` <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+            <small> ${receivedData.username}</small>
+            <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`;
+            messageSender.style.display = "flex"
+            let messageText = document.createElement("p");
+            messageText.className = "message-text";
+            messageText.textContent = receivedData.text;
+            
+            messageElement.append(messageSender);
+            messageElement.append(messageText);
+            if (chatBox) {
+                chatBox.prepend(messageElement);
+            }
+        }else{
+            alert(`« ${receivedData.username} »  send a message `)
+        }
+        // let username = document.querySelector(".chat-messages")
+        // // console.log("......" ,username.parentElement.style.display !== "none");
+        // if (!username && username.getAttribute("data-name") !== receivedData.username) {
+
+        //     alert(`« ${receivedData.username} »  send a message `)
+        
+        // }
+        
+
+
+
     };
 
     socket.onclose = () => {
@@ -74,18 +96,23 @@ export function closee() {
 }
 
 export function sendMessage(event) {
+    let id = event.target.getAttribute("data-id");
     let name = event.target.id;
+    let contact = document.querySelector("#contact")
+    let user = contact.querySelector(`[data-id="${id}"]`)
+    contact.prepend(user)
+    console.log("?????? user :", user , "????? name : " , name);
+    
+    Users(user, name)
     let token = document.cookie.slice(13);
     let messageInput = document.querySelector(".message-input");
     let message = messageInput.value.trim().replaceAll("\n", "");
-
     if (message !== "") {
         let msgObject = {
             token: token,
             username: name,
             text: message,
         };
-
         if (socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify(msgObject));
             console.log("Message sent");
@@ -95,7 +122,6 @@ export function sendMessage(event) {
         }
 
         let chatBox = document.querySelector(".chat-messages");
-        console.log("====> textcontenet :", chatBox.textContent);
         if (chatBox.textContent === "Not a message available") {
             chatBox.innerHTML = ""
         }

@@ -1,5 +1,5 @@
 import { MoreData } from "./pages.js"
-import { likeHandel, QuertMoreChat } from "./service.js"
+import { likeHandel, QuertMoreChat ,QueryChat} from "./service.js"
 
 export const pagenation = debounce(() => {
     if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
@@ -62,4 +62,17 @@ export const Dateformat = (timestamp) => {
     } else {
         return `${Math.floor(seconds / 86400)} j`;
     }
+}
+
+
+export const Users = (profile,Nickname) => {
+   
+    
+        profile.addEventListener("click", (event) => {
+        let id = event.target.getAttribute("data-id")
+
+        QueryChat(id, Nickname)
+    })
+   
+    
 }
