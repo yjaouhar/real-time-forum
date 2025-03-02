@@ -18,30 +18,22 @@ function connectWebSocket() {
     };
 
     socket.onmessage = (event) => {
-        console.log("Received Message");
-
-
         let receivedData = JSON.parse(event.data);
-        console.log("Received:", receivedData);
         let chatBox = document.querySelector(".chat-messages");
         let messageElement = document.createElement("div");
         messageElement.className = "message";
         let messageSender = document.createElement("div");
         messageSender.className = "message-sender";
-        messageSender.innerHTML = ` 
-        <span class="material-icons" style="margin-right: 10px" >account_circle</span>
-        ${receivedData.username}`;
+        messageSender.innerHTML = ` <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+                                       <small> ${receivedData.username}</small>
+                                       <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`;
         messageSender.style.display = "flex"
         let messageText = document.createElement("p");
         messageText.className = "message-text";
         messageText.textContent = receivedData.text;
-        let time = document.createElement("p")
-        time.textContent = Dateformat(new Date())
-        time.style.marginLeft = "50%"
 
         messageElement.append(messageSender);
         messageElement.append(messageText);
-        messageElement.append(time);
         chatBox.prepend(messageElement);
     };
 
@@ -103,24 +95,24 @@ export function sendMessage(event) {
         }
 
         let chatBox = document.querySelector(".chat-messages");
+        console.log("====> textcontenet :", chatBox.textContent);
+        if (chatBox.textContent === "Not a message available") {
+            chatBox.innerHTML = ""
+        }
         let username = document.querySelector("title").getAttribute("class")
         let messageElement = document.createElement("div");
-        messageElement.className = "message sendr";
+        messageElement.className = "sendr";
         let messageSender = document.createElement("div");
         messageSender.className = "message-sender";
-        messageSender.innerHTML = ` <span class="material-icons" style="margin-right: 10px" >account_circle</span>
-        ${username}`
+        messageSender.innerHTML = `    <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+                                       <small> ${username}</small>
+                                       <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`
         messageSender.style.display = "flex"
         let messageText = document.createElement("p");
         messageText.className = "message-text";
         messageText.textContent = message;
-        let time = document.createElement("p")
-        time.textContent = Dateformat(new Date())
-
         messageElement.append(messageSender);
         messageElement.append(messageText);
-        time.style.marginLeft = "50%"
-        messageElement.append(time);
         chatBox.prepend(messageElement);
         messageInput.value = "";
     }

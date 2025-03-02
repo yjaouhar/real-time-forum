@@ -133,6 +133,7 @@ export const Homepage = (data) => {
 }
 
 export const Contact = (data) => {
+    let username = document.querySelector("title").getAttribute("class")
     let container = document.querySelector(".container")
     let contacts = document.createElement("aside")
     contacts.setAttribute("class", "contacts")
@@ -146,20 +147,25 @@ export const Contact = (data) => {
                  
      </div>
     `
+    console.log("uuuuuuu :", username);
+
     if (data) {
         data.forEach(element => {
-            let profile = document.createElement("p")
-            profile.innerHTML = `
-        <p class="profile" , data-id="${element.Id}" style="display: flex;align-items: flex-end;">
+            if (element.Nickname !== username) {
+                let profile = document.createElement("p")
+                profile.innerHTML = `
+        <p class="profile" , data-id="${element.Id}">
         <span class="material-icons" style="margin-right: 10px;">account_circle</span>
         ${element.Nickname}</p>
         `
-            contact.append(profile)
-            profile.addEventListener("click", (event) => {
-                let id = event.target.getAttribute("data-id")
+                contact.append(profile)
+                profile.addEventListener("click", (event) => {
+                    let id = event.target.getAttribute("data-id")
 
-                QueryChat(id, element.Nickname)
-            })
+                    QueryChat(id, element.Nickname)
+                })
+            }
+
         });
     } else {
         let profile = document.createElement("p")
@@ -204,25 +210,25 @@ export const Chatemp = (data, name) => {
             let nickname = document.createElement("div")
             if (elem.Sender === name) {
                 nickname.innerHTML = `
-                 <span class="material-icons" style="margin-right: 10px" >account_circle</span>
-                ${elem.Sender}
+                  <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+               <small> ${elem.Sender}</small>
+               <small style="margin-left: 30%;">${Dateformat(elem.Time)}</small>
                 `
             } else {
                 msg.setAttribute("class", "sendr")
                 nickname.innerHTML = `
-                 <span class="material-icons" style="margin-right: 10px">account_circle</span>
-                ${elem.Sender}
+                 <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+                 <small> ${elem.Sender}</small>
+                 <small style="margin-left: 30%;">${Dateformat(elem.Time)}</small>
                 `
             }
-nickname.style.display="flex"
+            console.log("=========>", elem.Sender, "====> time :", elem.Time);
+
+            nickname.style.display = "flex"
             let message = document.createElement("P")
-            let time = document.createElement("small")
             message.textContent = elem.Message
-            time.textContent = Dateformat(elem.Time)
-            time.style.marginLeft = "50%"
             msg.append(nickname)
             msg.append(message)
-            msg.append(time)
             div.append(msg)
         })
 
