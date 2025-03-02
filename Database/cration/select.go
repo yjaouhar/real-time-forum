@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"real-time-forum/utils"
 )
@@ -242,7 +243,7 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 	return like, dislike, reactin
 }
 
-func Select_all_nakname() ([]utils.AllNakename, error) {
+func Select_all_nakname(nickname string) ([]utils.AllNakename,error) {
 	var All []utils.AllNakename
 	quire := "SELECT id, nikname FROM users ORDER BY nikname ASC"
 	rows, err := DB.Query(quire)
@@ -256,7 +257,15 @@ func Select_all_nakname() ([]utils.AllNakename, error) {
 		if err != nil {
 			return nil, err
 		}
+		Name.Time , _ = Selectlastmessage(Name.Nickname, nickname)
 		All = append(All, Name)
+	}
+	for i := 0; i < len(All); i++ {
+		for j := i + 1; j < len(All); j++ {
+			if All[i].Time.Before(All[j].Time) {
+				All[i], All[j] = All[j], All[i]
+			}
+		}
 	}
 	return All, nil
 }
@@ -315,4 +324,26 @@ func Getlastmessage(id int) int {
 		return 0
 	}
 	return lastid
+}
+
+func Selectlastmessage(receiver_id string ,sender_id string) (time.Time , error) {
+	var last1 time.Time
+	var last2 time.Time
+	quire := "SELECT timestamp FROM messages WHERE receiver_id = ? AND sender_id = ? ORDER BY timestamp DESC LIMIT 1"
+	err := DB.QueryRow(quire, receiver_id, sender_id).Scan(&last1)
+	quire = "SELECT timestamp FROM messages WHERE receiver_id = ? AND sender_id = ? ORDER BY timestamp DESC LIMIT 1"
+	er := DB.QueryRow(quire, sender_id, receiver_id).Scan(&last2)
+	if err != nil && er != nil {
+		return time.Time{}, err
+	}
+	if err != nil && er == nil {
+		return last2, nil
+	}
+	if err == nil && er != nil {
+		return last1, nil
+	}
+	if last1.After(last2) {
+		return last1, nil
+	}
+	return last2, nil
 }

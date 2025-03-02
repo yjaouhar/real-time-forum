@@ -1,5 +1,7 @@
 package utils
 
+import "time"
+
 type Postes struct {
 	ID         int
 	UserID     int
@@ -51,6 +53,7 @@ type Reaction struct {
 type AllNakename struct {
 	Id       int
 	Nickname string
+	Time    time.Time
 }
 
 type Messages struct {
