@@ -1,6 +1,6 @@
 import { Regester, Login } from "./pages.js"
 import { showError } from "./errore.js"
-import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts } from "./check.js"
+import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts ,validateNickname} from "./check.js"
 console.log("=======>");
 document.addEventListener("DOMContentLoaded", Checkstuts)
 
@@ -53,7 +53,7 @@ export function handle() {
         let nickname = document.getElementById("nickname").value;
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
-        if (validateName(firstName) && validateName(lastName) && validateAge(age) && validateGender(gender) && Checkemail(email) && validatePassword(password)) {
+        if (validateNickname(nickname)&& validateName(firstName) && validateName(lastName) && validateAge(age) && validateGender(gender) && Checkemail(email) && validatePassword(password)) {
             console.log("Form submitted successfully!==========");
 
             fetch('/resgester', {

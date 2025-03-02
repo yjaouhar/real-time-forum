@@ -439,8 +439,8 @@ export const Regester = () => {
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="••••••••">
                 </div>
-                <div class="fill">
-                    <span>Fill in all fields</span>
+                <div class="fill" >
+                    <span></span>
                 </div>
                 <p id="error-message"></p>
                 <button type="submit" id="creat-btn">Create Account</button>

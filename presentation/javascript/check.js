@@ -56,10 +56,14 @@ export function validateCategories(cat) {
     return arr.includes(cat)
 }
 
-// function validateNickname(name) {
-//     const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
-//     return hasTwoLetters;
-// }
+export function validateNickname(name) {
+    const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
+    if (!hasTwoLetters){
+        showError("Nikname is not correct ")
+        return false;
+    }
+    return true;
+}
 
 async function Checkstuts(event) {
 

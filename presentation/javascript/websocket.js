@@ -31,7 +31,7 @@ function connectWebSocket() {
         let messageText = document.createElement("p");
         messageText.className = "message-text";
         messageText.textContent = receivedData.text;
-
+        alert(`« ${receivedData.username} »  send a message `)
         messageElement.append(messageSender);
         messageElement.append(messageText);
         chatBox.prepend(messageElement);
