@@ -53,7 +53,8 @@ type Reaction struct {
 type AllNakename struct {
 	Id       int
 	Nickname string
-	Time    time.Time
+	Time     time.Time
+	Type     string
 }
 
 type Messages struct {

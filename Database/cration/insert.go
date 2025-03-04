@@ -124,6 +124,7 @@ func UpdateTocken(tocken string) error {
 	return nil
 }
 
+
 func InsertConnection(sender string, recever string) error {
 	info, err := DB.Prepare("INSERT INTO connection (user_1,user_2) VALUES (?,?)")
 	if err != nil {

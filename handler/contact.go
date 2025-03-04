@@ -18,6 +18,7 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 		}
 		nickname := db.GetUser(db.GetId("sessionToken", token.Value))
 		Allusers, err := db.Select_all_nakname(nickname)
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{"error": "` + err.Error() + `", "status":false}`))

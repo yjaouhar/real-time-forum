@@ -1,5 +1,5 @@
 import { MoreData } from "./pages.js"
-import { likeHandel, QuertMoreChat ,QueryChat} from "./service.js"
+import { likeHandel, QuertMoreChat, QueryChat } from "./service.js"
 
 export const pagenation = debounce(() => {
     if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
@@ -25,8 +25,7 @@ export const LoadCaht = debounce((event) => {
 
 
     let message_chate = event.target
-    // console.log("=============> scrool :", Math.abs(-message_chate.scrollTop + message_chate.clientHeight - message_chate.scrollHeight));
-    if (Math.abs(-message_chate.scrollTop + message_chate.clientHeight - message_chate.scrollHeight)<5) {
+    if (Math.abs(-message_chate.scrollTop + message_chate.clientHeight - message_chate.scrollHeight) < 5) {
         document.createElement("div").getAttribute
         QuertMoreChat(message_chate.getAttribute("data-name"))
     }
@@ -49,7 +48,7 @@ export const Dateformat = (timestamp) => {
 
     let pastDate = new Date(timestamp);
     // pastDate.setHours(pastDate.getHours())
-    // console.log("Date : ", pastDate); // 2025-02-06 17:41:25
+    console.log("Date : ", typeof Date.now()); // 2025-02-06 17:41:25
     let now = new Date();
     let seconds = Math.floor((now - pastDate) / 1000); // Correction: now - pastDate
 
@@ -65,14 +64,14 @@ export const Dateformat = (timestamp) => {
 }
 
 
-export const Users = (profile,Nickname) => {
-   
-    
+export const Users = (profile, Nickname) => {
+    if (profile) {
         profile.addEventListener("click", (event) => {
-        let id = event.target.getAttribute("data-id")
+            let id = event.target.getAttribute("data-id")
 
-        QueryChat(id, Nickname)
-    })
-   
-    
+            QueryChat(id, Nickname)
+        })
+    }
 }
+
+export const Arr = []

@@ -1029,8 +1029,8 @@ label {
     flex-direction: column-reverse;
     padding: 10px;
     overflow-y: auto;
-    scrollbar-color:#f4f6f8 rgb(255, 255, 255);
-scrollbar-width: thin;
+    scrollbar-color: #f4f6f8 rgb(255, 255, 255);
+    scrollbar-width: thin;
 }
 
 .message {
@@ -1101,7 +1101,7 @@ small {
     display: flex;
     align-items: flex-end;
     border: 2px solid #00000030;
-    background: #10b981;
+    /* background: red; */
     color: #ffffff;
     padding: 5px;
     margin: 10px;
@@ -1113,3 +1113,4 @@ small {
 .profile:hover {
     background: #00744d;
 }
+

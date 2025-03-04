@@ -1,4 +1,4 @@
-import { Dateformat, LoadCaht , Users } from "./utils.js"
+import { Dateformat, LoadCaht, Users, Arr } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
@@ -133,6 +133,7 @@ export const Homepage = (data) => {
 }
 
 export const Contact = (data) => {
+
     let username = document.querySelector("title").getAttribute("class")
     let container = document.querySelector(".container")
     let contacts = document.createElement("aside")
@@ -149,18 +150,24 @@ export const Contact = (data) => {
     `
     if (data) {
         data.forEach(element => {
-            
+
             if (element.Nickname !== username) {
                 let profile = document.createElement("p")
-                profile.setAttribute("class", "users")
+                profile.setAttribute("class", "profile")
+                profile.setAttribute("data-id", `${element.Id}`)
                 profile.innerHTML = `
-        <p class="profile" , data-id="${element.Id}">
         <span class="material-icons" style="margin-right: 10px;">account_circle</span>${element.Nickname}</p>
         `
+                if (element.Type === "online") {
+                    profile.style.background = "#10b981"
+                } else {
+                    profile.style.background = "red"
+                }
                 contact.append(profile)
-                Users(profile , element.Nickname)
-             
+                Users(profile, element.Nickname)
+
             }
+
 
         });
     } else {
@@ -168,6 +175,8 @@ export const Contact = (data) => {
         profile.textContent = "Not a contact"
         profile.setAttribute("class", "profile")
         profile.setAttribute("data-id", element.Id)
+
+
         contact.append(profile)
     }
 
@@ -177,7 +186,7 @@ export const Contact = (data) => {
 }
 
 
-export const Chatemp = (data, name,id) => {
+export const Chatemp = (data, name, id) => {
     let contact = document.querySelector(".contacts")
     contact.style.display = "none"
     let container = document.querySelector(".container")

@@ -29,7 +29,7 @@ export function HomeListener(data) {
     })
 
     let logout = document.querySelector("#logout")
-    logout.addEventListener("click", logoutHandel)
+    logout.addEventListener("click", LogoutHandel)
 
     window.addEventListener("scroll", pagenation)
     let comment = document.querySelectorAll("#comment")
@@ -412,7 +412,7 @@ function CommentEvent(event) {//////comment
 }
 
 
-function logoutHandel() {
+export function LogoutHandel() {
     fetch("/logout", {
         method: 'POST',
     })

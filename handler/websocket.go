@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"sync"
 
 	db "real-time-forum/Database/cration"
@@ -37,22 +38,23 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	tocken := r.URL.Query().Get("token")
 	fmt.Println("tocken:", tocken)
-
-	username := db.GetUser(db.GetId("sessionToken", tocken))
+	id := db.GetId("sessionToken", tocken)
+	username := db.GetUser(id)
 	if db.HaveToken(tocken) {
 		mutex.Lock()
 		Clients[username] = ws
 		mutex.Unlock()
+		broadcastUserStatus(strconv.Itoa(id), "online")
 	}
 	for {
 		fmt.Println("Waiting for message")
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			fmt.Println("Error reading message:", err)
 			mutex.Lock()
 			delete(Clients, username)
 			mutex.Unlock()
+			broadcastUserStatus(strconv.Itoa(id), "offline")
 			break
 		}
 
@@ -113,5 +115,17 @@ func QueryMsg(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(messge)
+	}
+}
+
+func broadcastUserStatus(id, status string) {
+	message := map[string]string{
+		"type":   "user_status",
+		"id":     id,
+		"status": status,
+	}
+	// fmt.Println("[[[[[[[[[[[", Clients, "]]]]]]]]]]]")
+	for _, client := range Clients {
+		client.WriteJSON(message)
 	}
 }

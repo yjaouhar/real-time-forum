@@ -243,7 +243,7 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 	return like, dislike, reactin
 }
 
-func Select_all_nakname(nickname string) ([]utils.AllNakename,error) {
+func Select_all_nakname(nickname string) ([]utils.AllNakename, error) {
 	var All []utils.AllNakename
 	quire := "SELECT id, nikname FROM users ORDER BY nikname ASC"
 	rows, err := DB.Query(quire)
@@ -257,7 +257,8 @@ func Select_all_nakname(nickname string) ([]utils.AllNakename,error) {
 		if err != nil {
 			return nil, err
 		}
-		Name.Time , _ = Selectlastmessage(Name.Nickname, nickname)
+		Name.Time, _ = Selectlastmessage(Name.Nickname, nickname)
+		Name.Type = CheckStatus(Name.Nickname)
 		All = append(All, Name)
 	}
 	for i := 0; i < len(All); i++ {
@@ -268,6 +269,17 @@ func Select_all_nakname(nickname string) ([]utils.AllNakename,error) {
 		}
 	}
 	return All, nil
+}
+
+func CheckStatus(nickname string) string {
+	session := ""
+	quire := "SELECT sessionToken FROM users WHERE nikname = ?"
+	err := DB.QueryRow(quire, nickname).Scan(&session)
+	if err != nil {
+		return "offline"
+	}
+
+	return "online"
 }
 
 func QueryConnection(user_1 string, user_2 string) (int, error) {
@@ -326,7 +338,7 @@ func Getlastmessage(id int) int {
 	return lastid
 }
 
-func Selectlastmessage(receiver_id string ,sender_id string) (time.Time , error) {
+func Selectlastmessage(receiver_id string, sender_id string) (time.Time, error) {
 	var last1 time.Time
 	var last2 time.Time
 	quire := "SELECT timestamp FROM messages WHERE receiver_id = ? AND sender_id = ? ORDER BY timestamp DESC LIMIT 1"

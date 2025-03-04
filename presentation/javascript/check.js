@@ -1,7 +1,7 @@
 import { showError } from "./errore.js"
 import { handle } from "./login-register.js"
 import { HomeHandeler } from "./Homehandler.js"
-import { sendLogin , closee} from "./websocket.js"
+import { sendLogin, closee } from "./websocket.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -58,7 +58,7 @@ export function validateCategories(cat) {
 
 export function validateNickname(name) {
     const hasTwoLetters = (/^[a-zA-Z][a-zA-Z0-9_]{2,14}$/).test(name);
-    if (!hasTwoLetters){
+    if (!hasTwoLetters) {
         showError("Nikname is not correct ")
         return false;
     }
@@ -66,7 +66,6 @@ export function validateNickname(name) {
 }
 
 async function Checkstuts(event) {
-
 
     fetch('/stuts', {
         method: 'GET',
@@ -82,7 +81,7 @@ async function Checkstuts(event) {
                 handle()
                 closee()
             } else {
-            
+
                 let head = document.querySelector("title")
                 head.setAttribute("class", result.name)
                 HomeHandeler()
