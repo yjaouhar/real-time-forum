@@ -79,7 +79,3 @@ export function handle() {
         }
     }
 }
-
-window.addEventListener('unload', (event) => {
-    LogoutHandel()
-})

@@ -37,7 +37,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	tocken := r.URL.Query().Get("token")
-	fmt.Println("tocken:", tocken)
+	// fmt.Println("tocken:", tocken)
 	id := db.GetId("sessionToken", tocken)
 	username := db.GetUser(id)
 	if db.HaveToken(tocken) {
@@ -47,7 +47,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		broadcastUserStatus(strconv.Itoa(id), "online")
 	}
 	for {
-		fmt.Println("Waiting for message")
+		// fmt.Println("Waiting for message")
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -59,7 +59,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		}
 
 		username := db.GetUser(db.GetId("sessionToken", msg.Token))
-		fmt.Println("Message received:", msg, username)
+		// fmt.Println("Message received:", msg, username)
 		if Clients[username] == nil {
 			Clients[username] = ws
 		}

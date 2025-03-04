@@ -24,21 +24,24 @@ function connectWebSocket() {
             const id = receivedData.id
             const status = receivedData.status
             let cc = document.querySelector(`[data-id="${id}"]`)
-            if (status === "offline") {
-                cc.style.background = "red"
-                // const formData = new FormData()
-                // formData.append("id", id)
-                // fetch("/log", {
-                //     method: 'POST',
-                //     body: formData
-                // })
-                //     .catch(error => {
-                //         console.log('Error:', error);
-                //     });
+            if (cc) {
+                if (status === "offline") {
+                    cc.style.background = "red"
+                    // const formData = new FormData()
+                    // formData.append("id", id)
+                    // fetch("/log", {
+                    //     method: 'POST',
+                    //     body: formData
+                    // })
+                    //     .catch(error => {
+                    //         console.log('Error:', error);
+                    //     });
 
-            } else {
-                cc.style.background = "#10b981"
+                } else {
+                    cc.style.background = "#10b981"
+                }
             }
+
         } else {
             let contact = document.querySelector("#contact")
             let user = contact.querySelector(`[data-id="${receivedData.Id}"]`)
