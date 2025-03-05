@@ -42,6 +42,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		mutex.Lock()
 		utils.Clients[username] = ws
 		mutex.Unlock()
+		fmt.Println("........", utils.Clients)
 		broadcastUserStatus("user_status", strconv.Itoa(id), "online")
 	}
 	for {

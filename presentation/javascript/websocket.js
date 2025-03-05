@@ -22,7 +22,7 @@ function connectWebSocket() {
             let prof = document.querySelector(`[data-id="${id}"]`)
             if (prof) {
                 if (status === "offline") {
-                    prof.style.background = "red"
+                    prof.style.background = "#939393"
                 } else {
                     prof.style.background = "#10b981"
                 }

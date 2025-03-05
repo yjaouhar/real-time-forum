@@ -60,6 +60,7 @@ body {
 .sidebar,
 .contacts {
     width: 320px;
+    max-height: 670px;
     background: white;
     border-radius: 16px;
     padding: 1.5rem;
@@ -67,13 +68,16 @@ body {
     position: sticky;
     top: 85px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #f4f6f8 rgb(255, 255, 255)
 }
 
 .main-content {
     flex: 1;
     padding: 0;
-    max-width: 800px;
-    margin: 0 auto;
+    /* max-width: 800px; */
+    /* margin: 0 auto; */
 }
 
 .category-list button {
@@ -185,6 +189,10 @@ body {
     border-radius: 12px;
     transition: all 0.2s;
     cursor: pointer;
+    overflow-y: scroll;
+    max-height: 500px;
+    scrollbar-width: thin;
+    scrollbar-color: #f4f6f8 rgb(255, 255, 255)
 }
 
 .contact:hover {
@@ -193,13 +201,28 @@ body {
 
 #cancel {
     cursor: pointer;
-    /* height: 25px; */
-    margin-left: 96%;
+    height: 64px;
+    width: 64px;
+    margin-left: 35%;
+    /* margin-left: 96%; */
+    /* text-align: center; */
+}
+
+#categor {
+    cursor: pointer;
+    height: 64px;
+    width: 64px;
+    margin-left: 35%;
+}
+
+#categor:hover {
+    background: rgba(31, 243, 176, 0.267);
+    border-radius: 10%;
 }
 
 #cancel:hover {
+    background: rgba(31, 243, 176, 0.267);
     border-radius: 100%;
-    background-color: #e7e7e7;
 }
 
 #close {
@@ -495,31 +518,9 @@ select {
     color: white;
 }
 
-@media (max-width: 768px) {
-    #register-container {
-        flex-direction: column;
-        margin: 20px;
-    }
-
-    .info-side,
-    .register {
-        width: 100%;
-    }
-
-    .info-side {
-        padding: 30px;
-    }
-
-    .register {
-        padding: 30px;
-    }
-
-    .name-row {
-        flex-direction: column;
-        gap: 0;
-    }
+.menu {
+    display: none;
 }
-
 
 /* ========================================================== */
 
@@ -690,26 +691,6 @@ select {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
-    #login-container {
-        flex-direction: column;
-        margin: 20px;
-    }
-
-    .info-side,
-    .login-form {
-        width: 100%;
-    }
-
-    .info-side {
-        padding: 30px;
-        text-align: center;
-    }
-
-    .login-form {
-        padding: 30px;
-    }
-}
 
 /* style coment  */
 
@@ -912,15 +893,6 @@ label {
 }
 
 
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .info-side {
-        padding: 30px;
-    }
-}
 
 /* fgfgfgffffffffffffffffffffffffffffffffffffffffffffffffffffffffff */
 .input-wrapper {
@@ -997,16 +969,16 @@ label {
 }
 
 .chat-container {
-    width: 400px;
+    width: 345px;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    ;
     display: flex;
     flex-direction: column;
-    height: 620px;
-    position: sticky;
-    top: 85px;
+    height: 555px;
+    position: fixed;
+    top: 195px;
+    right: 5%;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -1099,18 +1071,118 @@ small {
 
 .profile {
     display: flex;
-    align-items: flex-end;
+    flex-wrap: wrap;
     border: 2px solid #00000030;
-    /* background: red; */
     color: #ffffff;
     padding: 5px;
     margin: 10px;
     font-weight: 900;
     cursor: pointer;
-
+    font-size: small;
+    word-break: break-word;
 }
 
 .profile:hover {
     background: #00744d;
 }
+.hed{
+    display: flex;
+        align-items: center;
+}
 
+@media (max-width: 968px) {
+    #register-container {
+        flex-direction: column;
+        margin: 20px;
+    }
+
+    .info-side,
+    .register {
+        width: 100%;
+    }
+
+    .register {
+        padding: 30px;
+    }
+
+    .name-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .menu {
+        display: block;
+    }
+
+    .sidebar {
+        display: none;
+        width: 60%;
+        height: 100%;
+        position: fixed;
+        top: 98px;
+        left: 0;
+        z-index: 1;
+    }
+
+
+
+    /* .container {
+        flex-direction: column;
+    } */
+    #login-container {
+        flex-direction: column;
+        margin: 20px;
+    }
+
+    .info-side,
+    .login-form {
+        width: 100%;
+    }
+
+    .info-side {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .login-form {
+        padding: 30px;
+    }
+
+
+}
+
+@media (max-width: 530px) {
+
+    .header {
+        align-items: normal;
+        flex-direction: column;
+    }
+
+    .main-content {
+        margin: auto;
+    }
+
+    .create-post button {
+        margin: auto;
+    }
+
+    .sidebar {
+        width: 80%;
+        top: 210px;
+    }
+
+    .chat-container {
+        top: 227px;
+        width: 320px;
+        right: 10%;
+    }
+
+    .logo {
+        text-align: end;
+    }
+
+    .hed {
+        display: flex;
+        justify-content: space-between;
+    }
+}

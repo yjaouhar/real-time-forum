@@ -31,6 +31,9 @@ export function HomeListener(data) {
     let logout = document.querySelector("#logout")
     logout.addEventListener("click", LogoutHandel)
 
+    let category = document.getElementById("categor")
+    category.addEventListener("click" , Catlist)
+
     window.addEventListener("scroll", pagenation)
     let comment = document.querySelectorAll("#comment")
     comment.forEach((el) => {
@@ -38,6 +41,9 @@ export function HomeListener(data) {
     })
     let categories = document.querySelectorAll(".cat")
     categories.forEach(elem => { elem.addEventListener("click", CatHandel) })
+
+    let menu = document.querySelector(".menu")
+    menu.addEventListener("click" , Menu)
 
     let reactionLike = document.querySelectorAll("#like")
     reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
@@ -226,18 +232,43 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
         });
 }
 
+const Menu = ()=>{
+    let cancel = document.querySelector(".menu")
+    if (cancel.getAttribute("data-vis") == "visibility_off") {
+        let sid =  document.querySelector(".sidebar")
+        sid.style.display = "none"
+        cancel.setAttribute ("data-vis","visibility")
+    } else {
+        let sid =  document.querySelector(".sidebar")
+        sid.style.display = "block"
+        cancel.setAttribute ("data-vis",  "visibility_off")
+    }
+}
 
 
 export const handelcontact = () => {///cancel contact
     let cancel = document.querySelector("#cancel")
-    if (cancel.textContent == "visibility_off") {
+    if (cancel.classList == "visibility_off") {
         let contact = document.querySelector("#contact")
         contact.style.display = "none"
-        cancel.textContent = "visibility"
+        cancel.classList = "visibility"
     } else {
         let contact = document.querySelector("#contact")
         contact.style.display = "block"
-        cancel.textContent = "visibility_off"
+        cancel.classList = "visibility_off"
+    }
+
+}
+export const Catlist = () => {///cancel contact
+    let cancel = document.querySelector("#categor")
+    if (cancel.classList == "visibility_off") {
+        let contact = document.querySelector(".category-list")
+        contact.style.display = "none"
+        cancel.classList = "visibility"
+    } else {
+        let contact = document.querySelector(".category-list")
+        contact.style.display = "block"
+        cancel.classList = "visibility_off"
     }
 
 }

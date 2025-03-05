@@ -1,5 +1,5 @@
 import { Dateformat, LoadCaht, Users, Arr } from "./utils.js"
-import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
+import { Listener, handelcontact, QueryContact, QueryChat  } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
 export const Homepage = (data) => {
@@ -8,7 +8,11 @@ export const Homepage = (data) => {
     let name = title.getAttribute("class")
     document.body.innerHTML = `
     <header class="header">
+    <div class="hed">
+        <div  class="menu" data-vis="visibility"><span class="material-icons" style="margin: 0 30px;" >menu</span></div>
         <div class="logo">FORUM</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span class="material-icons" style="color:#10b981;border:2px solid #10b981;border-radius: 100%;">account_circle</span> ${name}</div>
         <button id="logout">logout</button>
     </header>
     `
@@ -16,23 +20,22 @@ export const Homepage = (data) => {
     container.setAttribute("class", "container")
     let sidebar = document.createElement("aside")
     sidebar.setAttribute("class", "sidebar")
-    let info = document.createElement("div")
-    info.setAttribute("class", "contact")
-    let profile = document.createElement("span")
-    profile.setAttribute("class", "material-icons")
-    profile.textContent = "account_circle"
-    let user = document.createElement("span")
-    user.textContent = name
-    let online = document.createElement("span")
-    online.setAttribute("class", "online-indicator")
-    info.append(profile)
-    info.append(user)
-    info.append(online)
-    sidebar.append(info)
+   
+    // let profile = document.createElement("span")
+    // profile.setAttribute("class", "material-icons")
+    // profile.textContent = "account_circle"
+    // let user = document.createElement("span")
+    // user.textContent = name
+    // let online = document.createElement("span")
+    // online.setAttribute("class", "online-indicator") <span class="material-icons">category</span> 
+    // info.append(profile)
+    // info.append(user)
+    // info.append(online)
+ 
     sidebar.innerHTML += `
-                <h3>Category</h3>
-                <div class="category-list">
-                 <button class="cat" value="all" >All</button>
+                <h3 id="categor" class="visibility" ><svg width="64px" height="64px" viewBox="0 0 48.00 48.00" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>category-list-solid</title> <g id="Layer_2" data-name="Layer 2"> <g id="invisible_box" data-name="invisible box"> <rect width="48" height="48" fill="none"></rect> </g> <g id="icons_Q2" data-name="icons Q2"> <path d="M24,10h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,10Z"></path> <path d="M24,24h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,24Z"></path> <path d="M24,38h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,38Z"></path> <path d="M12,2a2.1,2.1,0,0,0-1.7,1L4.2,13a2.3,2.3,0,0,0,0,2,1.9,1.9,0,0,0,1.7,1H18a2.1,2.1,0,0,0,1.7-1,1.8,1.8,0,0,0,0-2l-6-10A1.9,1.9,0,0,0,12,2Z"></path> <path d="M12,30a6,6,0,1,1,6-6A6,6,0,0,1,12,30Z"></path> <path d="M16,44H8a2,2,0,0,1-2-2V34a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v8A2,2,0,0,1,16,44Z"></path> </g> </g> </g></svg></h3>
+                <div class="category-list" style="display:none">
+                 <button class="cat" value="all" ><span class="material-icons">home</span></button>
                 <button class="cat" value="Tech Support" >Tech Support</button>
                 <button class="cat" value="General Discussion">General Discussion</button>
                 <button class="cat" value="Tutorials">Tutorials</button>
@@ -135,16 +138,18 @@ export const Homepage = (data) => {
 export const Contact = (data) => {
 
     let username = document.querySelector("title").getAttribute("class")
-    let container = document.querySelector(".container")
-    let contacts = document.createElement("aside")
-    contacts.setAttribute("class", "contacts")
+    // let container = document.querySelector(".container")
+    let aside = document.querySelector("aside")
+    let contacts = document.createElement("div")
+    // contacts.setAttribute("class", "contacts")
     let contact = document.createElement("div")
     contact.setAttribute("class", "contact")
     contact.setAttribute("id", "contact")
+    contact.style.display="none"
     contacts.innerHTML = `
      <div style=" margin-bottom: 1rem;">
-            <span class="material-icons" id="cancel">visibility_off</span>
-            <h3>contact</h3>
+            <!--<span class="material-icons" id="cancel">visibility_off</span>-->
+            <h3 class="visibility" id="cancel"><svg fill="#000000" width="64px" height="64px" viewBox="-3 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>group</title> <path d="M20.906 20.75c1.313 0.719 2.063 2 1.969 3.281-0.063 0.781-0.094 0.813-1.094 0.938-0.625 0.094-4.563 0.125-8.625 0.125-4.594 0-9.406-0.094-9.75-0.188-1.375-0.344-0.625-2.844 1.188-4.031 1.406-0.906 4.281-2.281 5.063-2.438 1.063-0.219 1.188-0.875 0-3-0.281-0.469-0.594-1.906-0.625-3.406-0.031-2.438 0.438-4.094 2.563-4.906 0.438-0.156 0.875-0.219 1.281-0.219 1.406 0 2.719 0.781 3.25 1.938 0.781 1.531 0.469 5.625-0.344 7.094-0.938 1.656-0.844 2.188 0.188 2.469 0.688 0.188 2.813 1.188 4.938 2.344zM3.906 19.813c-0.5 0.344-0.969 0.781-1.344 1.219-1.188 0-2.094-0.031-2.188-0.063-0.781-0.188-0.344-1.625 0.688-2.25 0.781-0.5 2.375-1.281 2.813-1.375 0.563-0.125 0.688-0.469 0-1.656-0.156-0.25-0.344-1.063-0.344-1.906-0.031-1.375 0.25-2.313 1.438-2.719 1-0.375 2.125 0.094 2.531 0.938 0.406 0.875 0.188 3.125-0.25 3.938-0.5 0.969-0.406 1.219 0.156 1.375 0.125 0.031 0.375 0.156 0.719 0.313-1.375 0.563-3.25 1.594-4.219 2.188zM24.469 18.625c0.75 0.406 1.156 1.094 1.094 1.813-0.031 0.438-0.031 0.469-0.594 0.531-0.156 0.031-0.875 0.063-1.813 0.063-0.406-0.531-0.969-1.031-1.656-1.375-1.281-0.75-2.844-1.563-4-2.063 0.313-0.125 0.594-0.219 0.719-0.25 0.594-0.125 0.688-0.469 0-1.656-0.125-0.25-0.344-1.063-0.344-1.906-0.031-1.375 0.219-2.313 1.406-2.719 1.031-0.375 2.156 0.094 2.531 0.938 0.406 0.875 0.25 3.125-0.188 3.938-0.5 0.969-0.438 1.219 0.094 1.375 0.375 0.125 1.563 0.688 2.75 1.313z"></path> </g></svg></h3>
                  
      </div>
     `
@@ -161,7 +166,7 @@ export const Contact = (data) => {
                 if (element.Type === "online") {
                     profile.style.background = "#10b981"
                 } else {
-                    profile.style.background = "red"
+                    profile.style.background = "#939393"
                 }
                 contact.append(profile)
                 Users(profile, element.Nickname)
@@ -181,13 +186,14 @@ export const Contact = (data) => {
     }
 
     contacts.append(contact)
-    container.append(contacts)
-    document.body.append(container)
+    aside.append(contacts)
+    // container.append(aside)
+    // document.body.append(container)
 }
 
 
 export const Chatemp = (data, name, id) => {
-    let contact = document.querySelector(".contacts")
+    let contact = document.querySelector(".contact")
     contact.style.display = "none"
     let container = document.querySelector(".container")
     let chatContainer
