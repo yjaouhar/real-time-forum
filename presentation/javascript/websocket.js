@@ -9,17 +9,15 @@ function connectWebSocket() {
         console.log("!!!! WebSocket Already Connected", socket.readyState);
         return;
     }
-
     let tock = document.cookie.slice(13);
     socket = new WebSocket(`ws://localhost:8080/ws?token=${tock}`);
-
-
     socket.onmessage = (event) => {
         let receivedData = JSON.parse(event.data);
         if (receivedData.type === "user_status") {
+            
             const id = receivedData.id
             const status = receivedData.status
-            let prof = document.querySelector(`[data-id="${id}"]`)
+            let prof = document.querySelector(`[contact-id="${id}"]`)
             if (prof) {
                 if (status === "offline") {
                     prof.style.background = "#939393"
@@ -28,14 +26,14 @@ function connectWebSocket() {
                 }
             }
 
-        } else if (receivedData.type==="user_status") {
-            QueryContact()
         }else {
             let contact = document.querySelector("#contact")
             let user = contact.querySelector(`[data-id="${receivedData.Id}"]`)
             contact.prepend(user)
             Users(user, receivedData.username)
             let chatBox = document.querySelector(".chat-messages");
+            
+            if (chatBox != null){
             if (chatBox.getAttribute("data-name") === receivedData.username) {
 
                 let messageElement = document.createElement("div");
@@ -56,8 +54,12 @@ function connectWebSocket() {
                     chatBox.prepend(messageElement);
                 }
             } else {
+                console.log("da6l");
                 alert(`« ${receivedData.username} »  send a message `)
             }
+        }else{
+            alert(`« ${receivedData.username} »  send a message `) 
+        }
         }
 
 

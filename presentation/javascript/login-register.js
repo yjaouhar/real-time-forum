@@ -70,7 +70,7 @@ export function handle() {
                         showError(result.message)
 
                     } else {
-                        window.location.href = "/"
+                        handle()
                     }
                 })
                 .catch((error) => {

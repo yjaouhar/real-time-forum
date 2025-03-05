@@ -27,6 +27,7 @@ type Message struct {
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("gg")
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println("Error upgrading:", err)
@@ -35,16 +36,15 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	tocken := r.URL.Query().Get("token")
-	// fmt.Println("tocken:", tocken)
 	id := db.GetId("sessionToken", tocken)
 	username := db.GetUser(id)
 	if db.HaveToken(tocken) {
 		mutex.Lock()
 		utils.Clients[username] = ws
 		mutex.Unlock()
-		fmt.Println("........", utils.Clients)
 		broadcastUserStatus("user_status", strconv.Itoa(id), "online")
 	}
+
 	for {
 		// fmt.Println("Waiting for message")
 		var msg Message
@@ -61,9 +61,8 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		// fmt.Println("Message received:", msg, username)
 		fmt.Println("0000000000000000")
 		if utils.Clients[username] == nil {
-
 			utils.Clients[username] = ws
-			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
+			 broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
 		}
 		if msg.Nickname == "" && msg.Message == "" {
 			fmt.Println("no message")

@@ -81,7 +81,6 @@ async function Checkstuts(event) {
                 handle()
                 closee()
             } else {
-
                 let head = document.querySelector("title")
                 head.setAttribute("class", result.name)
                 HomeHandeler()

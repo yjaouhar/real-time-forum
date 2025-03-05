@@ -159,7 +159,7 @@ export const Contact = (data) => {
             if (element.Nickname !== username) {
                 let profile = document.createElement("p")
                 profile.setAttribute("class", "profile")
-                profile.setAttribute("data-id", `${element.Id}`)
+                profile.setAttribute("contact-id", `${element.Id}`)
                 profile.innerHTML = `
         <span class="material-icons" style="margin-right: 10px;">account_circle</span>${element.Nickname}</p>
         `
@@ -179,7 +179,7 @@ export const Contact = (data) => {
         let profile = document.createElement("p")
         profile.textContent = "Not a contact"
         profile.setAttribute("class", "profile")
-        profile.setAttribute("data-id", element.Id)
+        profile.setAttribute("contact-id", element.Id)
 
 
         contact.append(profile)
