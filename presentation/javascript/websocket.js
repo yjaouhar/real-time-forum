@@ -1,4 +1,5 @@
-import { Dateformat, Users, Arr } from "./utils.js";
+import { Dateformat, Users } from "./utils.js";
+import { QueryContact } from "./service.js";
 
 
 let socket;
@@ -13,36 +14,23 @@ function connectWebSocket() {
     socket = new WebSocket(`ws://localhost:8080/ws?token=${tock}`);
 
 
-
-    socket.onopen = () => {
-        console.log("WebSocket Connected");
-    };
-
     socket.onmessage = (event) => {
         let receivedData = JSON.parse(event.data);
         if (receivedData.type === "user_status") {
             const id = receivedData.id
             const status = receivedData.status
-            let cc = document.querySelector(`[data-id="${id}"]`)
-            if (cc) {
+            let prof = document.querySelector(`[data-id="${id}"]`)
+            if (prof) {
                 if (status === "offline") {
-                    cc.style.background = "red"
-                    // const formData = new FormData()
-                    // formData.append("id", id)
-                    // fetch("/log", {
-                    //     method: 'POST',
-                    //     body: formData
-                    // })
-                    //     .catch(error => {
-                    //         console.log('Error:', error);
-                    //     });
-
+                    prof.style.background = "red"
                 } else {
-                    cc.style.background = "#10b981"
+                    prof.style.background = "#10b981"
                 }
             }
 
-        } else {
+        } else if (receivedData.type==="user_status") {
+            QueryContact()
+        }else {
             let contact = document.querySelector("#contact")
             let user = contact.querySelector(`[data-id="${receivedData.Id}"]`)
             contact.prepend(user)
@@ -75,14 +63,7 @@ function connectWebSocket() {
 
     };
 
-    socket.onclose = () => {
-        console.log("WebSocket Closed.");
-    };
 
-    socket.onerror = (error) => {
-        console.log("WebSocket Error:", error);
-        socket.close();
-    };
 }
 
 export function sendLogin() {

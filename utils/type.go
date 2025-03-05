@@ -1,6 +1,10 @@
 package utils
 
-import "time"
+import (
+	"time"
+
+	"github.com/gorilla/websocket"
+)
 
 type Postes struct {
 	ID         int
@@ -64,3 +68,5 @@ type Messages struct {
 	Time    string
 	Isread  string
 }
+
+var Clients = make(map[string]*websocket.Conn)

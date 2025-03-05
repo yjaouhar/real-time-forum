@@ -272,14 +272,10 @@ func Select_all_nakname(nickname string) ([]utils.AllNakename, error) {
 }
 
 func CheckStatus(nickname string) string {
-	session := ""
-	quire := "SELECT sessionToken FROM users WHERE nikname = ?"
-	err := DB.QueryRow(quire, nickname).Scan(&session)
-	if err != nil {
-		return "offline"
+	if utils.Clients[nickname] != nil {
+		return "online"
 	}
-
-	return "online"
+	return "offline"
 }
 
 func QueryConnection(user_1 string, user_2 string) (int, error) {

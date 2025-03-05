@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	db "real-time-forum/Database/cration"
+	"real-time-forum/utils"
 
 	"github.com/gorilla/websocket"
 )
@@ -16,10 +17,7 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-var (
-	Clients = make(map[string]*websocket.Conn)
-	mutex   = sync.Mutex{}
-)
+var mutex = sync.Mutex{}
 
 type Message struct {
 	Token    string `json:"token"`
@@ -42,9 +40,9 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	username := db.GetUser(id)
 	if db.HaveToken(tocken) {
 		mutex.Lock()
-		Clients[username] = ws
+		utils.Clients[username] = ws
 		mutex.Unlock()
-		broadcastUserStatus(strconv.Itoa(id), "online")
+		broadcastUserStatus("user_status", strconv.Itoa(id), "online")
 	}
 	for {
 		// fmt.Println("Waiting for message")
@@ -52,16 +50,19 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		err := ws.ReadJSON(&msg)
 		if err != nil {
 			mutex.Lock()
-			delete(Clients, username)
+			delete(utils.Clients, username)
 			mutex.Unlock()
-			broadcastUserStatus(strconv.Itoa(id), "offline")
+			broadcastUserStatus("user_status", strconv.Itoa(id), "offline")
 			break
 		}
 
 		username := db.GetUser(db.GetId("sessionToken", msg.Token))
 		// fmt.Println("Message received:", msg, username)
-		if Clients[username] == nil {
-			Clients[username] = ws
+		fmt.Println("0000000000000000")
+		if utils.Clients[username] == nil {
+
+			utils.Clients[username] = ws
+			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
 		}
 		if msg.Nickname == "" && msg.Message == "" {
 			fmt.Println("no message")
@@ -84,15 +85,16 @@ func SendMessage(msg Message, username string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	for nikname, client := range Clients {
+	for nikname, client := range utils.Clients {
 		if nikname == msg.Nickname {
+
 			msg.Nickname = username
 			msg.Id = db.GetId("nikname", msg.Nickname)
 			err := client.WriteJSON(msg)
 			if err != nil {
 				fmt.Println("Error sending message:", err)
 				client.Close()
-				delete(Clients, nikname)
+				delete(utils.Clients, nikname)
 			}
 			break
 		}
@@ -118,14 +120,13 @@ func QueryMsg(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func broadcastUserStatus(id, status string) {
+func broadcastUserStatus(typ, id, status string) {
 	message := map[string]string{
-		"type":   "user_status",
+		"type":   typ,
 		"id":     id,
 		"status": status,
 	}
-	// fmt.Println("[[[[[[[[[[[", Clients, "]]]]]]]]]]]")
-	for _, client := range Clients {
+	for _, client := range utils.Clients {
 		client.WriteJSON(message)
 	}
 }
