@@ -4,7 +4,7 @@ import { QueryContact } from "./service.js";
 
 let socket;
 
-function connectWebSocket() {
+export function connectWebSocket() {
     if (socket && socket.readyState === WebSocket.OPEN) {
         console.log("!!!! WebSocket Already Connected", socket.readyState);
         return;
@@ -25,6 +25,15 @@ function connectWebSocket() {
                     prof.style.background = "#10b981"
                 }
             }
+
+        }else if (receivedData.type === "new_contact") {
+            console.log("new contact");
+            
+            let aside = document.querySelector("aside")
+            console.log(aside);
+            
+            aside.textContent = ""
+            QueryContact()
 
         }else {
             let contact = document.querySelector("#contact")
@@ -69,7 +78,6 @@ function connectWebSocket() {
 
 export function sendLogin() {
     connectWebSocket();
-
     let msgObject = {
         token: document.cookie.slice(13),
         username: "",
@@ -83,7 +91,23 @@ export function sendLogin() {
         console.log("WebSocket Not Open");
     }
 }
+export function regest() {
+    connectWebSocket();
+    
+    let msgObject = {
+        token: document.cookie.slice(13),
+        username: "",
+        message: "",
+        regester : "true",
+    };
 
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(msgObject));
+        console.log("Login Message Sent");
+    } else {
+        console.log("WebSocket Not Opennnnnnn");
+    }
+}
 
 export function closee() {
     if (socket && socket.readyState === WebSocket.OPEN) {

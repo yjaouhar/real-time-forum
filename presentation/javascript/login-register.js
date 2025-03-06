@@ -1,9 +1,10 @@
 import { Regester, Login } from "./pages.js"
 import { showError } from "./errore.js"
 import { LogoutHandel } from "./service.js"
+import {  regest ,  connectWebSocket,closee} from "./websocket.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts, validateNickname } from "./check.js"
-console.log("=======>");
 document.addEventListener("DOMContentLoaded", Checkstuts)
+console.log(window.location.href); // Affiche URL complète
 
 
 export function handle() {
@@ -38,6 +39,7 @@ export function handle() {
     }
 
     function CreatAccounte(event) {
+        connectWebSocket()
         Regester()
         let login = document.getElementById("log")
         login.addEventListener("click", handle)
@@ -57,7 +59,6 @@ export function handle() {
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
         if (validateNickname(nickname) && validateName(firstName) && validateName(lastName) && validateAge(age) && validateGender(gender) && Checkemail(email) && validatePassword(password)) {
-            console.log("Form submitted successfully!==========");
 
             fetch('/resgester', {
                 method: 'POST',
@@ -70,9 +71,10 @@ export function handle() {
                 .then((result) => {
                     if (result.success) {
                         showError(result.message)
-
                     } else {
+                        regest()
                         handle()
+                        closee()
                     }
                 })
                 .catch((error) => {

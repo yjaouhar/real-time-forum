@@ -23,11 +23,12 @@ type Message struct {
 	Token    string `json:"token"`
 	Nickname string `json:"username"`
 	Message  string `json:"text"`
+	Regester  string `json:"regester"`
 	Id       int
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("gg")
+	fmt.Println("da5l: websocket")
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println("Error upgrading:", err)
@@ -50,19 +51,25 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
+			fmt.Println("Error reading message:", err)
 			mutex.Lock()
 			delete(utils.Clients, username)
 			mutex.Unlock()
 			broadcastUserStatus("user_status", strconv.Itoa(id), "offline")
 			break
 		}
+		// fmt.Println("Received message:", msg)
+		if msg.Regester == "true" {
+			fmt.Println("regester")
+            broadcastUserStatus("new_contact", "", "offline")
+			continue
+        }
 
 		username := db.GetUser(db.GetId("sessionToken", msg.Token))
-		// fmt.Println("Message received:", msg, username)
-		fmt.Println("0000000000000000")
+
 		if utils.Clients[username] == nil {
 			utils.Clients[username] = ws
-			 broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
+			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
 		}
 		if msg.Nickname == "" && msg.Message == "" {
 			fmt.Println("no message")
@@ -121,6 +128,7 @@ func QueryMsg(w http.ResponseWriter, r *http.Request) {
 }
 
 func broadcastUserStatus(typ, id, status string) {
+	fmt.Println("Broadcasting user status")
 	message := map[string]string{
 		"type":   typ,
 		"id":     id,
