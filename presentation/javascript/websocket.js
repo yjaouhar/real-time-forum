@@ -54,7 +54,6 @@ function connectWebSocket() {
                     chatBox.prepend(messageElement);
                 }
             } else {
-                console.log("da6l");
                 alert(`« ${receivedData.username} »  send a message `)
             }
         }else{

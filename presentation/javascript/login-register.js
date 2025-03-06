@@ -39,6 +39,8 @@ export function handle() {
 
     function CreatAccounte(event) {
         Regester()
+        let login = document.getElementById("log")
+        login.addEventListener("click", handle)
         let regester_form = document.getElementById("register-form")
         regester_form.addEventListener("submit", handleRegister)
 
