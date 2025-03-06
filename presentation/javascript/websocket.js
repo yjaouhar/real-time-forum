@@ -28,7 +28,7 @@ function connectWebSocket() {
 
         }else {
             let contact = document.querySelector("#contact")
-            let user = contact.querySelector(`[data-id="${receivedData.Id}"]`)
+            let user = contact.querySelector(`[contact-id="${receivedData.Id}"]`)
             contact.prepend(user)
             Users(user, receivedData.username)
             let chatBox = document.querySelector(".chat-messages");
@@ -96,11 +96,12 @@ export function closee() {
 
 export function sendMessage(event) {
     let id = event.target.getAttribute("data-id");
+    
     let name = event.target.id;
     let contact = document.querySelector("#contact")
-    let user = contact.querySelector(`[data-id="${id}"]`)
+    let user = contact.querySelector(`[contact-id="${id}"]`)
     contact.prepend(user)
-    console.log("?????? user :", user, "????? name : ", name);
+    console.log("?????? user :", user, "????? name:", name);
 
     Users(user, name)
     let token = document.cookie.slice(13);
@@ -124,12 +125,13 @@ export function sendMessage(event) {
         if (chatBox.textContent === "Not a message available") {
             chatBox.innerHTML = ""
         }
-        let username = document.querySelector("title").getAttribute("class")
+        let username = document.querySelector("title").getAttribute("class");
+
         let messageElement = document.createElement("div");
         messageElement.className = "sendr";
         let messageSender = document.createElement("div");
         messageSender.className = "message-sender";
-        messageSender.innerHTML = `    <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+        messageSender.innerHTML = `<small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
                                        <small> ${username}</small>
                                        <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`
         messageSender.style.display = "flex"

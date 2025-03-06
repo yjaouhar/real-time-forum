@@ -67,8 +67,7 @@ export const Dateformat = (timestamp) => {
 export const Users = (profile, Nickname) => {
     if (profile) {
         profile.addEventListener("click", (event) => {
-            let id = event.target.getAttribute("data-id")
-
+            let id = event.target.getAttribute("contact-id")
             QueryChat(id, Nickname)
         })
     }
