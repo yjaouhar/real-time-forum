@@ -67,6 +67,8 @@ export const Dateformat = (timestamp) => {
 export const Users = (profile, Nickname) => {
     if (profile) {
         profile.addEventListener("click", (event) => {
+            // document.getElementById("cancel").classList = "visibility_off"
+            // document.querySelector("#contact").style.display="block"
             let id = event.target.getAttribute("contact-id")
             QueryChat(id, Nickname)
         })

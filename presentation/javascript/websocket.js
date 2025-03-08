@@ -29,10 +29,10 @@ export function connectWebSocket() {
         }else if (receivedData.type === "new_contact") {
             console.log("new contact");
             
-            let aside = document.querySelector("aside")
-            console.log(aside);
+            // let aside = document.querySelector("aside")
+            // console.log(aside);
             
-            aside.textContent = ""
+            // aside.textContent = ""
             QueryContact()
 
         }else {

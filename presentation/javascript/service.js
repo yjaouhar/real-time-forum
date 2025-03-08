@@ -1,4 +1,4 @@
-import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage } from "./pages.js"
+import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage ,CategoryPost } from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
 import { pagenation, Dateformat, debounce, LoadCaht } from "./utils.js"
@@ -53,6 +53,7 @@ export function HomeListener(data) {
 
 const CatHandel = debounce((eve) => {
     eve.preventDefault();
+   
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -69,12 +70,10 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-
                 if (data.status === undefined) {
-                    console.log("===> status : ", data)
-                    HomeListener(data)
+                    CategoryPost(data)
                 } else {
-                    HomeListener()
+                    CategoryPost()
                 }
                 window.removeEventListener("scroll", pagenation);
                 if (data.length == 10) {
@@ -247,6 +246,8 @@ const Menu = ()=>{
 
 
 export const handelcontact = () => {///cancel contact
+  
+    
     let cancel = document.querySelector("#cancel")
     if (cancel.classList == "visibility_off") {
         let contact = document.querySelector("#contact")
