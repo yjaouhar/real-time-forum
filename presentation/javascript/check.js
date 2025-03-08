@@ -1,6 +1,8 @@
 import { showError } from "./errore.js"
 import { handle } from "./login-register.js"
 import { HomeHandeler } from "./Homehandler.js"
+import { Error } from "./err.js"
+
 import { sendLogin, closee } from "./websocket.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

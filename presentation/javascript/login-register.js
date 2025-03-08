@@ -1,10 +1,10 @@
 import { Regester, Login } from "./pages.js"
 import { showError } from "./errore.js"
-import { LogoutHandel } from "./service.js"
+import { Error } from "./err.js"
 import {  regest ,  connectWebSocket,closee} from "./websocket.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts, validateNickname } from "./check.js"
 document.addEventListener("DOMContentLoaded", Checkstuts)
-console.log(window.location.href); // Affiche URL complète
+   
 
 
 export function handle() {
