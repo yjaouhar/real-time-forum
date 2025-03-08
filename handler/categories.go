@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
@@ -10,12 +9,13 @@ import (
 	"real-time-forum/utils"
 )
 
-var (
-	sr    = 0
-	count = 0
-)
+var sr = 0
 
 func Categore(w http.ResponseWriter, r *http.Request) {
+	Check := servisse.CheckErr(w, r, "/categories", "POST")
+	if !Check {
+		return
+	}
 	var err error
 	var post []utils.Postes
 	_, err = servisse.IsHaveToken(r)
@@ -30,37 +30,34 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 	categories := []string{r.FormValue("categories")}
 	err = servisse.CategoriesValidator(categories)
 	if err != nil {
-		fmt.Println("error :", categories)
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": "400", "status":false,"finish": true ,"tocken":false}`))
+		w.Write([]byte(`{"error": "Bad request", "status":false , "StatusCode":400}`))
 		return
 	}
 
 	lastdata := r.FormValue("lastdata")
 	if lastdata == "true" {
-		
+
 		sr, err = db.Getlastid(categories[0])
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "note a categories valable","finish": true ,"status":false, "tocken":false}`))
+			w.Write([]byte(`{"finish": true ,"status":false}`))
 			return
 		}
 	}
 	if sr == -1 {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "data finsh", "status":false,"finish": true ,"tocken":false}`))
+		w.Write([]byte(`{ "status":false,"finish": true}`))
 		return
 	}
 
 	post, sr, err = db.GetCategories(categories[0], sr, userid)
 	if err != nil {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "note a categories valable", "finish": true , "status":false, "tocken":false}`))
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Internal server error", "status":false, "StatusCode":500}`))
 		return
 	}
-	fmt.Println("==> categories len :", post)
 	if len(post) < 10 {
-	
 		sr = -1
 	}
 

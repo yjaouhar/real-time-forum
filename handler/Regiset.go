@@ -2,10 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
+	Error"real-time-forum/Error"
 	"real-time-forum/utils"
 )
 
@@ -25,7 +25,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		var info User
 		errore := json.NewDecoder(r.Body).Decode(&info)
 		if errore != nil {
-			fmt.Println(errore)
+			errNessage, statuscode := Error.Json(errore)
+			w.WriteHeader(statuscode)
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": errNessage , "StatusCode": statuscode})
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -50,16 +52,19 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		info.Password, err = utils.HashPassword(info.Password)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error"})
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error" , "StatusCode": http.StatusInternalServerError})
 			return
 		}
 		err = db.Insertuser(info.FirstName, info.LastName, info.Email, info.Gender, info.Age, info.Nickname, info.Password)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error"})
+			json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Internal server error", "StatusCode": http.StatusInternalServerError})
 			return
 		}
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": ""})
+	}else {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]interface{}{"success": false, "message": "Method not allowed", "StatusCode": http.StatusMethodNotAllowed})
 	}
 }

@@ -68,7 +68,6 @@ export function validateNickname(name) {
 }
 
 async function Checkstuts(event) {
-
     fetch('/stuts', {
         method: 'GET',
         headers: {
@@ -82,7 +81,7 @@ async function Checkstuts(event) {
                 console.log(result.status);
                 handle()
                 closee()
-            } else {
+            }else {
                 let head = document.querySelector("title")
                 head.setAttribute("class", result.name)
                 HomeHandeler()
@@ -93,8 +92,6 @@ async function Checkstuts(event) {
         .catch((error) => {
             console.error("Error:", error);
         });
-
-    // Delay l'appel handle jusqu'à ce que l'élément soit disponible dans DOM
 
 
 

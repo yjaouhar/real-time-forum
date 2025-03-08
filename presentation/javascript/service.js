@@ -1,6 +1,7 @@
 import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage ,CategoryPost } from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
+import {Error} from "./err.js"
 import { pagenation, Dateformat, debounce, LoadCaht } from "./utils.js"
 import { HomeHandeler } from "./Homehandler.js"
 
@@ -72,8 +73,10 @@ const CatHandel = debounce((eve) => {
             .then(data => {
                 if (data.status === undefined) {
                     CategoryPost(data)
-                } else {
-                    CategoryPost()
+                }else if (data.StatusCode) {
+                    Error(data.StatusCode , data.error)
+                }else if (data.tocken == false) {
+                    handle()
                 }
                 window.removeEventListener("scroll", pagenation);
                 if (data.length == 10) {
@@ -95,9 +98,10 @@ const CatHandel = debounce((eve) => {
                     .then(response => response.json())
                     .then(data => {
                         if (!data.status && data.finish) {
-                            console.log("vvv", data);
                             window.removeEventListener("scroll", scrollHandel)
-                        } else {
+                        }else if (data.StatusCode) {
+                            Error(data.StatusCode , data.error)
+                        }else {
                             MoreData(data);
                             let reactionLike = document.querySelectorAll("#like")
                             reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
@@ -366,7 +370,9 @@ function CommentEvent(event) {//////comment
                 if (data) {
                     if (data.token == false) {
                         Checkstuts()
-                    } else {
+                    }else if (data.StatusCode) {
+                        Error(data.StatusCode , data.error)
+                    }else {
                         data.forEach((el) => {
                             let commentDiv = document.createElement("div");
                             commentDiv.classList.add("comment-content");

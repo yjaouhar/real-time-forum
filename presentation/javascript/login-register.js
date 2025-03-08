@@ -4,8 +4,7 @@ import { Error } from "./err.js"
 import {  regest ,  connectWebSocket,closee} from "./websocket.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts, validateNickname } from "./check.js"
 document.addEventListener("DOMContentLoaded", Checkstuts)
-   
-
+  
 
 export function handle() {
     Login()
