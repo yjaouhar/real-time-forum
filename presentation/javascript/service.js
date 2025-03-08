@@ -284,7 +284,7 @@ export const Catlist = () => {///cancel contact
 
 
 
-const send_comment = (event) => {/////send comment
+const send_comment = (event) => {
     let wrapper = event.target.closest(".input-wrapper");
     if (!wrapper) {
         console.error("Mochkil: Makaynch .input-wrapper");
@@ -307,7 +307,6 @@ const send_comment = (event) => {/////send comment
         return;
     }
 
-    console.log("da6l hna");
     fetch('/sendcomment', {
         method: 'POST',
         body: JSON.stringify({ content: content, post_id: post_id }),
@@ -333,16 +332,12 @@ const send_comment = (event) => {/////send comment
                     let simulatedEvent = new Event('click', { bubbles: true });
                     commentDiv.dispatchEvent(simulatedEvent);
 
-                    // CommentEvent(simulatedEvent); // Jarrab t7aydo w chouf wach kaykhddm
                 }
-            } else if (data.status == false && data.tocken == false) {
-                console.log("mochkil f tocken");
-                Checkstuts()
-            } else {
-                console.log("mochkil");
-                showError(data.error);
+            } else if (data.tocken == false) {
+                handle()
+            } else if (data.StatusCode) {
+                Error(data.StatusCode, data.error)
             }
-            console.log(data.tocken);
 
         })
         .catch(error => {
@@ -352,16 +347,10 @@ const send_comment = (event) => {/////send comment
 
 
 
-function CommentEvent(event) {//////comment
-
-
-    console.log(event.target);
+function CommentEvent(event) {
 
     let post_id = event.target.getAttribute("posteid");
     let postDiv = document.querySelector(`[postid="${post_id}"]`);
-
-    console.log(event.target.getAttribute("class"));
-
     if (event.target.getAttribute("class") == "of") {
 
         fetch("/getcomment", {
@@ -383,23 +372,23 @@ function CommentEvent(event) {//////comment
 
                             let userDiv = document.createElement("div");
                             userDiv.classList.add("user-name");
-                            userDiv.textContent = el.Username; // Changeha b user dynamiquement
+                            userDiv.textContent = el.Username;
 
                             let commentP = document.createElement("p");
                             commentP.classList.add("comment-text");
-                            commentP.textContent = el.Content; // Changeha b data dynamiquement
+                            commentP.textContent = el.Content;
 
 
                             let actionsDiv = document.createElement("div");
                             actionsDiv.classList.add("comment-actions");
                             actionsDiv.innerHTML = `
-                         <div class="like-button" data-status="of">
-                  <span id="like" data-type="comment" data-status="of" data-id = ${el.ID}  class="material-icons">thumb_up_off_alt</span> <b>${el.Like}</b>
-                   </div>
-                <div class="like-button" data-status="of">
-                  <span id="dislike" data-type="comment" data-status="of" data-id = ${el.ID} class="material-icons">thumb_down_off_alt</span>  <b>${el.DisLike}</b>
-                    </div>
-                        `
+                            <div class="like-button" data-status="of">
+                                 <span id="like" data-type="comment" data-status="of" data-id = ${el.ID}  class="material-icons">thumb_up_off_alt</span> <b>${el.Like}</b>
+                             </div>
+                             <div class="like-button" data-status="of">
+                                 <span id="dislike" data-type="comment" data-status="of" data-id = ${el.ID} class="material-icons">thumb_down_off_alt</span>  <b>${el.DisLike}</b>
+                             </div>
+                            `
                             if (el.Have === "like") {
                                 let like = actionsDiv.querySelector("#like")
                                 like.setAttribute("data-status", "on")
@@ -413,15 +402,14 @@ function CommentEvent(event) {//////comment
                             let timeSpan = document.createElement("span");
                             timeSpan.classList.add("timestamp");
                             timeSpan.textContent = Dateformat(el.CreatedAt);
-                            // actionsDiv.appendChild(likeBtn);
-                            // actionsDiv.appendChild(dislikeBtn);
-                            actionsDiv.appendChild(timeSpan);
 
-                            commentDiv.appendChild(userDiv);
-                            commentDiv.appendChild(commentP);
-                            commentDiv.appendChild(actionsDiv);
+                            actionsDiv.append(timeSpan);
 
-                            postDiv.appendChild(commentDiv);
+                            commentDiv.append(userDiv);
+                            commentDiv.append(commentP);
+                            commentDiv.append(actionsDiv);
+
+                            postDiv.append(commentDiv);
 
                         })
                         event.target.classList.remove("of")
@@ -441,11 +429,7 @@ function CommentEvent(event) {//////comment
 
 
     } else {
-        let comment = postDiv.querySelectorAll(".comment-content")
-
-        comment.forEach((el) => {
-            el.remove()
-        })
+        Clear(".", "comment-content")
         event.target.classList.remove("on")
         event.target.classList.add("of")
     }
@@ -479,7 +463,14 @@ export const QueryChat = (id, nickname) => {
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            Chatemp(data, nickname, id)
+            if (data.StatusCode) {
+                Error(data.StatusCode, data.error)
+            } else if (data.token) {
+                handle()
+            } else {
+                Chatemp(data, nickname, id)
+            }
+
         })
         .catch(error => {
             console.log('Error:', error);
@@ -511,9 +502,15 @@ export const QueryContact = () => {
     })
         .then(response => response.json())
         .then(data => {
-            Contact(data)
-            let cancel = document.querySelector("#cancel")
-            cancel.addEventListener("click", handelcontact)
+            if (data.StatusCode) {
+                Error(data.StatusCode, data.error)
+            } else if (data.token) {
+                handle()
+            } else {
+                Contact(data)
+                let cancel = document.querySelector("#cancel")
+                cancel.addEventListener("click", handelcontact)
+            }
         })
         .catch(error => {
             console.error("Error:", error);

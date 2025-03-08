@@ -68,20 +68,13 @@ export function validateNickname(name) {
 }
 
 async function Checkstuts(event) {
-    fetch('/stuts', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
+    fetch('/stuts', { method: 'GET' })
         .then((response) => response.json())
         .then((result) => {
-
-            if (!result.status) {
-                console.log(result.status);
+            if (!result.token==false) {
                 handle()
                 closee()
-            }else {
+            } else {
                 let head = document.querySelector("title")
                 head.setAttribute("class", result.name)
                 HomeHandeler()

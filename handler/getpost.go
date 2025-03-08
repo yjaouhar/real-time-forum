@@ -14,32 +14,43 @@ var (
 )
 
 func Getpost(w http.ResponseWriter, r *http.Request) {
+	if !servisse.CheckErr(w, r, "/getpost", "POST") {
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
 	var err error
 	_, err = servisse.IsHaveToken(r)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(`{"error": "Unauthorized", "status":false, "tocken":false}`))
+		w.Write([]byte(`{"tocken":false}`))
 		return
 	}
+
 	token, _ := r.Cookie("SessionToken")
-
 	userid := db.GetId("sessionToken", token.Value)
-
-	w.Header().Set("Content-Type", "application/json")
+	if userid < 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		return
+	}
 	lastdata := r.FormValue("lastdata")
-
+	if lastdata == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		return
+	}
 	if lastdata == "true" {
 		str, err = db.Getlastid("")
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"error": "400", "status":false, "finish": true ,"tocken":false}`))
+			w.Write([]byte(`{"finish": true}`))
 			return
 		}
 		lastdata = "false"
 	}
 	if str == 0 {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "400", "status":false, "finish": true ,"tocken":false}`))
+		w.Write([]byte(`{"finish": true}`))
 		return
 	}
 
@@ -52,6 +63,7 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 	Postes, err := db.GetPostes(str, end, userid)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
 		return
 	}
 	if end-10 >= 0 {

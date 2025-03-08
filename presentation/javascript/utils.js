@@ -1,12 +1,18 @@
+import { handle } from "./login-register.js"
 import { MoreData } from "./pages.js"
 import { likeHandel, QuertMoreChat, QueryChat } from "./service.js"
+import { Error } from "./err.js"
 
 export const pagenation = debounce(() => {
     if ((document.body.offsetHeight - (window.innerHeight + window.scrollY)) < 500) {
-        fetch('/getpost')
+        fetch('/getpost', { method: 'POST' })
             .then(response => response.json())
             .then(data => {
-                if (data.finish) {
+                if (data.StatusCode) {
+                    Error(data.StatusCode, data.error)
+                } else if (data.token) {
+                    handle()
+                } else if (data.finish) {
                     window.removeEventListener("scroll", pagenation)
                 } else {
                     MoreData(data);
