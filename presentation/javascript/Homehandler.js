@@ -1,4 +1,5 @@
 import { HomeListener } from "./service.js";
+let DATA;
 function HomeHandeler() {
     const formData = new FormData();
     formData.append('lastdata', true)
@@ -6,6 +7,7 @@ function HomeHandeler() {
 
         .then(response => response.json())
         .then(data => {
+            DATA = data
             HomeListener(data)
         })
         .catch(error => {
@@ -14,4 +16,4 @@ function HomeHandeler() {
 }
 
 
-export { HomeHandeler }
+export { HomeHandeler, DATA }

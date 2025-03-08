@@ -75,4 +75,8 @@ export const Users = (profile, Nickname) => {
     }
 }
 
-export const Arr = []
+export const Clear = (type, input) => {
+    document.querySelectorAll(`${type}${input}`).forEach(el => {
+        el.remove()
+    })
+}

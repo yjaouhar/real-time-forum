@@ -1,10 +1,10 @@
-import { Dateformat, LoadCaht, Users, Arr } from "./utils.js"
+import { Dateformat, LoadCaht, Users } from "./utils.js"
 import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
 export const Homepage = (data) => {
-  
- 
+
+
     let title = document.querySelector("title")
     let name = title.getAttribute("class")
     document.body.innerHTML = `
@@ -134,12 +134,12 @@ export const Contact = (data) => {
     // let container = document.querySelector(".container")
     let aside = document.querySelector("aside")
     let contact;
-    let contacts ;
+    let contacts;
     if (document.getElementById("contact")) {
-        contacts=document.querySelector(".proficone")
+        contacts = document.querySelector(".proficone")
         contact = document.getElementById("contact")
     } else {
-        contacts=document.createElement("div")
+        contacts = document.createElement("div")
         contact = document.createElement("div")
         contact.setAttribute("class", "contact")
         contact.setAttribute("id", "contact")
@@ -314,11 +314,12 @@ export const MoreMessage = (data) => {
     }
 }
 
-export const CategoryPost= (data) =>{
+export const CategoryPost = (data) => {
     let post = document.querySelectorAll(".post")
     post.forEach(element => {
         element.remove()
     });
+
     MoreData(data)
 }
 
@@ -327,7 +328,7 @@ export const MoreData = (data) => {
     let post = document.querySelectorAll(".post")
     let arr = []
     post.forEach((ele) => arr.push(ele.getAttribute("postid")))
-    if (data) {
+    if (data && data.length > 0) {
         data.forEach(element => {
             if (!arr.includes(String(element.ID))) {
                 let post = document.createElement("div")

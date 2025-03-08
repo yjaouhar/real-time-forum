@@ -1,9 +1,10 @@
-import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage ,CategoryPost } from "./pages.js"
+import { Homepage, Login, MoreData, Contact, Chatemp, MoreMessage, CategoryPost } from "./pages.js"
 import { Checkstuts, validateCategories } from "./check.js"
 import { showError } from "./errore.js"
-import {Error} from "./err.js"
-import { pagenation, Dateformat, debounce, LoadCaht } from "./utils.js"
-import { HomeHandeler } from "./Homehandler.js"
+import { Error } from "./err.js"
+import { handle } from "./login-register.js"
+import { pagenation, Dateformat, debounce, LoadCaht, Clear } from "./utils.js"
+import { HomeHandeler, DATA } from "./Homehandler.js"
 
 
 export function Listener() {
@@ -33,7 +34,7 @@ export function HomeListener(data) {
     logout.addEventListener("click", LogoutHandel)
 
     let category = document.getElementById("categor")
-    category.addEventListener("click" , Catlist)
+    category.addEventListener("click", Catlist)
 
     window.addEventListener("scroll", pagenation)
     let comment = document.querySelectorAll("#comment")
@@ -44,7 +45,7 @@ export function HomeListener(data) {
     categories.forEach(elem => { elem.addEventListener("click", CatHandel) })
 
     let menu = document.querySelector(".menu")
-    menu.addEventListener("click" , Menu)
+    menu.addEventListener("click", Menu)
 
     let reactionLike = document.querySelectorAll("#like")
     reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
@@ -54,14 +55,15 @@ export function HomeListener(data) {
 
 const CatHandel = debounce((eve) => {
     eve.preventDefault();
-   
+
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
     });
     let categories = eve.target.value
     if (categories === "all") {
-        HomeHandeler()
+        Clear(".", "post")
+        MoreData(DATA)
         return
     }
     const formData = new FormData();
@@ -71,21 +73,20 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                if (data.status === undefined) {
-                    CategoryPost(data)
-                }else if (data.StatusCode) {
-                    Error(data.StatusCode , data.error)
-                }else if (data.tocken == false) {
+                if (data.StatusCode) {
+                    Error(data.StatusCode, data.error)
+                } else if (data.tocken == false) {
                     handle()
+                } else if (data.NoData) {
+                    Clear(".", "post")
+                    MoreData(data)
+                } else {
+                    CategoryPost(data)
                 }
                 window.removeEventListener("scroll", pagenation);
                 if (data.length == 10) {
                     window.addEventListener("scroll", scrollHandel)
-                } else {
-                    console.log("NOTE DATA VALABLE");
-
                 }
-
             })
             .catch(error => {
                 console.log(error);
@@ -97,11 +98,11 @@ const CatHandel = debounce((eve) => {
                 fetch('/categories', { method: "POST", body: formData })
                     .then(response => response.json())
                     .then(data => {
-                        if (!data.status && data.finish) {
+                        if (data.finish) {
                             window.removeEventListener("scroll", scrollHandel)
-                        }else if (data.StatusCode) {
-                            Error(data.StatusCode , data.error)
-                        }else {
+                        } else if (data.StatusCode) {
+                            Error(data.StatusCode, data.error)
+                        } else {
                             MoreData(data);
                             let reactionLike = document.querySelectorAll("#like")
                             reactionLike.forEach(elm => elm.addEventListener("click", likeHandel))
@@ -115,6 +116,8 @@ const CatHandel = debounce((eve) => {
             }
         }, 100)
 
+    } else {
+        Error(400, "Bad Request")
     }
 }, 100)
 
@@ -235,23 +238,23 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
         });
 }
 
-const Menu = ()=>{
+const Menu = () => {
     let cancel = document.querySelector(".menu")
     if (cancel.getAttribute("data-vis") == "visibility_off") {
-        let sid =  document.querySelector(".sidebar")
+        let sid = document.querySelector(".sidebar")
         sid.style.display = "none"
-        cancel.setAttribute ("data-vis","visibility")
+        cancel.setAttribute("data-vis", "visibility")
     } else {
-        let sid =  document.querySelector(".sidebar")
+        let sid = document.querySelector(".sidebar")
         sid.style.display = "block"
-        cancel.setAttribute ("data-vis",  "visibility_off")
+        cancel.setAttribute("data-vis", "visibility_off")
     }
 }
 
 
 export const handelcontact = () => {///cancel contact
-  
-    
+
+
     let cancel = document.querySelector("#cancel")
     if (cancel.classList == "visibility_off") {
         let contact = document.querySelector("#contact")
@@ -370,9 +373,9 @@ function CommentEvent(event) {//////comment
                 if (data) {
                     if (data.token == false) {
                         Checkstuts()
-                    }else if (data.StatusCode) {
-                        Error(data.StatusCode , data.error)
-                    }else {
+                    } else if (data.StatusCode) {
+                        Error(data.StatusCode, data.error)
+                    } else {
                         data.forEach((el) => {
                             let commentDiv = document.createElement("div");
                             commentDiv.classList.add("comment-content");

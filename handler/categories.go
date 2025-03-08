@@ -12,8 +12,8 @@ import (
 var sr = 0
 
 func Categore(w http.ResponseWriter, r *http.Request) {
-	Check := servisse.CheckErr(w, r, "/categories", "POST")
-	if !Check {
+
+	if !servisse.CheckErr(w, r, "/categories", "POST") {
 		return
 	}
 	var err error
@@ -21,7 +21,7 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 	_, err = servisse.IsHaveToken(r)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(`{"error": "401", "finish": true,"status":false, "tocken":false}`))
+		w.Write([]byte(`{"tocken":false}`))
 		return
 	}
 
@@ -31,30 +31,29 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 	err = servisse.CategoriesValidator(categories)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": "Bad request", "status":false , "StatusCode":400}`))
+		w.Write([]byte(`{"error": "Bad request", "StatusCode":400}`))
 		return
 	}
 
 	lastdata := r.FormValue("lastdata")
 	if lastdata == "true" {
-
 		sr, err = db.Getlastid(categories[0])
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"finish": true ,"status":false}`))
+			w.Write([]byte(`{"NoData": true }`))
 			return
 		}
 	}
 	if sr == -1 {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{ "status":false,"finish": true}`))
+		w.Write([]byte(`{"finish": true}`))
 		return
 	}
 
 	post, sr, err = db.GetCategories(categories[0], sr, userid)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(`{"error": "Internal server error", "status":false, "StatusCode":500}`))
+		w.Write([]byte(`{"error": "Internal server error", "StatusCode":500}`))
 		return
 	}
 	if len(post) < 10 {
