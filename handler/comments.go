@@ -36,11 +36,16 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(idpost.ID)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest) // 422
+		w.WriteHeader(http.StatusBadRequest) 
 		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad request", "StatusCode": 400})
 		return
 	}
-
+	post_id := db.SelectPostid(id)
+	if !post_id {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		return
+	}
 	token, _ := r.Cookie("SessionToken")
 	userid := db.GetId("sessionToken", token.Value)
 	allcoments, err := db.SelectComments(id, userid)
@@ -80,8 +85,8 @@ func Sendcomment(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
 		return
 	}
-	err = db.SelectPostid(postid)
-	if err != nil {
+	post_id := db.SelectPostid(postid)
+	if !post_id {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
 		return

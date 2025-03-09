@@ -28,11 +28,7 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 
 	token, _ := r.Cookie("SessionToken")
 	userid := db.GetId("sessionToken", token.Value)
-	if userid < 1 {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
-		return
-	}
+	
 	lastdata := r.FormValue("lastdata")
 	if lastdata == "" {
 		w.WriteHeader(http.StatusBadRequest)

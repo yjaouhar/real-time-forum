@@ -1,5 +1,6 @@
 import { Dateformat, Users } from "./utils.js";
 import { QueryContact } from "./service.js";
+import { Error } from "./err.js";
 
 
 let socket;
@@ -14,7 +15,6 @@ export function connectWebSocket() {
     socket.onmessage = (event) => {
         let receivedData = JSON.parse(event.data);
         if (receivedData.type === "user_status") {
-            
             const id = receivedData.id
             const status = receivedData.status
             let prof = document.querySelector(`[contact-id="${id}"]`)
@@ -26,48 +26,54 @@ export function connectWebSocket() {
                 }
             }
 
-        }else if (receivedData.type === "new_contact") {
+        } else if (receivedData.type === "new_contact") {
             console.log("new contact");
-            
+
             QueryContact()
 
-        }else {
+        } else {
             let contact = document.querySelector("#contact")
             let user = contact.querySelector(`[contact-id="${receivedData.Id}"]`)
             contact.prepend(user)
             Users(user, receivedData.username)
             let chatBox = document.querySelector(".chat-messages");
-            
-            if (chatBox != null){
-            if (chatBox.getAttribute("data-name") === receivedData.username) {
 
-                let messageElement = document.createElement("div");
-                messageElement.className = "message";
-                let messageSender = document.createElement("div");
-                messageSender.className = "message-sender";
-                messageSender.innerHTML = ` <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
+            if (chatBox != null) {
+                if (chatBox.getAttribute("data-name") === receivedData.username) {
+
+                    let messageElement = document.createElement("div");
+                    messageElement.className = "message";
+                    let messageSender = document.createElement("div");
+                    messageSender.className = "message-sender";
+                    messageSender.innerHTML = ` <small><span class="material-icons" style="margin-right: 10px ;font-size: small;">account_circle</span></small>
             <small> ${receivedData.username}</small>
             <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`;
-                messageSender.style.display = "flex"
-                let messageText = document.createElement("p");
-                messageText.className = "message-text";
-                messageText.textContent = receivedData.text;
+                    messageSender.style.display = "flex"
+                    let messageText = document.createElement("p");
+                    messageText.className = "message-text";
+                    messageText.textContent = receivedData.text;
 
-                messageElement.append(messageSender);
-                messageElement.append(messageText);
-                if (chatBox) {
-                    chatBox.prepend(messageElement);
+                    messageElement.append(messageSender);
+                    messageElement.append(messageText);
+                    if (chatBox) {
+                        chatBox.prepend(messageElement);
+                    }
+                } else {
+                    alert(`« ${receivedData.username} »  send a message `)
                 }
             } else {
                 alert(`« ${receivedData.username} »  send a message `)
             }
-        }else{
-            alert(`« ${receivedData.username} »  send a message `) 
-        }
         }
 
 
     };
+
+    socket.onerror = (error) => {
+        // Error(500, error)
+        console.log("====>", error);
+
+    }
 
 
 }
@@ -89,12 +95,12 @@ export function sendLogin() {
 }
 export function regest() {
     connectWebSocket();
-    
+
     let msgObject = {
         token: document.cookie.slice(13),
         username: "",
         message: "",
-        regester : "true",
+        regester: "true",
     };
 
     if (socket.readyState === WebSocket.OPEN) {
@@ -115,7 +121,7 @@ export function closee() {
 
 export function sendMessage(event) {
     let id = event.target.getAttribute("data-id");
-    
+
     let name = event.target.id;
     let contact = document.querySelector("#contact")
     let user = contact.querySelector(`[contact-id="${id}"]`)

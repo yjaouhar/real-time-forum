@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	db "real-time-forum/Database/cration"
@@ -9,40 +9,40 @@ import (
 )
 
 func Post(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		_, ishave := servisse.IsHaveToken(r)
-		if ishave != nil {
-			fmt.Println("token not found POST")
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(`{"error": "401", "status":false , "tocken":false}`))
-			return
-		}
-		title := r.FormValue("title")
-		content := r.FormValue("content")
-		categories := r.Form["categories"]
-		if len(categories) == 0 || title == "" || content == "" {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(`{"error": "400", "status":false ,"tocken":true}`))
-			return
-		}
-		err := servisse.CategoriesValidator(categories)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(`{"error": "400", "status":false ,"tocken":true}`))
-			return
-		}
-		tocken, _ := r.Cookie("SessionToken")
-		user_id := db.GetId("sessionToken", tocken.Value)
-		errore := db.InsertPostes(user_id, title, content, categories)
-
-		if errore != nil {
-			fmt.Println("===> er : ", errore)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"error": "500", "status":false ,"tocken":true}`))
-			return
-		}
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "200", "status":true ,"tocken":true}`))
-
+	if !servisse.CheckErr(w, r, "/pubpost", "POST") {
+		return
 	}
+	_, ishave := servisse.IsHaveToken(r)
+	if ishave != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"tocken":false}`))
+		return
+	}
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	categories := r.Form["categories"]
+
+	if len(categories) == 0 || title == "" || content == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{"filldata": "false"})
+		return
+	}
+	err := servisse.CategoriesValidator(categories)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		return
+	}
+	tocken, _ := r.Cookie("SessionToken")
+	user_id := db.GetId("sessionToken", tocken.Value)
+	errore := db.InsertPostes(user_id, title, content, categories)
+
+	if errore != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal Server Error", "StatusCode": 500})
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{"secsses": "true"})
+
 }

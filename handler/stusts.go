@@ -13,7 +13,7 @@ func Stuts(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	name, ishave := servisse.IsHaveToken(r)
-	if ishave != nil || name != "" {
+	if ishave != nil || name == "" {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(`{"token":false}`))
 		return

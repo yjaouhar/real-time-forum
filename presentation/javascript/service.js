@@ -73,6 +73,7 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
+
                 if (data.StatusCode) {
                     Error(data.StatusCode, data.error)
                 } else if (data.tocken == false) {
@@ -143,6 +144,9 @@ export const likeHandel = (event) => {
         .then(data => {
             if (data.tocken == false) {
                 Checkstuts()
+            } else if (data.StatusCode) {
+                Error(data.StatusCode, data.error)
+
             } else {
 
                 let element
@@ -206,8 +210,9 @@ export const handelpost = (event) => {
 export const submitpost = (ev) => {/////////////////formulaire dyal create post
     ev.preventDefault();
     let title = ev.target.title.value
-    let post = ev.target.content.value
-    if (title === "" || post === "") {
+    let post = ev.target.content.value.replaceAll("\n", "")
+
+    if (title === "" || post.trim() === "") {
         showError("Fill in all the fields")
         return
     }
@@ -218,18 +223,17 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
     })
         .then(response => response.json())
         .then(data => {
-            if (data.status) {
-                HomeHandeler()
+            if (data.StatusCode) {
+                Error(data.StatusCode, data.error)
+            } else if (data.tocken == false) {
+                Checkstuts()
+                return
+            } else if (data.filldata) {
+                showError("Fill all the field")
                 return
             } else {
-                console.log(data.tocken)
-                if (data.tocken == false) {
-                    Checkstuts()
-                    return
-                } else {
-                    showError(data.error)
-                    return
-                }
+                HomeHandeler()
+                return
             }
         })
         .catch(error => {

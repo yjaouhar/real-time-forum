@@ -23,15 +23,19 @@ type Message struct {
 	Token    string `json:"token"`
 	Nickname string `json:"username"`
 	Message  string `json:"text"`
-	Regester  string `json:"regester"`
+	Regester string `json:"regester"`
 	Id       int
 }
 
 func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("da5l: websocket")
+	if r.Method != "GET" {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println("Error upgrading:", err)
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	defer ws.Close()
@@ -47,7 +51,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
-		// fmt.Println("Waiting for message")
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -58,12 +61,11 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			broadcastUserStatus("user_status", strconv.Itoa(id), "offline")
 			break
 		}
-		// fmt.Println("Received message:", msg)
 		if msg.Regester == "true" {
 			fmt.Println("regester")
-            broadcastUserStatus("new_contact", "", "offline")
+			broadcastUserStatus("new_contact", "", "offline")
 			continue
-        }
+		}
 
 		username := db.GetUser(db.GetId("sessionToken", msg.Token))
 

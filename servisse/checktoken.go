@@ -13,12 +13,6 @@ func IsHaveToken(r *http.Request) (string, error) {
 		return "", errors.New("Unauthorized")
 	}
 	id := db.GetId("sessionToken", sesiontoken.Value)
-	if id < 1 {
-		return "", errors.New("BadRequest")
-	}
 	name := db.GetUser(id)
-	if name == "" {
-		return "", errors.New("BadRequest")
-	}
 	return name, nil
 }

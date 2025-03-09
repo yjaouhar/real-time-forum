@@ -1,10 +1,10 @@
 import { Regester, Login } from "./pages.js"
 import { showError } from "./errore.js"
 import { Error } from "./err.js"
-import {  regest ,  connectWebSocket,closee} from "./websocket.js"
+import { regest, connectWebSocket, closee } from "./websocket.js"
 import { Checkemail, validateAge, validateGender, validateName, validatePassword, Checkstuts, validateNickname } from "./check.js"
 document.addEventListener("DOMContentLoaded", Checkstuts)
-  
+
 
 export function handle() {
     Login()
@@ -25,7 +25,9 @@ export function handle() {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
+                if (data.StatusCode) {
+                    Error(data.StatusCode, data.error)
+                } else if (data.status) {
                     Checkstuts(event)
                 } else {
                     showError(data.error)

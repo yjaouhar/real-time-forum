@@ -1,60 +1,67 @@
 package handler
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 
 	db "real-time-forum/Database/cration"
+	"real-time-forum/servisse"
 
 	"real-time-forum/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		w.Header().Set("Content-Type", "application/json")
-		var boo bool
-		var err error
-		typ := ""
-		var hashedPassword string
-		if strings.Contains(email, "@") {
-			boo = db.CheckInfo(email, "email")
-			typ = "email"
-		} else {
-			boo = db.CheckInfo(email, "nikname")
-			typ = "nikname"
-		}
+	if !servisse.CheckErr(w, r, "/login", "POST") {
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
 
-		if !boo {
-			hashedPassword, err = db.Getpasswor(typ, email)
-		}
+	var boo bool
+	var err error
+	typ := ""
+	var hashedPassword string
+	if strings.Contains(email, "@") {
+		boo = db.CheckInfo(email, "email")
+		typ = "email"
+	} else {
+		boo = db.CheckInfo(email, "nikname")
+		typ = "nikname"
+	}
 
-		if boo || err != nil || !utils.ComparePassAndHashedPass(hashedPassword, password) {
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(`{"error": "Invalid ` + typ + ` or password", "status":false}`))
-			return
-		}
-		SessionToken, erre := utils.GenerateSessionToken()
-		if erre != nil {
-			fmt.Println("err f sition")
-			return
-		}
-		err = db.Updatesession(typ, SessionToken, email) ////email mmkin ikon nikname mmkin ikon email
-		if err != nil {
-			fmt.Println("ERRORE", err)
-			return
-		}
+	if !boo {
+		hashedPassword, err = db.Getpasswor(typ, email)
+	}
 
-		http.SetCookie(w, &http.Cookie{
-			Name:  "SessionToken",
-			Value: SessionToken,
-			Path:  "/",
-		})
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"error": "Login successful", "status":true}`))
-		// fmt.Println("Email:", email, "Password:", password)
+	if boo || err != nil || !utils.ComparePassAndHashedPass(hashedPassword, password) {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"error": "Invalid ` + typ + ` or password", "status":false}`))
+		return
+	}
+	SessionToken, erre := utils.GenerateSessionToken()
+	if erre != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		return
 
 	}
+	err = db.Updatesession(typ, SessionToken, email)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "SessionToken",
+		Value:   SessionToken,
+		Expires: time.Now().Add(24 * time.Hour),
+		Path:    "/",
+	})
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"status":true}`))
+
 }

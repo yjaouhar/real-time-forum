@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -31,7 +32,7 @@ func Getpasswor(input string, typ string) (string, error) {
 }
 
 func Updatesession(typ string, tocken string, input string) error {
-	query := "UPDATE users SET sessionToken = $1 WHERE " + typ + " = $2"
+	query := "UPDATE users SET sessionToken = ? WHERE " + typ + " = ?"
 	_, err := DB.Exec(query, tocken, input)
 	if err != nil {
 		return err
@@ -102,6 +103,7 @@ var count int
 func GetCategories(category string, start int, userid int) ([]utils.Postes, int, error) {
 	end := 0
 	var postes []utils.Postes
+
 	quire := "SELECT post_id FROM categories WHERE category = ? AND id <= ? ORDER BY id DESC LIMIT 10"
 	rows, err := DB.Query(quire, strings.ToLower(category), start)
 	if err != nil {
@@ -135,6 +137,9 @@ func GetCategories(category string, start int, userid int) ([]utils.Postes, int,
 		end = id
 	}
 
+	if len(postes) == 0 {
+		return nil, 0, errors.New("empty data")
+	}
 	return postes, end, nil
 }
 
@@ -173,13 +178,14 @@ func SelectComments(postid int, userid int) ([]utils.CommentPost, error) {
 	return comments, nil
 }
 
-func SelectPostid(postid int) error {
-	query := "SELECT id FROM postes WHERE id = $1"
-	_, err := DB.Exec(query, postid)
+func SelectPostid(postid int) bool {
+	id := 0
+	query := "SELECT id FROM postes WHERE id = ?"
+	err := DB.QueryRow(query, postid).Scan(&id)
 	if err != nil {
-		return err
+		return false
 	}
-	return nil
+	return id >= 1
 }
 
 func Getlastid(cat string) (int, error) {
@@ -224,6 +230,19 @@ func GetReactionRow(userid int, postid int) (string, error) {
 		return "", err
 	}
 	return reaction, nil
+}
+
+func CheckContentid(contentid int, contentype string) bool {
+	var id int
+	quire := "SELECT id FROM postes WHERE content_id = ?"
+	if contentype == "comment" {
+		quire = "SELECT id FROM comments WHERE content_id = ?"
+	}
+	err := DB.QueryRow(quire, contentid).Scan(&id)
+	if err != nil {
+		return false
+	}
+	return id >= 1
 }
 
 func Liklength(sl []utils.Reaction, userid int) (int, int, string) {

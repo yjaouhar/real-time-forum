@@ -25,10 +25,8 @@ func Insertuser(first_name string, last_name string, email string, gender string
 
 func InsertPostes(user_id int, title string, content string, catygory []string) error {
 	created_at := time.Now().Format("2006-01-02 15:04:05")
-	fmt.Println(created_at)
 	info, err := DB.Prepare("INSERT INTO postes (user_id,title,content,created_at,categories) VALUES (?,?,?,?,?)")
 	if err != nil {
-		fmt.Println("==> E : ", err)
 		return err
 	}
 	_, err = info.Exec(user_id, title, content, created_at, strings.Join(catygory, " "))
@@ -123,7 +121,6 @@ func UpdateTocken(tocken string) error {
 	}
 	return nil
 }
-
 
 func InsertConnection(sender string, recever string) error {
 	info, err := DB.Prepare("INSERT INTO connection (user_1,user_2) VALUES (?,?)")
