@@ -1,6 +1,7 @@
 import { Dateformat, Users } from "./utils.js";
 import { QueryContact } from "./service.js";
 import { Error } from "./err.js";
+import { showError } from "./errore.js";
 
 
 let socket;
@@ -49,7 +50,7 @@ export function connectWebSocket() {
             <small> ${receivedData.username}</small>
             <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`;
                     messageSender.style.display = "flex"
-                    let messageText = document.createElement("p");
+                    let messageText = document.createElement("pre");
                     messageText.className = "message-text";
                     messageText.textContent = receivedData.text;
 
@@ -70,9 +71,7 @@ export function connectWebSocket() {
     };
 
     socket.onerror = (error) => {
-        // Error(500, error)
-        console.log("====>", error);
-
+        console.log(error);
     }
 
 
@@ -126,13 +125,23 @@ export function sendMessage(event) {
     let contact = document.querySelector("#contact")
     let user = contact.querySelector(`[contact-id="${id}"]`)
     contact.prepend(user)
-    console.log("?????? user :", user, "????? name:", name);
-
     Users(user, name)
     let token = document.cookie.slice(13);
     let messageInput = document.querySelector(".message-input");
-    let message = messageInput.value.trim().replaceAll("\n", "");
-    if (message !== "") {
+    let message = messageInput.value
+    let messagetest = messageInput.value.trim().replaceAll("\n", "");
+    if (messagetest === "") {
+        let err = document.querySelector(".messageError")
+        err.textContent="Message is empty, write something"
+        err.style.display="block"
+        return
+    }else if (message.length>1000){
+        let err = document.querySelector(".messageError")
+        err.textContent="Message is too long you have the right to 1000 character"
+        err.style.display="block"
+        return
+    }else { 
+        document.querySelector(".messageError").style.display="none"
         let msgObject = {
             token: token,
             username: name,
@@ -160,7 +169,7 @@ export function sendMessage(event) {
                                        <small> ${username}</small>
                                        <small style="margin-left: 30%;">${Dateformat(new Date())}</small>`
         messageSender.style.display = "flex"
-        let messageText = document.createElement("p");
+        let messageText = document.createElement("pre");
         messageText.className = "message-text";
         messageText.textContent = message;
         messageElement.append(messageSender);

@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: none;
 }
 
 body {
@@ -59,14 +60,15 @@ body {
 
 .sidebar,
 .contacts {
-    width: 320px;
+    width: 70px;
     max-height: 670px;
     background: white;
     border-radius: 16px;
     padding: 1.5rem;
+    padding-left: 8px;
     height: fit-content;
     position: sticky;
-    top: 85px;
+    top: 130px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     overflow-y: scroll;
     scrollbar-width: thin;
@@ -76,23 +78,31 @@ body {
 .main-content {
     flex: 1;
     padding: 0;
-    /* max-width: 800px; */
-    /* margin: 0 auto; */
+}
+
+.category-list {
+    position: fixed;
+    left: 8%;
+    top: 137px;
+
 }
 
 .category-list button {
     display: flex;
-    width: 100%;
+    width: 105%;
     padding: 0.75rem 1rem;
-    margin: 0.5rem 0;
-    border: 1px solid transparent;
+    margin: 0.6rem 0;
+    border: 1px solid #adadad;
     border-radius: 12px;
-    background: #f9fafb;
+    background: #eef0f1;
     text-align: left;
     cursor: pointer;
     transition: all 0.2s;
     font-weight: 500;
     color: #4b5563;
+    align-items: center;
+    justify-content: space-around;
+
 }
 
 .category-list button:hover {
@@ -185,12 +195,11 @@ body {
     display: block;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
-    padding: 0.75rem;
     border-radius: 12px;
     transition: all 0.2s;
     cursor: pointer;
     overflow-y: scroll;
-    max-height: 500px;
+    max-height: 440px;
     scrollbar-width: thin;
     scrollbar-color: #f4f6f8 rgb(255, 255, 255)
 }
@@ -201,18 +210,14 @@ body {
 
 #cancel {
     cursor: pointer;
-    height: 64px;
-    width: 64px;
-    margin-left: 35%;
-    /* margin-left: 96%; */
-    /* text-align: center; */
+    height: 50px;
+    width: 50px;
 }
 
 #categor {
     cursor: pointer;
-    height: 64px;
-    width: 64px;
-    margin-left: 35%;
+    height: 50px;
+    width: 50px;
 }
 
 #categor:hover {
@@ -227,7 +232,6 @@ body {
 
 #close {
     cursor: pointer;
-    /* height: 25px; */
     margin-left: 96%;
 }
 
@@ -254,7 +258,7 @@ h3 {
     line-height: 1.7;
 }
 
-/*-----------------------------------------------------------------*/
+
 .form-container {
     background: white;
     width: 100%;
@@ -345,7 +349,7 @@ h3 {
     background-color: #059669;
 }
 
-/*-----------------------------------------------------------------*/
+
 #register-container {
     display: flex;
     max-width: 1000px;
@@ -522,7 +526,7 @@ select {
     display: none;
 }
 
-/* ========================================================== */
+
 
 .input-wrapper {
     position: relative;
@@ -531,7 +535,6 @@ select {
 
 .comment-input {
     width: 100%;
-    /* background-color: red; */
     min-height: 40px;
     padding: 8px 12px;
     padding-right: 40px;
@@ -568,9 +571,9 @@ select {
 }
 
 
-/* ========================================================== */
 
-/* Container layout */
+
+
 #login-container {
     display: flex;
     max-width: 1000px;
@@ -602,7 +605,7 @@ select {
     line-height: 1.5;
 }
 
-/* Login form side styling */
+
 .login-form {
     padding: 40px;
     width: 60%;
@@ -615,7 +618,7 @@ select {
     text-align: center;
 }
 
-/* Form elements styling */
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -641,7 +644,7 @@ select {
     border-color: #4ade80;
 }
 
-/* Error message styling */
+
 #error-message {
     color: #dc2626;
     font-size: 14px;
@@ -649,14 +652,13 @@ select {
     min-height: 20px;
 }
 
-/* Button styling */
+
 #login-btn {
     width: 100%;
     padding: 12px;
     border: 1px solid #4ade80;
     background: white;
     color: rgb(34, 33, 33);
-    /* border: none; */
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
@@ -667,7 +669,6 @@ select {
     background: #22c55e;
 }
 
-/* Register link styling */
 .register-link {
     text-align: center;
     margin-top: 20px;
@@ -690,10 +691,6 @@ select {
     text-decoration: underline;
 }
 
-/* Responsive design */
-
-/* style coment  */
-
 label {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -711,66 +708,45 @@ label {
 }
 
 .comment-content .like-button {
-    /* background-color: red; */
     width: 14%;
 }
 
 .user-name {
     font-weight: bold;
-    /* خط غليظ */
     font-size: 14px;
-    /* حجم الخط */
     color: #333;
-    /* لون النص */
     margin-bottom: 8px;
-    /* مسافة تحت الاسم */
 }
 
 .comment-text {
     font-size: 14px;
-    /* حجم الخط */
     line-height: 1.6;
-    /* ارتفاع السطر */
     color: #555;
-    /* لون النص */
     margin-bottom: 12px;
-    /* مسافة تحت النص */
 }
 
 .comment-actions {
     display: flex;
-    /* عرض أفقي */
     align-items: center;
-    /* محاذاة وسط العناصر */
     gap: 12px;
-    /* مسافة بين العناصر */
 }
 
 .action-btn {
     background: none;
-    /* بدون خلفية */
     border: none;
-    /* بدون حدود */
     color: #007bff;
-    /* لون أزرق */
     cursor: pointer;
-    /* تغيير المؤشر عند التمرير */
     font-size: 14px;
-    /* حجم الخط */
 }
 
 .action-btn:hover {
     text-decoration: underline;
-    /* خط تحت النص عند التمرير */
 }
 
 .timestamp {
     font-size: 12px;
-    /* حجم صغير */
     color: #999;
-    /* لون رمادي */
     margin-left: auto;
-    /* يدفع النص للتراصف على اليمين */
 }
 
 
@@ -783,42 +759,6 @@ label {
 }
 
 
-
-/*  */
-
-
-
-/* #login-btn:hover {
-    background: #0984e3;
-    transform: translateY(-2px);
-}
-
-.register-link {
-    text-align: center;
-    color: #636e72;
-
-} */
-
-/* #c-a {
-    background-color: rgb(66, 183, 42);
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 5px;
-    border: 3px solid black;
-} */
-
-
-
-/* #c-a:hover {
-    background-color: rgb(30, 206, 68);
-} */
 
 #like {
     color: white;
@@ -863,11 +803,9 @@ label {
     align-items: center;
     height: 20px;
     width: 33%;
-    /* background-color: #bebfbe; */
     border-radius: 50px;
     padding: 8px 24px 8px 0px;
     border: none;
-    /* cursor: pointer; */
     transition: all 0.2s;
 }
 
@@ -893,8 +831,6 @@ label {
 }
 
 
-
-/* fgfgfgffffffffffffffffffffffffffffffffffffffffffffffffffffffffff */
 .input-wrapper {
     position: relative;
     display: flex;
@@ -963,9 +899,7 @@ label {
     min-height: 20px;
     text-align: center;
     position: relative;
-    /* Adjust this if necessary */
     top: 0;
-    /* Move it to the desired location */
 }
 
 .chat-container {
@@ -1010,7 +944,7 @@ label {
     margin: 5px 0;
     padding: 8px 12px;
     border-radius: 18px 18px 18px 0px;
-    width: 60%;
+    width: 70%;
     box-shadow: 0px 2px 10px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -1022,16 +956,17 @@ label {
 
 .chat-input {
     display: flex;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     border-top: 1px solid #ccc;
 }
 
-.chat-input input[type="text"] {
+.chat-input .message-input {
     flex: 1;
-    padding: 8px;
+    padding: 2px 15px;
     border: 1px solid #ccc;
     border-radius: 18px;
     outline: none;
+    scrollbar-width: none;
 }
 
 .chat-input button {
@@ -1050,13 +985,18 @@ label {
 
 .sendr {
     background: #baffc2;
-    margin-left: 40%;
+    margin-left: 28%;
     margin-top: 5px;
     margin-bottom: 5px;
     padding: 8px 12px;
     border-radius: 18px 18px 0px 18px;
-    width: 60%;
+    width: 70%;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-text {
+    white-space: pre-wrap;
+    word-break: break-word
 }
 
 hr {
@@ -1085,9 +1025,27 @@ small {
 .profile:hover {
     background: #00744d;
 }
-.hed{
+
+.hed {
     display: flex;
-        align-items: center;
+    align-items: center;
+}
+
+.contact-container {
+    max-height: 440px;
+    position: fixed;
+    left: 8%;
+    top: 140px;
+}
+
+@media (max-width: 1100px) {
+    .category-list {
+        left: 10%;
+    }
+
+    .contact-container {
+        left: 9%;
+    }
 }
 
 @media (max-width: 968px) {
@@ -1114,21 +1072,42 @@ small {
         display: block;
     }
 
-    .sidebar {
-        display: none;
-        width: 60%;
-        height: 100%;
-        position: fixed;
-        top: 98px;
-        left: 0;
-        z-index: 1;
+    h3 {
+        margin: 0;
+
     }
 
+    #categor {
+        margin-top: 6px;
+    }
 
+    .sidebar {
+        display: none;
+        width: 7%;
+        height: 92px;
+        position: fixed;
+        top: 115px;
+        left: 0;
+        z-index: 1;
+        padding-bottom: 0;
+        padding-top: 0;
+        overflow-y: hidden;
+    }
 
-    /* .container {
-        flex-direction: column;
-    } */
+    #cancel,
+    #categor {
+        height: 35px;
+        width: 35px;
+    }
+
+    svg {
+        height: 35px;
+        width: 35px;
+    }
+
+    .main-content {
+        margin-left: 40px;
+    }
     #login-container {
         flex-direction: column;
         margin: 20px;
@@ -1159,7 +1138,7 @@ small {
     }
 
     .main-content {
-        margin: auto;
+        margin-left: 45px;
     }
 
     .create-post button {
@@ -1167,14 +1146,46 @@ small {
     }
 
     .sidebar {
-        width: 80%;
-        top: 210px;
+        width: 11%;
+        top: 190px;
+        height: 90px;
+
+    }
+
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .contact-container {
+        top: 200px;
+        left: 15%;
+    }
+
+    .category-list {
+        top: 200px;
+        left: 15%;
+    }
+
+    .profile {
+        border: 1px solid #00000030;
+        padding: 2px 3px 0px 0px;
+        margin: 5px;
+        font-size: x-small;
+    }
+
+    .category-list button {
+        width: 100%;
+        padding: 0.5rem 0.5rem;
+        margin: 0.6rem 0;
     }
 
     .chat-container {
-        top: 227px;
-        width: 320px;
-        right: 10%;
+        top: 172px;
+        width: 100%;
+        height: 64%;
+        right: 0;
+        z-index: 1;
     }
 
     .logo {
@@ -1187,7 +1198,16 @@ small {
     }
 }
 
-/* style for error */
+@media (max-width: 420px) {
+    .container {
+        padding: 24px 0;
+    }
+
+    .post {
+        width: 80%;
+    }
+}
+
 
 .error-container {
     display: flex;
@@ -1230,5 +1250,3 @@ small {
     background-color: #218838;
 }
 
-
-/*  */

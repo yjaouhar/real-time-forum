@@ -9,7 +9,9 @@ function HomeHandeler() {
 
         .then(response => response.json())
         .then(data => {
-            if (data.StatusCode) {
+            if(data.request) {
+                alert(data.request)
+            }else if (data.StatusCode) {
                 Error(data.StatusCode, data.error)
             } else if (data.token) {
                 handle()

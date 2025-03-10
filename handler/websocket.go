@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	db "real-time-forum/Database/cration"
+	"real-time-forum/servisse"
 	"real-time-forum/utils"
 
 	"github.com/gorilla/websocket"
@@ -111,15 +112,26 @@ func SendMessage(msg Message, username string) {
 }
 
 func QueryMsg(w http.ResponseWriter, r *http.Request) {
+	if !servisse.CheckErr(w, r, "/querychat", "POST") {
+		return
+	}
 	sr := 1
 	nickname := r.FormValue("nickname")
 	token := r.FormValue("token")
 	first := r.FormValue("first")
-	if db.HaveToken(token) && sr != 0 {
+	_, err := servisse.IsHaveToken(r)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"tocken":false}`))
+		return
+	}
+	if sr != 0 {
 		user := db.GetUser(db.GetId("sessionToken", token))
 		messge, err := db.QueryMessage(user, nickname, first)
 		if err != nil {
-			fmt.Println("Error wer query message : ", err)
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"NoData":true}`))
+			return
 		}
 		if len(messge) < 10 {
 			sr = 0

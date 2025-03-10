@@ -8,7 +8,9 @@ export const pagenation = debounce(() => {
         fetch('/getpost', { method: 'POST' })
             .then(response => response.json())
             .then(data => {
-                if (data.StatusCode) {
+                if(data.request) {
+                    alert(data.request)
+                }else if (data.StatusCode) {
                     Error(data.StatusCode, data.error)
                 } else if (data.token) {
                     handle()
@@ -50,13 +52,9 @@ export function debounce(func, wait = 300) {
 
 
 export const Dateformat = (timestamp) => {
-
-
     let pastDate = new Date(timestamp);
-    // pastDate.setHours(pastDate.getHours())
-    console.log("Date : ", typeof Date.now()); // 2025-02-06 17:41:25
     let now = new Date();
-    let seconds = Math.floor((now - pastDate) / 1000); // Correction: now - pastDate
+    let seconds = Math.floor((now - pastDate) / 1000); 
 
     if (seconds < 60) {
         return `${seconds} s`;
@@ -73,8 +71,6 @@ export const Dateformat = (timestamp) => {
 export const Users = (profile, Nickname) => {
     if (profile) {
         profile.addEventListener("click", (event) => {
-            // document.getElementById("cancel").classList = "visibility_off"
-            // document.querySelector("#contact").style.display="block"
             let id = event.target.getAttribute("contact-id")
             QueryChat(id, Nickname)
         })

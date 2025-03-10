@@ -71,7 +71,9 @@ async function Checkstuts(event) {
     fetch('/stuts', { method: 'GET' })
         .then((response) => response.json())
         .then((result) => {
-            if (!result.token) {
+            if(result.request) {
+                alert(result.request)
+            }else if (!result.token) {
                 handle()
                 closee()
             } else {

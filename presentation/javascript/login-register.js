@@ -25,7 +25,9 @@ export function handle() {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.StatusCode) {
+                if(data.request) {
+                    alert(data.request)
+                }else if (data.StatusCode) {
                     Error(data.StatusCode, data.error)
                 } else if (data.status) {
                     Checkstuts(event)
@@ -70,7 +72,9 @@ export function handle() {
             })
                 .then((response) => response.json())
                 .then((result) => {
-                    if (result.success) {
+                    if(result.request) {
+                        alert(result.request)
+                    }else if (result.success) {
                         showError(result.message)
                     } else {
                         regest()
