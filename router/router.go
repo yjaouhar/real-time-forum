@@ -3,6 +3,8 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"sync"
+	"time"
 
 	"real-time-forum/handler"
 )
@@ -36,4 +38,26 @@ func StartServer() error {
 	router := Router()
 	fmt.Println("✅ Server running on: http://localhost:8080")
 	return http.ListenAndServe(":8080", router)
+}
+
+var Time sync.Map
+
+func LimitRequest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ip := r.RemoteAddr
+		now := time.Now()
+
+		lastRequest, exists := Time.Load(ip)
+
+		if exists {
+			if now.Sub(lastRequest.(time.Time)) < 500 * time.Millisecond {
+				http.Error(w, "Too many requests", http.StatusTooManyRequests)
+				return
+			}
+		}
+
+		Time.Store(ip, now)
+
+		next.ServeHTTP(w, r)
+	})
 }
