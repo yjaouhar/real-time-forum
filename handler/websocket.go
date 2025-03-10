@@ -36,7 +36,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		fmt.Println(err)
 		return
 	}
 	defer ws.Close()
@@ -84,7 +84,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("Error inserting message in DB:", err)
 			}
-
 			msg.Token = ""
 			SendMessage(msg, username)
 		}
