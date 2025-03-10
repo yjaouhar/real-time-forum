@@ -8,9 +8,9 @@ export const pagenation = debounce(() => {
         fetch('/getpost', { method: 'POST' })
             .then(response => response.json())
             .then(data => {
-                if(data.request) {
+                if (data.request) {
                     alert(data.request)
-                }else if (data.StatusCode) {
+                } else if (data.StatusCode) {
                     Error(data.StatusCode, data.error)
                 } else if (data.token) {
                     handle()
@@ -25,7 +25,8 @@ export const pagenation = debounce(() => {
                 }
             })
             .catch(error => {
-                console.log('Error:', error);
+                console.error(error);
+
             });
     }
 }, 300)
@@ -54,7 +55,7 @@ export function debounce(func, wait = 300) {
 export const Dateformat = (timestamp) => {
     let pastDate = new Date(timestamp);
     let now = new Date();
-    let seconds = Math.floor((now - pastDate) / 1000); 
+    let seconds = Math.floor((now - pastDate) / 1000);
 
     if (seconds < 60) {
         return `${seconds} s`;

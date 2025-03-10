@@ -33,10 +33,10 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
-
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("WebSocket upgrade failed: %v\n", err)
+		http.Error(w, "Failed to upgrade to WebSocket", http.StatusInternalServerError)
 		return
 	}
 	defer ws.Close()
@@ -63,7 +63,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		if msg.Regester == "true" {
-			fmt.Println("regester")
 			broadcastUserStatus("new_contact", "", "offline")
 			continue
 		}
@@ -75,7 +74,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
 		}
 		if msg.Nickname == "" && msg.Message == "" {
-			fmt.Println("no message")
 			continue
 		}
 		if !db.CheckInfo(msg.Nickname, "nikname") && db.HaveToken(msg.Token) {
@@ -83,6 +81,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			err = db.InsertMessage(username, msg.Nickname, msg.Message)
 			if err != nil {
 				fmt.Println("Error inserting message in DB:", err)
+				break
 			}
 			msg.Token = ""
 			SendMessage(msg, username)
@@ -141,7 +140,6 @@ func QueryMsg(w http.ResponseWriter, r *http.Request) {
 }
 
 func broadcastUserStatus(typ, id, status string) {
-	fmt.Println("Broadcasting user status")
 	message := map[string]string{
 		"type":   typ,
 		"id":     id,

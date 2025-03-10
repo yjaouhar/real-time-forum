@@ -23,7 +23,7 @@ function HomeHandeler() {
             }
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 }
 

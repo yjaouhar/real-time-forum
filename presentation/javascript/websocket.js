@@ -132,16 +132,16 @@ export function sendMessage(event) {
     let messagetest = messageInput.value.trim().replaceAll("\n", "");
     if (messagetest === "") {
         let err = document.querySelector(".messageError")
-        err.textContent="Message is empty, write something"
-        err.style.display="block"
+        err.textContent = "Message is empty, write something"
+        err.style.display = "block"
         return
-    }else if (message.length>1000){
+    } else if (message.length > 1000) {
         let err = document.querySelector(".messageError")
-        err.textContent="Message is too long you have the right to 1000 character"
-        err.style.display="block"
+        err.textContent = "Message is too long you have the right to 1000 character"
+        err.style.display = "block"
         return
-    }else { 
-        document.querySelector(".messageError").style.display="none"
+    } else {
+        document.querySelector(".messageError").style.display = "none"
         let msgObject = {
             token: token,
             username: name,

@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 
@@ -14,7 +13,6 @@ func CheckInfo(info string, input string) bool { ////hna kanoxofo wax email ola 
 	quire := "SELECT COUNT(*) FROM users WHERE " + input + " = ?"
 	err := DB.QueryRow(quire, info).Scan(&inter)
 	if err != nil {
-		fmt.Println(err)
 		return false
 	}
 
@@ -165,7 +163,6 @@ func SelectComments(postid int, userid int) ([]utils.CommentPost, error) {
 		var comment utils.CommentPost
 		err := rows.Scan(&comment.ID, &comment.PostID, &comment.UserID, &comment.Content, &comment.CreatedAt)
 		if err != nil {
-			fmt.Println("moxkil f scan")
 			return nil, err
 		}
 

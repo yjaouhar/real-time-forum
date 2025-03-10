@@ -73,9 +73,9 @@ const CatHandel = debounce((eve) => {
         fetch("/categories", { method: "POST", body: formData })
             .then(response => response.json())
             .then(data => {
-                if(data.request) {
+                if (data.request) {
                     alert(data.request)
-                }else if (data.StatusCode) {
+                } else if (data.StatusCode) {
                     Error(data.StatusCode, data.error)
                 } else if (data.tocken == false) {
                     handle()
@@ -91,7 +91,7 @@ const CatHandel = debounce((eve) => {
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.error(error);
             })
         const scrollHandel = debounce((event) => {
             event.preventDefault();
@@ -100,9 +100,9 @@ const CatHandel = debounce((eve) => {
                 fetch('/categories', { method: "POST", body: formData })
                     .then(response => response.json())
                     .then(data => {
-                        if(data.request) {
+                        if (data.request) {
                             alert(data.request)
-                        }else if (data.finish) {
+                        } else if (data.finish) {
                             window.removeEventListener("scroll", scrollHandel)
                         } else if (data.StatusCode) {
                             Error(data.StatusCode, data.error)
@@ -115,7 +115,7 @@ const CatHandel = debounce((eve) => {
                         }
                     })
                     .catch(error => {
-                        console.log('Error:', error);
+                        console.error(error);
                     });
             }
         }, 100)
@@ -145,9 +145,9 @@ export const likeHandel = (event) => {
     })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.tocken == false) {
+            } else if (data.tocken == false) {
                 Checkstuts()
             } else if (data.StatusCode) {
                 Error(data.StatusCode, data.error)
@@ -183,7 +183,7 @@ export const likeHandel = (event) => {
 
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 
 }
@@ -229,9 +229,9 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
     })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.StatusCode) {
+            } else if (data.StatusCode) {
                 Error(data.StatusCode, data.error)
             } else if (data.tocken == false) {
                 Checkstuts()
@@ -245,7 +245,7 @@ export const submitpost = (ev) => {/////////////////formulaire dyal create post
             }
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
 
         });
 }
@@ -353,9 +353,9 @@ const send_comment = (event) => {
     })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.status) {
+            } else if (data.status) {
                 let currentNb = parseInt(commentDiv.textContent, 10);
                 if (isNaN(currentNb)) currentNb = 0;
                 let nb = String(currentNb + 1);
@@ -383,7 +383,7 @@ const send_comment = (event) => {
 
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 };
 
@@ -403,9 +403,9 @@ function CommentEvent(event) {
             .then(data => {
 
                 if (data) {
-                    if(data.request) {
+                    if (data.request) {
                         alert(data.request)
-                    }else if (data.token == false) {
+                    } else if (data.token == false) {
                         Checkstuts()
                     } else if (data.StatusCode) {
                         Error(data.StatusCode, data.error)
@@ -468,7 +468,7 @@ function CommentEvent(event) {
                 }
             })
             .catch(error => {
-                console.log('Error:', error);
+                console.error(error);
 
             });
 
@@ -488,15 +488,15 @@ export function LogoutHandel() {
     })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.status == true) {
+            } else if (data.status == true) {
                 document.cookie = "SessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 Checkstuts()
             }
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 }
 
@@ -509,9 +509,9 @@ export const QueryChat = (id, nickname) => {
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.StatusCode) {
+            } else if (data.StatusCode) {
                 Error(data.StatusCode, data.error)
                 return
             } else if (data.token) {
@@ -524,7 +524,7 @@ export const QueryChat = (id, nickname) => {
 
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 }
 
@@ -536,16 +536,16 @@ export const QuertMoreChat = (name) => {
     fetch("/querychat", { method: "POST", body: formData })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.length < 10) {
+            } else if (data.length < 10) {
                 let chat_container = document.querySelector(".chat-messages")
                 chat_container.removeEventListener("scroll", LoadCaht)
             }
             MoreMessage(data)
         })
         .catch(error => {
-            console.log('Error:', error);
+            console.error(error);
         });
 }
 
@@ -555,9 +555,9 @@ export const QueryContact = () => {
     })
         .then(response => response.json())
         .then(data => {
-            if(data.request) {
+            if (data.request) {
                 alert(data.request)
-            }else if (data.StatusCode) {
+            } else if (data.StatusCode) {
                 Error(data.StatusCode, data.error)
             } else if (data.token) {
                 handle()

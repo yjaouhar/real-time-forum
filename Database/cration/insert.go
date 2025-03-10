@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -125,12 +124,10 @@ func UpdateTocken(tocken string) error {
 func InsertConnection(sender string, recever string) error {
 	info, err := DB.Prepare("INSERT INTO connection (user_1,user_2) VALUES (?,?)")
 	if err != nil {
-		fmt.Println("error insert connection :", err)
 		return err
 	}
 	_, err = info.Exec(sender, recever)
 	if err != nil {
-		fmt.Println("error exucet connection in database :", err)
 		return err
 	}
 	return nil
@@ -143,19 +140,16 @@ func InsertMessage(sender string, recever string, message string) error {
 		InsertConnection(sender, recever)
 		id, err = QueryConnection(sender, recever)
 		if err != nil {
-			fmt.Println("error insert message :", err)
 			return err
 		}
 	}
 	info, err := DB.Prepare("INSERT INTO messages (connection_id,sender_id,receiver_id,message,timestamp,is_read) VALUES (?,?,?,?,?,?)")
 	if err != nil {
-		fmt.Println("error insert message :", err)
 		return err
 	}
 
 	_, err = info.Exec(id, sender, recever, message, date, "no")
 	if err != nil {
-		fmt.Println("error exucet message in database :", err)
 		return err
 	}
 	return nil
