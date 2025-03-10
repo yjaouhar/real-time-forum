@@ -234,9 +234,9 @@ func GetReactionRow(userid int, postid int) (string, error) {
 
 func CheckContentid(contentid int, contentype string) bool {
 	var id int
-	quire := "SELECT id FROM postes WHERE content_id = ?"
+	quire := "SELECT id FROM postes WHERE id = ?"
 	if contentype == "comment" {
-		quire = "SELECT id FROM comments WHERE content_id = ?"
+		quire = "SELECT id FROM comments WHERE id = ?"
 	}
 	err := DB.QueryRow(quire, contentid).Scan(&id)
 	if err != nil {

@@ -18,6 +18,7 @@ type reac struct {
 }
 
 func Reaction(w http.ResponseWriter, r *http.Request) {
+
 	if !servisse.CheckErr(w, r, "/reactione", "POST") {
 		return
 	}
@@ -46,6 +47,7 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !db.CheckContentid(content_id, reactione.Content_type) {
+
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": http.StatusBadRequest})
 		return
