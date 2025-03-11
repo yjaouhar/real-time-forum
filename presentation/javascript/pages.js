@@ -246,7 +246,7 @@ export const Chatemp = (data, name, id) => {
     chatContainer.append(div)
     chatContainer.innerHTML += `
   <div class="chat-input">
-      <textarea  class="message-input" placeholder="Type a message..."  required maxlength="1000"></textarea>
+      <textarea  class="message-input" placeholder="Type a message..." required maxlength="1000"></textarea>
       <button>Send</button>
     </div>
     <div><small class="messageError" style="color:red ; display:none"></small></div>

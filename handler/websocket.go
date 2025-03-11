@@ -42,9 +42,11 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	tocken := r.URL.Query().Get("token")
-	id := db.GetId("sessionToken", tocken)
-	username := db.GetUser(id)
+	id := 0
+	username := ""
 	if db.HaveToken(tocken) {
+		id = db.GetId("sessionToken", tocken)
+		username = db.GetUser(id)
 		mutex.Lock()
 		utils.Clients[username] = ws
 		mutex.Unlock()
@@ -56,24 +58,28 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		err := ws.ReadJSON(&msg)
 		if err != nil {
 			fmt.Println("Error reading message:", err)
+			if username != "" {
 			mutex.Lock()
 			delete(utils.Clients, username)
 			mutex.Unlock()
 			broadcastUserStatus("user_status", strconv.Itoa(id), "offline")
+		}
 			break
 		}
 		if msg.Regester == "true" {
 			broadcastUserStatus("new_contact", "", "offline")
 			continue
 		}
-
-		username := db.GetUser(db.GetId("sessionToken", msg.Token))
+		if username == "" {
+			username = db.GetUser(db.GetId("sessionToken", msg.Token))
+		}
+		
 
 		if utils.Clients[username] == nil {
 			utils.Clients[username] = ws
 			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
 		}
-		if msg.Nickname == "" && msg.Message == "" {
+		if msg.Nickname == "" || msg.Message == "" {
 			continue
 		}
 		if !db.CheckInfo(msg.Nickname, "nikname") && db.HaveToken(msg.Token) {

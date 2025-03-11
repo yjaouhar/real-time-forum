@@ -1,8 +1,5 @@
 import { Dateformat, Users } from "./utils.js";
 import { QueryContact } from "./service.js";
-import { Error } from "./err.js";
-import { showError } from "./errore.js";
-
 
 let socket;
 
@@ -38,8 +35,13 @@ export function connectWebSocket() {
             contact.prepend(user)
             Users(user, receivedData.username)
             let chatBox = document.querySelector(".chat-messages");
-
-            if (chatBox != null) {
+            let chatcontenier = document.querySelector(".chat-container")
+            //  console.log(chatcontenier);
+            //  console.log(chatcontenier.style.display);
+            if(chatcontenier != null && chatcontenier.style.display !== "none") {
+                // if (chatcontenier.style.display === "none") {
+                //     alert(`« ${receivedData.username} »  send a message `)
+                // }
                 if (chatBox.getAttribute("data-name") === receivedData.username) {
 
                     let messageElement = document.createElement("div");
@@ -85,12 +87,7 @@ export function sendLogin() {
         message: "",
     };
 
-    if (socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify(msgObject));
-        console.log("Login Message Sent");
-    } else {
-        console.log("WebSocket Not Open");
-    }
+  Send(msgObject)
 }
 export function regest() {
     connectWebSocket();
@@ -101,7 +98,10 @@ export function regest() {
         message: "",
         regester: "true",
     };
+    Send(msgObject)
+}
 
+function Send(msgObject) {
     if (socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify(msgObject));
         console.log("Login Message Sent");
