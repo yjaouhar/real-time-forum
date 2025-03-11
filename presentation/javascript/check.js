@@ -73,7 +73,7 @@ async function Checkstuts(event) {
         .then((result) => {
             if (result.request) {
                 alert(result.request)
-            } else if (!result.token) {
+            } else if (result.token == false) {
                 handle()
                 closee()
             } else {

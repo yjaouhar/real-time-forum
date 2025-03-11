@@ -55,6 +55,7 @@ export function HomeListener(data) {
 
 const CatHandel = debounce((eve) => {
     eve.preventDefault();
+console.log("...........6666666.....",eve.target.value);
 
     window.scrollTo({
         top: 0,
@@ -265,58 +266,61 @@ const Menu = () => {
 
 
 export const handelcontact = () => {///cancel contact
-
     let sid = document.querySelector("aside")
     let cancel = document.querySelector("#cancel")
     let cat = document.querySelector("#categor")
-
+// let wid = sid.style.width
     if (cat.classList == "visibility_off") {
         let contact = document.querySelector(".category-list")
         contact.style.display = "none"
         cat.classList = "visibility"
-        sid.style.width = "70px"
-        sid.style.height = "fit-content"
+        // sid.style.width = "70px"
+        // sid.style.height = "fit-content"
     }
     if (cancel.classList == "visibility_off") {
         let contact = document.querySelector("#contact")
+        // document.querySelector(".contact-container").style.display = "none"
         contact.style.display = "none"
         cancel.classList = "visibility"
-        sid.style.width = "70px"
-        sid.style.height = "fit-content"
+        // sid.style.width = "6%"
+        // sid.style.height = "fit-content"
     } else {
         let contact = document.querySelector("#contact")
+        // document.querySelector(".contact-container").style.display = "block"
         contact.style.display = "block"
         cancel.classList = "visibility_off"
-        sid.style.width = "270px"
-        sid.style.height = "470px"
+        // sid.style.width = wid
+        // sid.style.height = "470px"
 
     }
 
 }
-export const Catlist = () => {///cancel contact
-    // handelcontact()
+export const Catlist = () => {
+
+   
     let cnt = document.querySelector("#cancel")
     let cancel = document.querySelector("#categor")
     let sid = document.querySelector("aside")
+
     if (cnt.classList == "visibility_off") {
         let contact = document.querySelector("#contact")
+        // document.querySelector(".contact-container").style.display = "none"
         contact.style.display = "none"
         cnt.classList = "visibility"
-        sid.style.width = "70px"
-        sid.style.height = "fit-content"
+     
     }
     if (cancel.classList == "visibility_off") {
         let contact = document.querySelector(".category-list")
         contact.style.display = "none"
         cancel.classList = "visibility"
-        sid.style.width = "70px"
-        sid.style.height = "fit-content"
+        // sid.style.width = "70px"
+        // sid.style.height = "fit-content"
     } else {
         let contact = document.querySelector(".category-list")
         contact.style.display = "block"
         cancel.classList = "visibility_off"
-        sid.style.width = "270px"
-        sid.style.height = "470px"
+        // sid.style.width = "270px"
+        // sid.style.height = "470px"
     }
 
 }

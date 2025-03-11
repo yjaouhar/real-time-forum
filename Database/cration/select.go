@@ -261,7 +261,7 @@ func Liklength(sl []utils.Reaction, userid int) (int, int, string) {
 
 func Select_all_nakname(nickname string) ([]utils.AllNakename, error) {
 	var All []utils.AllNakename
-	quire := "SELECT id, nikname FROM users ORDER BY nikname ASC"
+	quire := "SELECT id, nikname FROM users ORDER BY nikname COLLATE NOCASE ASC"
 	rows, err := DB.Query(quire)
 	if err != nil {
 		return nil, err

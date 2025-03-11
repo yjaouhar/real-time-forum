@@ -12,7 +12,6 @@ import (
 var sr = 0
 
 func Categore(w http.ResponseWriter, r *http.Request) {
-
 	if !servisse.CheckErr(w, r, "/categories", "POST") {
 		return
 	}
@@ -28,6 +27,7 @@ func Categore(w http.ResponseWriter, r *http.Request) {
 	token, _ := r.Cookie("SessionToken")
 	userid := db.GetId("sessionToken", token.Value)
 	categories := []string{r.FormValue("categories")}
+
 	err = servisse.CategoriesValidator(categories)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

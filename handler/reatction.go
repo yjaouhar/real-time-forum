@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"sync"
 
 	db "real-time-forum/Database/cration"
 	Error "real-time-forum/Error"
@@ -17,13 +18,15 @@ type reac struct {
 	Reactione_type string `json:"reaction_type"`
 }
 
-func Reaction(w http.ResponseWriter, r *http.Request) {
+var Mutex sync.Mutex
 
+func Reaction(w http.ResponseWriter, r *http.Request) {
 	if !servisse.CheckErr(w, r, "/reactione", "POST") {
 		return
 	}
 
 	var reactione reac
+
 	err := json.NewDecoder(r.Body).Decode(&reactione)
 	if err != nil {
 		message, statuscode := Error.Json(err)
@@ -52,6 +55,8 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": http.StatusBadRequest})
 		return
 	}
+	Mutex.Lock()
+	defer Mutex.Unlock()
 
 	reactiontype, err := db.GetReactionRow(reactione.User_id, content_id)
 	if err != nil {
@@ -88,5 +93,4 @@ func Reaction(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{ "status":true , "like":"` + strconv.Itoa(like) + `", "dislike":"` + strconv.Itoa(dislike) + `", "content_type":"` + contenttype + `"}`))
-
 }

@@ -25,8 +25,6 @@ export function connectWebSocket() {
             }
 
         } else if (receivedData.type === "new_contact") {
-            console.log("new contact");
-
             QueryContact()
 
         } else {

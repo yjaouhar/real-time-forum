@@ -1,5 +1,5 @@
 import { Dateformat, LoadCaht, Users } from "./utils.js"
-import { Listener, handelcontact, QueryContact, QueryChat } from "./service.js"
+import { Listener, QueryContact } from "./service.js"
 import { sendMessage } from "./websocket.js"
 
 export const Homepage = (data) => {
@@ -26,7 +26,7 @@ export const Homepage = (data) => {
             <div>
                 <h3 id="categor" class="visibility" ><svg width="50px" height="50px" viewBox="0 0 48.00 48.00" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>category-list-solid</title> <g id="Layer_2" data-name="Layer 2"> <g id="invisible_box" data-name="invisible box"> <rect width="48" height="48" fill="none"></rect> </g> <g id="icons_Q2" data-name="icons Q2"> <path d="M24,10h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,10Z"></path> <path d="M24,24h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,24Z"></path> <path d="M24,38h0a2,2,0,0,1,2-2H42a2,2,0,0,1,2,2h0a2,2,0,0,1-2,2H26A2,2,0,0,1,24,38Z"></path> <path d="M12,2a2.1,2.1,0,0,0-1.7,1L4.2,13a2.3,2.3,0,0,0,0,2,1.9,1.9,0,0,0,1.7,1H18a2.1,2.1,0,0,0,1.7-1,1.8,1.8,0,0,0,0-2l-6-10A1.9,1.9,0,0,0,12,2Z"></path> <path d="M12,30a6,6,0,1,1,6-6A6,6,0,0,1,12,30Z"></path> <path d="M16,44H8a2,2,0,0,1-2-2V34a2,2,0,0,1,2-2h8a2,2,0,0,1,2,2v8A2,2,0,0,1,16,44Z"></path> </g> </g> </g></svg></h3>
                 <div class="category-list" style="display:none">
-                    <button class="cat" value="all" ><span class="material-icons">home</span></button>
+                    <button class="cat" value="all" >Home</button>
                     <button class="cat" value="Tech Support" >Tech Support</button>
                     <button class="cat" value="General Discussion">General Discussion</button>
                     <button class="cat" value="Tutorials">Tutorials</button>
@@ -120,16 +120,23 @@ export const Homepage = (data) => {
 }
 
 export const Contact = (data) => {
-
+    
     let username = document.querySelector("title").getAttribute("class")
     let aside = document.querySelector("aside")
     let contactcontainer = document.createElement("div")
     contactcontainer.classList = "contact-container"
+
     let contact;
     let contacts;
+    if( document.querySelector(".notprofile")){
+        document.querySelector(".notprofile").remove()
+    }
+    
     if (document.getElementById("contact")) {
         contacts = document.querySelector(".proficone")
         contact = document.getElementById("contact")
+        contact.innerHTML = ""
+        
     } else {
         contacts = document.createElement("div")
         contact = document.createElement("div")
@@ -146,7 +153,8 @@ export const Contact = (data) => {
                  
      </div>
     `
-    if (data) {
+
+    if (data.length > 1) {
         data.forEach(element => {
 
             if (element.Nickname !== username) {
@@ -169,18 +177,22 @@ export const Contact = (data) => {
 
         });
     } else {
+    
+        
         let profile = document.createElement("p")
         profile.textContent = "Not a contact"
-        profile.setAttribute("class", "profile")
-        profile.setAttribute("contact-id", element.Id)
+        profile.setAttribute("class", "notprofile")
+        profile.style.marginLeft="40px"
+        // profile.setAttribute("contact-id", element.Id)
 
 
         contact.append(profile)
     }
 
-    contactcontainer.append(contact)
+    // contactcontainer.append(contact)
     aside.append(contacts)
-    aside.prepend(contactcontainer)
+    document.querySelector(".container").append(contact)
+    // aside.prepend(contactcontainer)
 
 }
 

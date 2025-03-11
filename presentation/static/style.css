@@ -52,8 +52,10 @@ body {
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1700px;
+    /* margin: 0 auto; */
+    align-items: start;
+
     padding: 1rem;
 }
 
@@ -83,6 +85,12 @@ body {
 }
 
 .category-list {
+    display: block;
+    background: #1414145e;
+    border: 2px solid #a5a5a5;
+    width: 185px;
+    padding: 18px;
+    margin-left: 2%;
     position: fixed;
     left: 8%;
     top: 137px;
@@ -194,21 +202,21 @@ body {
 }
 
 .contact {
-    display: block;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    border-radius: 12px;
-    transition: all 0.2s;
-    cursor: pointer;
+
+    border: 2px solid #afafaf;
+    background: #14141425;
+    height: 500px;
+    width: 200px;
+    position: fixed;
+    left: 8%;
+    top: 140px;
     overflow-y: scroll;
-    max-height: 440px;
     scrollbar-width: thin;
-    scrollbar-color: #f4f6f8 rgb(255, 255, 255)
+   /* scrollbar-color: #f4f6f8 rgb(255, 255, 255) */
+
 }
 
-.contact:hover {
-    background: #f9fafb;
-}
+
 
 #cancel {
     cursor: pointer;
@@ -1034,25 +1042,24 @@ small {
     align-items: center;
 }
 
-.contact-container {
-    max-height: 440px;
-    position: fixed;
-    left: 8%;
-    top: 140px;
-}
 
 
 @media (max-width: 1100px) {
+  
     .category-list {
         left: 10%;
     }
 
-    .contact-container {
+    .contact{
         left: 9%;
     }
 }
 
 @media (max-width: 968px) {
+   
+    .container {
+        grid-template-columns: 1fr;
+    }
     #register-container {
         flex-direction: column;
         margin: 20px;
@@ -1087,7 +1094,7 @@ small {
 
     .sidebar {
         display: none;
-        width: 7%;
+        width: 6%;
         height: 92px;
         position: fixed;
         top: 115px;
@@ -1096,6 +1103,8 @@ small {
         padding-bottom: 0;
         padding-top: 0;
         overflow-y: hidden;
+        padding: 0;
+    
     }
 
     #cancel,
@@ -1135,7 +1144,7 @@ small {
 }
 
 @media (max-width: 530px) {
-
+   
     .header {
         align-items: normal;
         flex-direction: column;
@@ -1150,9 +1159,10 @@ small {
     }
 
     .sidebar {
-        width: 11%;
+        width: 7%;
         top: 190px;
-        height: 90px;
+        height: 75px;
+    
 
     }
 
@@ -1161,7 +1171,7 @@ small {
         height: 30px;
     }
 
-    .contact-container {
+    .contact {
         top: 200px;
         left: 15%;
     }
@@ -1188,7 +1198,7 @@ small {
         top: 172px;
         width: 90%;
         height: 500px;
-        left: 0;
+        left: 5%;
         z-index: 1;
     }
 
@@ -1203,16 +1213,14 @@ small {
 }
 
 @media (max-width: 420px) {
+  
     .container {
         padding: 24px 0;
         width: 94%;
     }
 
   .main-content{
-    padding: 0;
-    margin: 0;
-    margin-left: 15px;
-    width: 90%;
+    margin-left: 30px;
   }
   .sidebar {
     width: 6%;
@@ -1230,22 +1238,22 @@ small {
   }
   .chat-container{
     width: 86%;
-    left: 1px;
+    /* left: 1px; */
     height: 500px;
 
   }
 }
 @media (max-width: 350px) {
-
-  .main-content{
-    width: 60%;
-  }
+  
+  
   .chat-container {
     width: 70%;
-    left: 0;
+    /* left: 0; */
     height: 450px;
   }
-
+  .sidebar {
+    width: 7%;
+}
 }
 
 .error-container {

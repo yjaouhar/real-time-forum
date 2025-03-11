@@ -1,6 +1,7 @@
 import { HomeListener } from "./service.js";
 import { handle } from "./login-register.js"
 import { Error } from "./err.js"
+import { pagenation } from "./utils.js"
 let DATA;
 function HomeHandeler() {
     const formData = new FormData();
@@ -9,6 +10,8 @@ function HomeHandeler() {
 
         .then(response => response.json())
         .then(data => {
+            console.log(data);
+            
             if(data.request) {
                 alert(data.request)
             }else if (data.StatusCode) {
@@ -17,6 +20,11 @@ function HomeHandeler() {
                 handle()
             } else if (data.finish) {
                 window.removeEventListener("scroll", pagenation)
+                console.log(document.body);
+                if (document.querySelector(".container")===null) {
+                    HomeListener(data)
+                }
+               
             } else {
                 DATA = data
                 HomeListener(data)
