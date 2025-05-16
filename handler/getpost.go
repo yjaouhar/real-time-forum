@@ -3,15 +3,13 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 )
 
-var (
-	end = 0
-	str = 0
-)
+
 
 func Getpost(w http.ResponseWriter, r *http.Request) {
 	if !servisse.CheckErr(w, r, "/getpost", "POST") {
@@ -25,12 +23,11 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"tocken":false}`))
 		return
 	}
-
+	str := 0
 	token, _ := r.Cookie("SessionToken")
 	userid := db.GetId("sessionToken", token.Value)
-	
 	lastdata := r.FormValue("lastdata")
-
+	postid := r.FormValue("id")
 	if lastdata == "true" {
 		str, err = db.Getlastid("")
 		if err != nil {
@@ -39,33 +36,24 @@ func Getpost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		lastdata = "false"
-	}
-	if str == 0 {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"finish": true}`))
-		return
-	}
-
-	if str > 10 {
-		end = str - 10
-	} else if str < 10 {
-		end = 0
+	} else {
+		str, err = strconv.Atoi(postid)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]any{"error": "Bad Request", "StatusCode": 400})
+			return
+		}
 	}
 
-	Postes, err := db.GetPostes(str, end, userid)
+
+
+	Postes, err := db.GetPostes(str, userid)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal server error", "StatusCode": 500})
 		return
 	}
-	if end-10 >= 0 {
-		str = end
-		end -= 10
-	} else {
-		str = end
-		end = 0
-	}
-
+	
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(Postes)
 }

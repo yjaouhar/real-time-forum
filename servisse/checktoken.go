@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 )
 
 func IsHaveToken(r *http.Request) (string, error) {
@@ -14,5 +14,6 @@ func IsHaveToken(r *http.Request) (string, error) {
 	}
 	id := db.GetId("sessionToken", sesiontoken.Value)
 	name := db.GetUser(id)
+
 	return name, nil
 }

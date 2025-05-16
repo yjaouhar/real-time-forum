@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	Error "real-time-forum/Error"
 	"real-time-forum/servisse"
 	"real-time-forum/utils"
@@ -21,7 +21,7 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 	_, err = servisse.IsHaveToken(r)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(`{"token":false}`))
+		json.NewEncoder(w).Encode(map[string]any{"tocken": false})
 		return
 	}
 
@@ -30,20 +30,20 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		message, statuscode := Error.Json(err)
 		w.WriteHeader(statuscode)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": message, "StatusCode": statuscode})
+		json.NewEncoder(w).Encode(map[string]any{"error": message, "StatusCode": statuscode})
 		return
 	}
 
 	id, err := strconv.Atoi(idpost.ID)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest) 
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad request", "StatusCode": 400})
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"error": "Bad request", "StatusCode": 400})
 		return
 	}
 	post_id := db.SelectPostid(id)
 	if !post_id {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Bad Request", "StatusCode": 400})
 		return
 	}
 	token, _ := r.Cookie("SessionToken")
@@ -51,7 +51,7 @@ func Comments(w http.ResponseWriter, r *http.Request) {
 	allcoments, err := db.SelectComments(id, userid)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal server error", "StatusCode": 500})
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -66,8 +66,9 @@ func Sendcomment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_, ishave := servisse.IsHaveToken(r)
 	if ishave != nil {
+
 		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte(`"tocken":false}`))
+		json.NewEncoder(w).Encode(map[string]any{"tocken": false})
 		return
 	}
 	tocken, _ := r.Cookie("SessionToken")
@@ -76,28 +77,27 @@ func Sendcomment(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		message, statuscode := Error.Json(err)
 		w.WriteHeader(statuscode)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": message, "StatusCode": statuscode})
+		json.NewEncoder(w).Encode(map[string]any{"error": message, "StatusCode": statuscode})
 		return
 	}
 	postid, err := strconv.Atoi(comment.PostID)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Bad Request", "StatusCode": 400})
 		return
 	}
 	post_id := db.SelectPostid(postid)
 	if !post_id {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Bad Request", "StatusCode": 400})
 		return
 	}
 	err = db.InsertComment(postid, id, comment.Content)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal Server Error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal Server Error", "StatusCode": 500})
 		return
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":true}`))
-
 }

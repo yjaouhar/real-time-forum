@@ -1,0 +1,130 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  #register-container {
+    display: flex;
+    width: 950px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .info-side {
+    background-color: #5be37d;
+    color: white;
+    flex: 1;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .info-side h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .info-side p {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  .feature-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .feature-list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+  }
+  
+  .feature-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: white;
+  }
+  
+  .register {
+    flex: 1.5;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .register h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  #register-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .name-row {
+    display: flex;
+    gap: 50px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  input,
+  select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  button#creat-btn,
+  button#log {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #5be37d;
+    background-color: transparent;
+    color: #333;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s ease;
+  }
+  
+  button#creat-btn:hover,
+  button#log:hover {
+    background-color: #5be37d;
+    color: white;
+  }
+  
+  span.have {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+  }
+  

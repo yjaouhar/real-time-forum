@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 )
 

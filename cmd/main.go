@@ -1,13 +1,15 @@
 package main
 
 import (
-	data "real-time-forum/Database/cration"
+	"fmt"
+	data "real-time-forum/Database"
 	Ret "real-time-forum/router"
 )
 
 func main() {
 	Db, err := data.Db()
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	defer Db.Close()

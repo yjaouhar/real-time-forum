@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 	"real-time-forum/utils"
 
@@ -48,49 +49,53 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		id = db.GetId("sessionToken", tocken)
 		username = db.GetUser(id)
 		mutex.Lock()
-		utils.Clients[username] = ws
+		utils.Clients[username] = append(utils.Clients[username], ws)
 		mutex.Unlock()
-		broadcastUserStatus("user_status", strconv.Itoa(id), "online")
+		BroadcastUserStatus("user_status", strconv.Itoa(id), "online", username)
+	} else {
+		return
 	}
 
 	for {
 		var msg Message
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			fmt.Println("Error reading message:", err)
-			if username != "" {
-			mutex.Lock()
-			delete(utils.Clients, username)
-			mutex.Unlock()
-			broadcastUserStatus("user_status", strconv.Itoa(id), "offline")
-		}
+			if len(utils.Clients[username]) == 1 {
+				mutex.Lock()
+				delete(utils.Clients, username)
+				mutex.Unlock()
+				BroadcastUserStatus("user_status", strconv.Itoa(id), "offline", username)
+			} else {
+				for i, c := range utils.Clients[username] {
+					if c == ws {
+						mutex.Lock()
+						utils.Clients[username] = append(utils.Clients[username][:i], utils.Clients[username][i+1:]...)
+						mutex.Unlock()
+						break
+					}
+				}
+			}
 			break
 		}
-		if msg.Regester == "true" {
-			broadcastUserStatus("new_contact", "", "offline")
-			continue
-		}
-		if username == "" {
-			username = db.GetUser(db.GetId("sessionToken", msg.Token))
-		}
-		
-
-		if utils.Clients[username] == nil {
-			utils.Clients[username] = ws
-			broadcastUserStatus("new_contact", strconv.Itoa(id), "online")
-		}
-		if msg.Nickname == "" || msg.Message == "" {
+		if len(msg.Message) > 1000 || len(msg.Message) < 1 || strings.ReplaceAll(msg.Message, "\n", "") == "" || strings.ReplaceAll(msg.Message, " ", "") == "" {
+			ws.WriteJSON(map[string]string{
+				"error":      "BadRequest",
+				"StatusCode": "400",
+			})
 			continue
 		}
 		if !db.CheckInfo(msg.Nickname, "nikname") && db.HaveToken(msg.Token) {
-
-			err = db.InsertMessage(username, msg.Nickname, msg.Message)
-			if err != nil {
-				fmt.Println("Error inserting message in DB:", err)
-				break
+			if _, exists := utils.Clients[msg.Nickname]; exists {
+				err = db.InsertMessage(username, msg.Nickname, msg.Message)
+				if err != nil {
+					fmt.Println("Error inserting message in DB:", err)
+					break
+				}
+				msg.Token = ""
+				SendMessage(msg, username)
+			} else {
+				fmt.Println("Key ma kaynch!")
 			}
-			msg.Token = ""
-			SendMessage(msg, username)
 		}
 	}
 }
@@ -101,14 +106,24 @@ func SendMessage(msg Message, username string) {
 
 	for nikname, client := range utils.Clients {
 		if nikname == msg.Nickname {
-
 			msg.Nickname = username
 			msg.Id = db.GetId("nikname", msg.Nickname)
-			err := client.WriteJSON(msg)
-			if err != nil {
-				fmt.Println("Error sending message:", err)
-				client.Close()
-				delete(utils.Clients, nikname)
+			for _, clien := range client {
+				err := clien.WriteJSON(msg)
+				if err != nil {
+					fmt.Println("Error sending message:", err)
+					clien.Close()
+					if len(utils.Clients[nikname]) == 1 {
+						delete(utils.Clients, nikname)
+					} else {
+						for i, c := range utils.Clients[nikname] {
+							if c == clien {
+								utils.Clients[nikname] = append(utils.Clients[nikname][:i], utils.Clients[nikname][i+1:]...)
+								break
+							}
+						}
+					}
+				}
 			}
 			break
 		}
@@ -119,39 +134,63 @@ func QueryMsg(w http.ResponseWriter, r *http.Request) {
 	if !servisse.CheckErr(w, r, "/querychat", "POST") {
 		return
 	}
-	sr := 1
 	nickname := r.FormValue("nickname")
 	token := r.FormValue("token")
 	first := r.FormValue("first")
-	_, err := servisse.IsHaveToken(r)
+	sr := r.FormValue("id")
+	id, err := strconv.Atoi(sr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"error": "BadRequest", "StatusCode": 400})
+		return
+	}
+	_, err = servisse.IsHaveToken(r)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte(`{"tocken":false}`))
 		return
 	}
-	if sr != 0 {
-		user := db.GetUser(db.GetId("sessionToken", token))
-		messge, err := db.QueryMessage(user, nickname, first)
-		if err != nil {
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"NoData":true}`))
-			return
-		}
-		if len(messge) < 10 {
-			sr = 0
-		}
+
+	user := db.GetUser(db.GetId("sessionToken", token))
+	messge, err := db.QueryMessage(user, nickname, first, id)
+	if err != nil {
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(messge)
+		w.Write([]byte(`{"NoData":true}`))
+		return
 	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(messge)
 }
 
-func broadcastUserStatus(typ, id, status string) {
+func BroadcastUserStatus(typ, id, status, username string) {
 	message := map[string]string{
 		"type":   typ,
 		"id":     id,
 		"status": status,
 	}
-	for _, client := range utils.Clients {
-		client.WriteJSON(message)
+	for key, client := range utils.Clients {
+		if key != username {
+			for _, conn := range client {
+				err := conn.WriteJSON(message)
+				if err != nil {
+					conn.Close()
+					if len(client) == 1 {
+						mutex.Lock()
+						delete(utils.Clients, id)
+						mutex.Unlock()
+					} else {
+						for i, c := range client {
+							if c == conn {
+								mutex.Lock()
+								client = append(client[:i], client[i+1:]...)
+								mutex.Unlock()
+								break
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

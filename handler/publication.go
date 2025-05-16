@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 )
 
@@ -24,13 +24,13 @@ func Post(w http.ResponseWriter, r *http.Request) {
 
 	if len(categories) == 0 || title == "" || content == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"filldata": "false"})
+		json.NewEncoder(w).Encode(map[string]any{"filldata": "false"})
 		return
 	}
 	err := servisse.CategoriesValidator(categories)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Bad Request", "StatusCode": 400})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Bad Request", "StatusCode": 400})
 		return
 	}
 	tocken, _ := r.Cookie("SessionToken")
@@ -39,10 +39,10 @@ func Post(w http.ResponseWriter, r *http.Request) {
 
 	if errore != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal Server Error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal Server Error", "StatusCode": 500})
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]interface{}{"secsses": "true"})
+	json.NewEncoder(w).Encode(map[string]any{"secsses": "true"})
 
 }

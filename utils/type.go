@@ -62,6 +62,7 @@ type AllNakename struct {
 }
 
 type Messages struct {
+	Id      int
 	Sender  string
 	Recever string
 	Message string
@@ -69,4 +70,4 @@ type Messages struct {
 	Isread  string
 }
 
-var Clients = make(map[string]*websocket.Conn)
+var Clients = make(map[string][]*websocket.Conn)

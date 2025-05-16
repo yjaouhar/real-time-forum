@@ -1,9 +1,10 @@
 import { showError } from "./errore.js"
-import { handle } from "./login-register.js"
-import { HomeHandeler } from "./Homehandler.js"
+import { handle } from "./Authontication/login-register.js"
+
+import { HomeHandeler } from "./Home/Homehandler.js"
 import { Error } from "./err.js"
 
-import { sendLogin, closee } from "./websocket.js"
+import { connectWebSocket, closee } from "./Chat/websocket.js"
 function Checkemail(email) {
     var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) {
@@ -68,20 +69,24 @@ export function validateNickname(name) {
 }
 
 async function Checkstuts(event) {
+
     fetch('/stuts', { method: 'GET' })
         .then((response) => response.json())
         .then((result) => {
-            if (result.request) {
-                alert(result.request)
-            } else if (result.token == false) {
+            if (result){
+                 if (result.StatusCode) {
+                Error(result.StatusCode, result.error)
+            }else if (result.token == false) {
                 handle()
                 closee()
             } else {
                 let head = document.querySelector("title")
                 head.setAttribute("class", result.name)
                 HomeHandeler()
-                sendLogin()
+                connectWebSocket()
             }
+            }
+           
 
         })
         .catch((error) => {

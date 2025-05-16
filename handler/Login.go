@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 
 	"real-time-forum/utils"
@@ -44,24 +44,24 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	SessionToken, erre := utils.GenerateSessionToken()
 	if erre != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal server error", "StatusCode": 500})
 		return
 
 	}
-	err = db.Updatesession(typ, SessionToken, email)
+	expiry := time.Now().Add(24 * time.Hour)
+	err = db.Updatesession(typ, SessionToken, expiry, email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal server error", "StatusCode": 500})
 		return
 	}
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "SessionToken",
 		Value:   SessionToken,
-		Expires: time.Now().Add(24 * time.Hour),
+		Expires: expiry,
 		Path:    "/",
 	})
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":true}`))
-
 }

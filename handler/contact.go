@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	db "real-time-forum/Database/cration"
+	db "real-time-forum/Database"
 	"real-time-forum/servisse"
 )
 
@@ -22,7 +22,7 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 	Allusers, err := db.Select_all_nakname(nickname)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]interface{}{"error": "Internal server error", "StatusCode": 500})
+		json.NewEncoder(w).Encode(map[string]any{"error": "Internal server error", "StatusCode": 500})
 		return
 	}
 
